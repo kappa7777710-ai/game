@@ -1,0 +1,1011 @@
+<title>Индустриальный пояс</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0A0D18;
+  --panel:#12172A;
+  --card:#171D33;
+  --card-hover:#1E2640;
+  --border:#293150;
+  --border-strong:#3A4468;
+  --text-primary:#E9ECF7;
+  --text-secondary:#9CA6C4;
+  --text-muted:#606A8A;
+  --tier0:#4FD1E7;
+  --tier1:#F2A93B;
+  --tier2:#9C7CF4;
+  --tier3:#F4557B;
+  --tier4:#4ADE9B;
+  --class1:#E8C15A;
+  --class2:#6FCF7A;
+  --class3:#7C9CF4;
+  --class4:#E07CE0;
+  --skill:#B388FF;
+  --good:#4ADE9B;
+  --bad:#F4557B;
+  --radius:10px;
+  --font-display:'Rajdhani',sans-serif;
+  --font-body:'IBM Plex Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+}
+body{background:var(--bg);color:var(--text-primary);font-family:var(--font-body);}
+*{box-sizing:border-box;}
+.page{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;display:flex;flex-direction:column;gap:22px;}
+.eyebrow{font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);}
+h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing:.01em;margin:2px 0 0;text-wrap:balance;color:var(--text-primary);}
+.sub{font-size:13px;color:var(--text-secondary);margin-top:4px;max-width:60ch;}
+.stats-row{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;}
+.stat{display:flex;flex-direction:column;gap:2px;}
+.stat-label{font-size:10.5px;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;}
+.stat-value{font-family:var(--font-mono);font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;}
+
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 18px 20px;}
+.panel h2{font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.05em;text-transform:uppercase;color:var(--text-secondary);margin:0 0 12px;}
+.ledger-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:9px;}
+.chip{display:flex;gap:9px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--chip-color,var(--tier0));border-radius:8px;padding:9px 10px;}
+.chip-body{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1;}
+.chip-name{font-size:11.5px;color:var(--text-secondary);line-height:1.25;}
+.chip-amt{font-family:var(--font-mono);font-size:14px;font-weight:500;font-variant-numeric:tabular-nums;}
+.chip-cap{color:var(--text-muted);font-weight:400;font-size:11px;}
+.chip-bar{height:3px;border-radius:2px;background:var(--border);overflow:hidden;}
+.chip-bar-fill{height:100%;background:var(--chip-color,var(--tier0));}
+.chip-rate{font-family:var(--font-mono);font-size:10.5px;font-variant-numeric:tabular-nums;}
+.chip-rate.pos{color:var(--good);}
+.chip-rate.neg{color:var(--bad);}
+.chip-rate.zero{color:var(--text-muted);}
+
+.sections{display:flex;gap:6px;flex-wrap:wrap;}
+.section-btn{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.02em;background:var(--panel);border:1px solid var(--border);color:var(--text-secondary);padding:10px 18px;border-radius:9px 9px 0 0;cursor:pointer;transition:color .15s,background .15s;}
+.section-btn:hover{color:var(--text-primary);}
+.section-btn.active{color:#0A0D18;background:var(--sec-color,var(--tier0));border-color:var(--sec-color,var(--tier0));}
+
+.tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:0;}
+.tab-btn{font-family:var(--font-display);font-weight:600;font-size:13.5px;letter-spacing:.03em;text-transform:uppercase;background:none;border:none;color:var(--text-muted);padding:10px 14px;cursor:pointer;border-bottom:2px solid transparent;transition:color .15s;}
+.tab-btn:hover{color:var(--text-secondary);}
+.tab-btn.active{color:var(--tab-color,var(--tier0));border-bottom-color:var(--tab-color,var(--tier0));}
+.tab-badge{font-family:var(--font-mono);font-size:10.5px;color:var(--text-muted);margin-left:5px;}
+
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:13px;}
+.locked-banner{grid-column:1/-1;padding:14px 16px;border:1px dashed var(--border-strong);border-radius:10px;color:var(--text-secondary);font-size:13px;}
+.bcard{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--tier-color,var(--tier0));border-radius:10px;padding:14px 15px;display:flex;flex-direction:column;gap:9px;}
+.bcard-head{display:flex;gap:10px;align-items:flex-start;}
+.bcard-head h3{font-family:var(--font-display);font-weight:600;font-size:15px;margin:0;color:var(--text-primary);}
+.bcard-recipe{font-size:11.5px;color:var(--text-secondary);margin-top:2px;line-height:1.4;}
+.bcard-richness{font-size:10.5px;color:var(--tier-color,var(--tier0));margin-top:2px;}
+.bcard-staff{font-size:10.5px;color:var(--text-muted);margin-top:1px;}
+.bcard-stats{display:flex;justify-content:space-between;font-size:11.5px;color:var(--text-secondary);}
+.bcard-stats strong{color:var(--text-primary);font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
+.util-bar{height:5px;border-radius:3px;background:var(--border);overflow:hidden;}
+.util-fill{height:100%;transition:width .3s;}
+.util-bar.full .util-fill{background:var(--good);}
+.util-bar.partial .util-fill{background:var(--tier1);}
+.util-bar.blocked .util-fill{background:var(--bad);}
+.util-bar.idle .util-fill{background:var(--text-muted);}
+.util-label{font-size:10.5px;color:var(--text-muted);}
+.bcard-cost{display:flex;flex-wrap:wrap;gap:6px;font-family:var(--font-mono);font-size:11px;font-variant-numeric:tabular-nums;}
+.bcard-cost span{padding:2px 6px;border-radius:5px;background:var(--panel);border:1px solid var(--border);}
+.bcard-cost span.ok{color:var(--good);}
+.bcard-cost span.bad{color:var(--bad);}
+.build-btn{margin-top:2px;font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:.03em;text-transform:uppercase;background:var(--tier-color,var(--tier0));color:#0A0D18;border:none;border-radius:7px;padding:9px 10px;cursor:pointer;}
+.build-btn:disabled{background:var(--border);color:var(--text-muted);cursor:not-allowed;}
+
+.t0{--chip-color:var(--tier0);--tier-color:var(--tier0);--tab-color:var(--tier0);}
+.t1{--chip-color:var(--tier1);--tier-color:var(--tier1);--tab-color:var(--tier1);}
+.t2{--chip-color:var(--tier2);--tier-color:var(--tier2);--tab-color:var(--tier2);}
+.t3{--chip-color:var(--tier3);--tier-color:var(--tier3);--tab-color:var(--tier3);}
+.t4{--chip-color:var(--tier4);--tier-color:var(--tier4);--tab-color:var(--tier4);}
+.tpop{--tab-color:var(--class1);}
+.tskill{--tab-color:var(--skill);}
+
+.pop-panel{display:flex;flex-direction:column;}
+.pop-class{display:flex;flex-direction:column;gap:11px;padding-block:18px;border-bottom:1px solid var(--border);}
+.pop-class:last-child{border-bottom:none;}
+.pop-class-head{display:flex;flex-wrap:wrap;align-items:center;gap:14px;border-left:3px solid var(--tier-color);padding-left:11px;}
+.pop-class-head svg{flex-shrink:0;}
+.pop-class-head h3{font-family:var(--font-display);font-weight:600;font-size:16px;margin:0;color:var(--text-primary);}
+.pop-metrics{display:flex;flex-wrap:wrap;gap:12px;font-family:var(--font-mono);font-size:11px;font-variant-numeric:tabular-nums;color:var(--text-secondary);}
+.pop-metrics .ok{color:var(--good);}
+.pop-metrics .warn{color:var(--tier1);}
+.pop-metrics .bad{color:var(--bad);}
+.need-list{display:flex;flex-direction:column;gap:7px;}
+.need-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-secondary);}
+.need-row .need-label{width:150px;flex-shrink:0;}
+.need-row .need-weight{font-family:var(--font-mono);font-size:10.5px;color:var(--text-muted);width:70px;flex-shrink:0;}
+.need-row .need-bar{flex:1;height:7px;border-radius:4px;background:var(--border);overflow:hidden;}
+.need-row .need-bar-fill{height:100%;}
+.need-row .need-pct{font-family:var(--font-mono);width:38px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;}
+.pop-needs{display:flex;flex-wrap:wrap;gap:8px;}
+.pop-needs .chip{min-width:140px;flex:1 0 140px;}
+.pop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+
+.footnote{font-size:12px;color:var(--text-muted);line-height:1.6;border-top:1px solid var(--border);padding-top:16px;}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);display:flex;align-items:center;justify-content:center;padding:20px;z-index:10;}
+.modal-backdrop[hidden]{display:none;}
+.modal{background:var(--panel);border:1px solid var(--border-strong);border-radius:14px;padding:22px 22px 20px;max-width:380px;width:100%;}
+.modal h2{font-family:var(--font-display);font-size:17px;margin:0 0 4px;}
+.modal-time{font-size:12.5px;color:var(--text-secondary);margin-bottom:12px;}
+.modal-rows{display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto;margin-bottom:12px;}
+.delta-row{display:flex;align-items:center;gap:8px;font-size:12.5px;}
+.delta-row.muted{color:var(--text-muted);}
+.delta-name{flex:1;color:var(--text-secondary);}
+.delta-val{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-weight:500;}
+.delta-val.pos{color:var(--good);}
+.delta-val.neg{color:var(--bad);}
+.modal-cap-note{display:none;font-size:11px;color:var(--tier1);margin-bottom:10px;}
+.modal-close{width:100%;font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:.03em;text-transform:uppercase;background:var(--tier0);color:#0A0D18;border:none;border-radius:8px;padding:10px;cursor:pointer;}
+
+@media (max-width:480px){
+  h1{font-size:24px;}
+  .stats-row{gap:12px;}
+  .ledger-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));}
+}
+</style>
+
+<div class="page">
+  <header>
+    <div class="eyebrow">Управляющий модуль · Сектор Керберос-9</div>
+    <h1>Индустриальный пояс</h1>
+    <div class="sub">Замкнутая производственная экономика: каждый товар на складе кто-то добыл или произвёл, и каждую фабрику кто-то обслуживает. Ничего не появляется без цепочки и без персонала.</div>
+    <div class="stats-row">
+      <div class="stat"><span class="stat-label">Время работы колонии</span><span class="stat-value" id="statTime">—</span></div>
+      <div class="stat"><span class="stat-label">Построено объектов</span><span class="stat-value" id="statBuilt">0</span></div>
+      <div class="stat"><span class="stat-label">Занято персонала</span><span class="stat-value" id="statWorkers">0</span></div>
+      <div class="stat"><span class="stat-label">Сохранено</span><span class="stat-value" id="statSaved">—</span></div>
+    </div>
+  </header>
+
+  <section class="panel">
+    <h2>Склад колонии</h2>
+    <div class="ledger-grid" id="ledger"></div>
+  </section>
+
+  <section>
+    <nav class="sections" id="sections"></nav>
+    <nav class="tabs" id="tabs" style="margin-top:10px;"></nav>
+    <div class="bgrid" id="bgrid" style="margin-top:14px;"></div>
+    <div class="pop-panel" id="popPanel" style="margin-top:14px;" hidden></div>
+    <div class="pop-panel" id="skillsPanel" style="margin-top:14px;" hidden></div>
+  </section>
+
+  <div class="footnote">Экономика замкнута: сырьё поступает только с месторождений (у каждого — своё случайное богатство), а любой полуфабрикат, изделие, жильё или бытовой товар требует ровно тех ресурсов, что указаны в его цепочке. Каждая фабрика набирает персонал своего класса из жилых модулей и не выйдет на полную мощность, пока штат не укомплектован, а быт — не обеспечен нужными товарами (как в градостроительных стратегиях: чем выше класс персонала, тем больше видов товаров ему нужно одновременно). Симуляция идёт в реальном времени и продолжается, пока вкладка закрыта — при следующем заходе колония досчитает прогресс (не более 12 часов офлайн за раз).</div>
+</div>
+
+<div class="modal-backdrop" id="offlineModal" hidden>
+  <div class="modal">
+    <h2>С возвращением на базу</h2>
+    <div class="modal-time" id="modalTime"></div>
+    <div class="modal-rows" id="modalRows"></div>
+    <div class="modal-cap-note" id="modalCapNote">Учтено не более 12 часов офлайн-прогресса за один раз.</div>
+    <button class="modal-close" id="modalClose">Продолжить работу колонии</button>
+  </div>
+</div>
+
+<script>
+const RESOURCES=[
+  {id:'iron_ore',name:'Железная руда',tier:0,cap:300,shapeIdx:0},
+  {id:'silicate',name:'Силикатный песок',tier:0,cap:300,shapeIdx:1},
+  {id:'ice',name:'Лёд',tier:0,cap:300,shapeIdx:2},
+  {id:'hydrogen',name:'Водород',tier:0,cap:300,shapeIdx:3},
+  {id:'carbon',name:'Угольная пыль',tier:0,cap:300,shapeIdx:4},
+
+  {id:'iron_plate',name:'Железная пластина',tier:1,cap:220,shapeIdx:0},
+  {id:'silicon_pure',name:'Очищенный кремний',tier:1,cap:220,shapeIdx:1},
+  {id:'water',name:'Вода',tier:1,cap:220,shapeIdx:2},
+  {id:'graphite',name:'Графит',tier:1,cap:220,shapeIdx:3},
+  {id:'liquid_h2',name:'Жидкий водород',tier:1,cap:220,shapeIdx:4},
+
+  {id:'steel',name:'Сталь',tier:2,cap:160,shapeIdx:0},
+  {id:'silicon_wafer',name:'Кремниевая пластина',tier:2,cap:160,shapeIdx:1},
+  {id:'polymer',name:'Полимер',tier:2,cap:160,shapeIdx:2},
+
+  {id:'circuit',name:'Электронная плата',tier:3,cap:110,shapeIdx:0},
+  {id:'hull_plate',name:'Броневая плита',tier:3,cap:110,shapeIdx:1},
+  {id:'fuel_cell',name:'Топливный элемент',tier:3,cap:110,shapeIdx:2},
+
+  {id:'processor',name:'Процессорный блок',tier:4,cap:60,shapeIdx:0},
+  {id:'drone_frame',name:'Корпус дрона',tier:4,cap:60,shapeIdx:1},
+  {id:'reactor_core',name:'Реакторное ядро',tier:4,cap:60,shapeIdx:2},
+];
+
+const POP_GOODS=[
+  {id:'food_basic',name:'Протеиновая паста',cls:1,cap:4000,shapeIdx:2,colorVar:'class1'},
+  {id:'clothing',name:'Комбинезон',cls:1,cap:500,shapeIdx:4,colorVar:'class1'},
+  {id:'leisure',name:'Досуг',cls:1,cap:500,shapeIdx:1,colorVar:'class1'},
+  {id:'o2_mix',name:'Кислородный коктейль',cls:2,cap:300,shapeIdx:2,colorVar:'class2'},
+  {id:'stimulant',name:'Стимулятор',cls:3,cap:200,shapeIdx:2,colorVar:'class3'},
+  {id:'datafeed',name:'Инфопакет',cls:4,cap:150,shapeIdx:2,colorVar:'class4'},
+];
+
+const BUILDINGS=[
+  {id:'iron_ore',name:'Железный экскаватор',tier:0,cycle:6,in:{},out:{iron_ore:4},cost:{iron_plate:15,steel:8},workers:3},
+  {id:'silicate',name:'Харвестер реголита',tier:0,cycle:6,in:{},out:{silicate:4},cost:{iron_plate:15,steel:8},workers:3},
+  {id:'ice',name:'Крио-бур',tier:0,cycle:8,in:{},out:{ice:3},cost:{iron_plate:18,steel:8},workers:4},
+  {id:'hydrogen',name:'Газовый скиммер',tier:0,cycle:8,in:{},out:{hydrogen:3},cost:{iron_plate:18,steel:10},workers:4},
+  {id:'carbon',name:'Углеродный скрейпер',tier:0,cycle:6,in:{},out:{carbon:4},cost:{iron_plate:15,steel:8},workers:3},
+
+  {id:'iron_plate',name:'Плавильня',tier:1,cycle:5,in:{iron_ore:5},out:{iron_plate:3},cost:{steel:12,water:6},workers:4},
+  {id:'silicon_pure',name:'Обогатительный узел',tier:1,cycle:5,in:{silicate:5},out:{silicon_pure:3},cost:{steel:12,water:6},workers:4},
+  {id:'water',name:'Конденсатор',tier:1,cycle:6,in:{ice:4},out:{water:3},cost:{steel:12,graphite:6},workers:5},
+  {id:'graphite',name:'Угольный компрессор',tier:1,cycle:5,in:{carbon:5},out:{graphite:3},cost:{steel:12,water:6},workers:4},
+  {id:'liquid_h2',name:'Крио-компрессор',tier:1,cycle:7,in:{hydrogen:4},out:{liquid_h2:3},cost:{steel:12,water:6},workers:6},
+
+  {id:'steel',name:'Литейный цех',tier:2,cycle:8,in:{iron_plate:4,graphite:3},out:{steel:3},cost:{iron_plate:20,water:10},workers:6},
+  {id:'silicon_wafer',name:'Вафельная фабрика',tier:2,cycle:9,in:{silicon_pure:4,water:3},out:{silicon_wafer:3},cost:{steel:20,silicon_pure:10},workers:7},
+  {id:'polymer',name:'Завод полимеров',tier:2,cycle:8,in:{graphite:3,liquid_h2:3},out:{polymer:3},cost:{steel:20,liquid_h2:10},workers:7},
+
+  {id:'circuit',name:'Электронный цех',tier:3,cycle:10,in:{silicon_wafer:3,steel:3},out:{circuit:2},cost:{steel:15,silicon_wafer:10},workers:8},
+  {id:'hull_plate',name:'Пресс брони',tier:3,cycle:10,in:{steel:4,polymer:3},out:{hull_plate:2},cost:{steel:20,polymer:10},workers:9},
+  {id:'fuel_cell',name:'Сборка топл. элементов',tier:3,cycle:9,in:{liquid_h2:3,water:3},out:{fuel_cell:2},cost:{steel:15,polymer:10},workers:8},
+
+  {id:'processor',name:'Линия процессоров',tier:4,cycle:14,in:{circuit:3,polymer:2},out:{processor:1},cost:{circuit:15,polymer:10},workers:10},
+  {id:'drone_frame',name:'Сборка дронов',tier:4,cycle:16,in:{hull_plate:2,processor:2},out:{drone_frame:1},cost:{hull_plate:10,processor:10},workers:12},
+  {id:'reactor_core',name:'Реакторная линия',tier:4,cycle:16,in:{fuel_cell:2,processor:2},out:{reactor_core:1},cost:{fuel_cell:10,processor:10},workers:13},
+];
+
+const SERVICE_BUILDINGS=[
+  {id:'food_basic',name:'Гидропонная ферма',cls:1,cycle:6,in:{water:2},out:{food_basic:3},cost:{iron_plate:15,water:10}},
+  {id:'clothing',name:'Швейный цех',cls:1,cycle:8,in:{carbon:2},out:{clothing:1},cost:{iron_plate:12,carbon:10}},
+  {id:'leisure',name:'Комната отдыха',cls:1,cycle:10,in:{graphite:1},out:{leisure:1},cost:{iron_plate:12,graphite:8}},
+  {id:'o2_mix',name:'Оксигенатор',cls:2,cycle:7,in:{hydrogen:2,water:1},out:{o2_mix:2},cost:{steel:15,water:10}},
+  {id:'stimulant',name:'Синтезатор стимуляторов',cls:3,cycle:8,in:{carbon:2,water:1},out:{stimulant:2},cost:{steel:18,graphite:10}},
+  {id:'datafeed',name:'Медиа-центр',cls:4,cycle:10,in:{polymer:1,water:1},out:{datafeed:1},cost:{circuit:10,polymer:8}},
+];
+
+const HOUSING=[
+  {id:'house_c1',name:'Жилой блок: разнорабочие',cls:1,capacity:20,cost:{iron_plate:25,water:15}},
+  {id:'house_c2',name:'Жилой блок: техники',cls:2,capacity:15,cost:{steel:20,polymer:10}},
+  {id:'house_c3',name:'Жилой блок: инженеры',cls:3,capacity:10,cost:{steel:25,circuit:8}},
+  {id:'house_c4',name:'Жилой блок: специалисты',cls:4,capacity:8,cost:{hull_plate:10,processor:6}},
+];
+
+const CLASSES=[
+  {id:1,name:'Разнорабочие',needsWeighted:[
+    {id:'water',label:'Вода',weight:0.30},
+    {id:'food_basic',label:'Еда',weight:0.35},
+    {id:'clothing',label:'Одежда',weight:0.20},
+    {id:'leisure',label:'Досуг',weight:0.15},
+  ]},
+  {id:2,name:'Техники',extraNeeds:['o2_mix']},
+  {id:3,name:'Инженеры',extraNeeds:['o2_mix','stimulant']},
+  {id:4,name:'Специалисты',extraNeeds:['o2_mix','stimulant','datafeed']},
+];
+
+const CLASS_OF_TIER={0:1,1:1,2:2,3:3,4:4};
+const BASE_FREE_CAPACITY={1:8,2:0,3:0,4:0};
+const SEC_PER_DAY=86400;
+const PER_WORKER_RATE={
+  water:1/SEC_PER_DAY,
+  food_basic:1/SEC_PER_DAY,
+  clothing:0.1/SEC_PER_DAY,
+  leisure:0.1/SEC_PER_DAY,
+  o2_mix:0.03,
+  stimulant:0.02,
+  datafeed:0.015,
+};
+
+const SKILLS=[
+  {id:'t0',tier:0,name:'Горное дело'},
+  {id:'t1',tier:1,name:'Переработка сырья'},
+  {id:'t2',tier:2,name:'Промышленный синтез'},
+  {id:'t3',tier:3,name:'Точное машиностроение'},
+  {id:'t4',tier:4,name:'Робототехника и системы'},
+];
+const MAX_SKILL_LEVEL=5;
+const SKILL_SPEED_BONUS=0.08;
+const SKILL_WORKFORCE_CUT=0.05;
+const SKILL_BASE_SP=300;
+const SP_PER_HOUR_BY_TIER={0:1,1:1.5,2:2,3:2.5,4:3};
+const ACADEMY_SP_PER_HOUR=90;
+const ACADEMY={id:'academy',name:'Учебный центр',cost:{steel:30,silicon_wafer:15}};
+const SKILL_BUILDINGS=[ACADEMY];
+
+function skillLevelCost(level){ return Math.round(SKILL_BASE_SP*Math.pow(level,2.5)); }
+function skillLevelOf(tier){ return (state.skills && state.skills['t'+tier] && state.skills['t'+tier].level) || 0; }
+function speedMultForTier(tier){ return 1+SKILL_SPEED_BONUS*skillLevelOf(tier); }
+function workforceCutForTier(tier){ return SKILL_WORKFORCE_CUT*skillLevelOf(tier); }
+
+const SECTIONS=[
+  {id:'production',label:'Производство',color:'tier0'},
+  {id:'population',label:'Население',color:'class1'},
+  {id:'skills',label:'Навыки',color:'skill'},
+];
+const TAB_LABELS=['Добыча','Переработка','Компоненты','Продвинутые узлы','Готовые изделия'];
+const SAVE_KEY='industrial_belt_v5';
+const OFFLINE_CAP_SEC=12*3600;
+const OFFLINE_STEP=30;
+
+function resById(id){ return RESOURCES.find(r=>r.id===id) || POP_GOODS.find(r=>r.id===id); }
+function resName(id){ const r=resById(id); return r?r.name:id; }
+function colorVarOf(res){ return res.colorVar || ('tier'+res.tier); }
+
+const ICONS={
+  iron_ore:'<polygon points="4,14 3,9 7,4 13,3 17,7 16,13 12,17 6,17"/><polygon points="7,9 10,6 13,9 11,13 8,13" opacity="0.5"/>',
+  silicate:'<ellipse cx="10" cy="14.5" rx="8" ry="2.6"/><circle cx="6" cy="12" r="1.3" opacity="0.6"/><circle cx="10" cy="10.2" r="1.3" opacity="0.6"/><circle cx="14" cy="12.4" r="1.3" opacity="0.6"/>',
+  ice:'<polygon points="10,1 12,7 18,5 13,10 18,15 12,13 10,19 8,13 2,15 7,10 2,5 8,7"/>',
+  hydrogen:'<circle cx="7" cy="12" r="4"/><circle cx="13" cy="8" r="3" opacity="0.6"/><circle cx="14" cy="14" r="2.2" opacity="0.8"/>',
+  carbon:'<polygon points="4,15 3,8 8,3 15,4 17,11 12,17 6,17"/><polygon points="7,8 11,6 14,10 11,14 8,12" opacity="0.5"/>',
+  iron_plate:'<rect x="3" y="6" width="14" height="8" rx="1"/><circle cx="6" cy="10" r="1" opacity="0.6"/><circle cx="14" cy="10" r="1" opacity="0.6"/>',
+  silicon_pure:'<rect x="4" y="8" width="12" height="6" rx="2"/><rect x="5" y="9" width="10" height="1.5" opacity="0.6"/>',
+  water:'<path d="M10 2C10 2 4 10.5 4 14A6 6 0 0 0 16 14C16 10.5 10 2 10 2Z"/>',
+  graphite:'<rect x="8.5" y="2" width="3" height="16" rx="1.5" transform="rotate(20 10 10)"/>',
+  liquid_h2:'<rect x="6" y="4" width="8" height="13" rx="3"/><rect x="7" y="6.5" width="6" height="1.6" opacity="0.5"/><rect x="7" y="9.5" width="6" height="1.1" opacity="0.4"/>',
+  steel:'<path d="M4 3h12v3H12v8h4v3H4v-3h4V6H4z"/>',
+  silicon_wafer:'<circle cx="10" cy="10" r="8"/><circle cx="10" cy="10" r="5" fill="none" stroke="currentColor" stroke-width="0.7" opacity="0.5"/><circle cx="10" cy="10" r="2" opacity="0.5"/>',
+  polymer:'<path d="M6 7L14 7L10 14Z" opacity="0.35"/><circle cx="6" cy="7" r="2.6"/><circle cx="14" cy="7" r="2.6"/><circle cx="10" cy="14" r="2.6"/>',
+  circuit:'<rect x="3" y="3" width="14" height="14" rx="1.5"/><path d="M6 3v3M10 3v3M14 3v3M6 14v3M10 14v3M14 14v3M3 6h3M3 10h3M3 14h3M14 6h3M14 10h3M14 14h3" stroke="currentColor" stroke-width="1" fill="none" opacity="0.7"/><circle cx="10" cy="10" r="2" opacity="0.5"/>',
+  hull_plate:'<polygon points="10,2 17,5 17,12 10,18 3,12 3,5"/><polygon points="10,5 14,7 14,11 10,14 6,11 6,7" opacity="0.5"/>',
+  fuel_cell:'<rect x="5" y="4" width="10" height="14" rx="2"/><rect x="8" y="1" width="4" height="3" rx="1"/><rect x="7" y="8" width="6" height="6" opacity="0.5"/>',
+  processor:'<rect x="6" y="6" width="8" height="8" rx="1"/><path d="M8 2v3M12 2v3M8 15v3M12 15v3M2 8h3M2 12h3M15 8h3M15 12h3" stroke="currentColor" stroke-width="1.4" fill="none"/><rect x="8" y="8" width="4" height="4" opacity="0.5"/>',
+  drone_frame:'<path d="M3 3l5 5M17 3l-5 5M3 17l5-5M17 17l-5-5" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="10" cy="10" r="3"/><circle cx="3" cy="3" r="2" opacity="0.6"/><circle cx="17" cy="3" r="2" opacity="0.6"/><circle cx="3" cy="17" r="2" opacity="0.6"/><circle cx="17" cy="17" r="2" opacity="0.6"/>',
+  reactor_core:'<circle cx="10" cy="10" r="2.6"/><ellipse cx="10" cy="10" rx="8" ry="3" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7"/><ellipse cx="10" cy="10" rx="8" ry="3" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7" transform="rotate(60 10 10)"/><ellipse cx="10" cy="10" rx="8" ry="3" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.7" transform="rotate(120 10 10)"/>',
+  food_basic:'<path d="M3 9a7 4 0 0 1 14 0v1a7 4 0 0 1-14 0z"/><path d="M5 5q1-3 5-3t5 3" fill="none" stroke="currentColor" stroke-width="1.3" opacity="0.6"/>',
+  clothing:'<path d="M7 3l3 2 3-2 3 3-2 3v9H6V9L4 6z"/>',
+  leisure:'<rect x="4" y="4" width="12" height="12" rx="3"/><circle cx="7.5" cy="7.5" r="1.1" opacity="0.6"/><circle cx="12.5" cy="7.5" r="1.1" opacity="0.6"/><circle cx="10" cy="10" r="1.1" opacity="0.6"/><circle cx="7.5" cy="12.5" r="1.1" opacity="0.6"/><circle cx="12.5" cy="12.5" r="1.1" opacity="0.6"/>',
+  o2_mix:'<path d="M10 2a6 6 0 0 1 6 6c0 4-3 5-3 9H7c0-4-3-5-3-9a6 6 0 0 1 6-6z"/><circle cx="10" cy="8" r="2" opacity="0.5"/>',
+  stimulant:'<rect x="8" y="2" width="4" height="9" rx="1.5"/><rect x="6" y="11" width="8" height="6" rx="1"/><rect x="9" y="11" width="2" height="6" opacity="0.5"/>',
+  datafeed:'<circle cx="10" cy="15" r="1.6"/><path d="M6 12a5.5 5.5 0 0 1 8 0" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9a10 10 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="1.6" opacity="0.7"/>',
+  class1:'<path d="M3 13a7 5 0 0 1 14 0v1H3z"/><rect x="2" y="13" width="16" height="2.2" rx="1"/><rect x="9" y="6" width="2" height="4" opacity="0.6"/>',
+  class2:'<circle cx="5.5" cy="5.5" r="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="7.5" y="8.5" width="7.5" height="3" rx="1.5" transform="rotate(45 7.5 8.5)"/><circle cx="14.5" cy="14.5" r="3" fill="none" stroke="currentColor" stroke-width="2"/>',
+  class3:'<circle cx="10" cy="10" r="4"/><path d="M10 2v3M10 15v3M2 10h3M15 10h3M4.6 4.6l2 2M13.4 13.4l2 2M4.6 15.4l2-2M13.4 6.6l2-2" stroke="currentColor" stroke-width="2"/>',
+  class4:'<polygon points="10,2 12.5,7.5 18,8 13.8,11.8 15,17.5 10,14.5 5,17.5 6.2,11.8 2,8 7.5,7.5"/>',
+  skillT0:'<path d="M2 11c4-6 8-7.5 13-5.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="8.7" y="8" width="2.2" height="11" rx="1" transform="rotate(28 8.7 8)"/>',
+  skillT1:'<path d="M8 2h4v5l4 8.5a2 2 0 0 1-2 3H6a2 2 0 0 1-2-3L8 7z"/><rect x="7" y="2" width="6" height="2"/>',
+  skillT2:'<path d="M6 7L14 7L10 14Z" opacity="0.35"/><circle cx="6" cy="7" r="2.6"/><circle cx="14" cy="7" r="2.6"/><circle cx="10" cy="14" r="2.6"/>',
+  skillT3:'<path d="M3 16L15 4M8 3l2 2M14 9l2 2M5 13l2 2" stroke="currentColor" stroke-width="2" fill="none"/>',
+  skillT4:'<rect x="5" y="6" width="10" height="9" rx="2"/><circle cx="8" cy="10.5" r="1.2"/><circle cx="12" cy="10.5" r="1.2"/><rect x="9" y="2" width="2" height="4"/><circle cx="10" cy="2" r="1.2"/>',
+  housing:'<path d="M10 2 2 8v10h16V8z"/><rect x="8" y="12" width="4" height="6" opacity="0.5"/>',
+  academy:'<path d="M10 3 1 7l9 4 9-4z"/><path d="M5 9v4c0 1.5 2.5 3 5 3s5-1.5 5-3V9" fill="none" stroke="currentColor" stroke-width="1.4"/>',
+};
+
+function iconSvg(key,colorVar){
+  const inner=ICONS[key] || '<circle cx="10" cy="10" r="7"/>';
+  return '<svg viewBox="0 0 20 20" width="20" height="20" style="color:var(--'+colorVar+')" fill="currentColor">'+inner+'</svg>';
+}
+
+function freshState(){
+  const resources={};
+  RESOURCES.forEach(r=>resources[r.id]=0);
+  POP_GOODS.forEach(r=>resources[r.id]=0);
+  const cargo={iron_plate:40,steel:30,water:25,graphite:20,liquid_h2:15,food_basic:20,clothing:5,leisure:5};
+  Object.entries(cargo).forEach(([k,v])=>resources[k]=v);
+  const richness={};
+  RESOURCES.filter(r=>r.tier===0).forEach(r=>{ richness[r.id]=Math.round((0.8+Math.random()*0.5)*100)/100; });
+  const skills={};
+  SKILLS.forEach(s=>skills[s.id]={level:0,sp:0});
+  const now=Date.now();
+  return {resources,buildings:{},richness,skills,training:'t0',lastTs:now,startTs:now,playSeconds:0};
+}
+
+function loadState(){
+  try{
+    const raw=localStorage.getItem(SAVE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return null;
+}
+function saveState(){
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify(state)); }catch(e){}
+}
+
+let state=loadState();
+let isNew=!state;
+if(!state) state=freshState();
+POP_GOODS.forEach(r=>{ if(state.resources[r.id]==null) state.resources[r.id]=0; });
+
+const util={};
+function blankWf(){ return {cap:0,demand:0,assigned:0,staffing:1,satisfaction:1,weighted:[],extras:[],base:null}; }
+let lastWorkforce={1:blankWf(),2:blankWf(),3:blankWf(),4:blankWf()};
+
+function runProdBuilding(b, dt, richMult, speedMult){
+  if(speedMult==null) speedMult=1;
+  const count=state.buildings[b.id]||0;
+  if(count<=0){ return {frac:0, reason:'idle'}; }
+  const outQty=b.out[b.id];
+  const outPerSec=outQty*count/b.cycle*speedMult;
+  const desiredOut=outPerSec*dt*richMult;
+  const entries=Object.entries(b.in||{});
+  const desiredIns={};
+  let inputFraction=1;
+  entries.forEach(([rid,q])=>{
+    const perSec=q*count/b.cycle*speedMult;
+    const desired=perSec*dt;
+    desiredIns[rid]=desired;
+    if(desired>0){
+      const avail=state.resources[rid]||0;
+      inputFraction=Math.min(inputFraction, avail/desired);
+    }
+  });
+  const outMeta=resById(b.id);
+  const capSpace=outMeta.cap-(state.resources[b.id]||0);
+  let outCapFraction=1;
+  if(desiredOut>0){ outCapFraction=Math.min(1, Math.max(0,capSpace)/desiredOut); }
+  return {inputFraction, outCapFraction, desiredOut, desiredIns, entries};
+}
+
+function computeWorkforce(dt){
+  const wf={};
+  let class1Sat=1;
+  [1,2,3,4].forEach(c=>{
+    const housing=HOUSING.find(h=>h.cls===c);
+    const builtCap=(state.buildings[housing.id]||0)*housing.capacity;
+    const cap=builtCap+(BASE_FREE_CAPACITY[c]||0);
+    const demand=BUILDINGS.filter(b=>CLASS_OF_TIER[b.tier]===c).reduce((s,b)=>s+(state.buildings[b.id]||0)*b.workers*(1-workforceCutForTier(b.tier)),0);
+    const staffing=demand>0?Math.min(1,cap/demand):1;
+    const assigned=Math.min(cap,demand);
+    const cls=CLASSES.find(x=>x.id===c);
+    let satisfaction;
+    const weighted=[];
+    const extras=[];
+    if(c===1){
+      satisfaction=0;
+      cls.needsWeighted.forEach(n=>{
+        const rate=PER_WORKER_RATE[n.id];
+        const desired=rate*assigned*dt;
+        let fraction=1;
+        if(desired>0){
+          const avail=state.resources[n.id]||0;
+          fraction=Math.max(0,Math.min(1, avail/desired));
+        }
+        satisfaction+=n.weight*fraction;
+        const consume=desired*fraction;
+        state.resources[n.id]=Math.max(0,(state.resources[n.id]||0)-consume);
+        weighted.push({id:n.id,label:n.label,weight:n.weight,fraction});
+      });
+      satisfaction=Math.max(0,Math.min(1,satisfaction));
+      class1Sat=satisfaction;
+    }else{
+      satisfaction=class1Sat;
+      (cls.extraNeeds||[]).forEach(gid=>{
+        const rate=PER_WORKER_RATE[gid];
+        const desired=rate*assigned*dt;
+        let fraction=1;
+        if(desired>0){
+          const avail=state.resources[gid]||0;
+          fraction=Math.max(0,Math.min(1, avail/desired));
+        }
+        satisfaction=Math.min(satisfaction, fraction);
+        extras.push({id:gid,fraction});
+      });
+      satisfaction=Math.max(0,Math.min(1,satisfaction));
+      (cls.extraNeeds||[]).forEach(gid=>{
+        const rate=PER_WORKER_RATE[gid];
+        const desired=rate*assigned*dt;
+        const consume=desired*satisfaction;
+        state.resources[gid]=Math.max(0,(state.resources[gid]||0)-consume);
+      });
+    }
+    wf[c]={cap,demand,assigned,staffing,satisfaction,weighted,extras,base:c===1?null:class1Sat};
+  });
+  return wf;
+}
+
+function spPerHourTotal(){
+  const fromBuildings=BUILDINGS.reduce((s,b)=>s+(state.buildings[b.id]||0)*SP_PER_HOUR_BY_TIER[b.tier],0);
+  const academies=state.buildings[ACADEMY.id]||0;
+  return {fromBuildings, fromAcademy:academies*ACADEMY_SP_PER_HOUR, total:fromBuildings+academies*ACADEMY_SP_PER_HOUR};
+}
+
+function tickSkills(dt){
+  const spPerSec=spPerHourTotal().total/3600;
+  if(!state.training) return;
+  const sk=state.skills[state.training];
+  if(!sk || sk.level>=MAX_SKILL_LEVEL) return;
+  sk.sp+=spPerSec*dt;
+  while(sk.level<MAX_SKILL_LEVEL && sk.sp>=skillLevelCost(sk.level+1)){
+    sk.sp-=skillLevelCost(sk.level+1);
+    sk.level+=1;
+  }
+}
+
+function simulateStep(dt){
+  tickSkills(dt);
+  SERVICE_BUILDINGS.forEach(sb=>{
+    const count=state.buildings[sb.id]||0;
+    if(count<=0){ util[sb.id]={frac:0,reason:'idle'}; return; }
+    const calc=runProdBuilding(sb, dt, 1);
+    const fraction=Math.max(0,Math.min(1,calc.inputFraction,calc.outCapFraction));
+    calc.entries.forEach(([rid,q])=>{
+      const next=(state.resources[rid]||0)-calc.desiredIns[rid]*fraction;
+      state.resources[rid]=next<0?0:next;
+    });
+    state.resources[sb.id]=(state.resources[sb.id]||0)+calc.desiredOut*fraction;
+    let reason='full';
+    if(fraction<0.999){
+      reason = calc.inputFraction<=calc.outCapFraction ? 'input' : 'storage';
+    }
+    util[sb.id]={frac:fraction,reason};
+  });
+
+  const wf=computeWorkforce(dt);
+  lastWorkforce=wf;
+
+  [0,1,2,3,4].forEach(t=>{
+    BUILDINGS.filter(b=>b.tier===t).forEach(b=>{
+      const count=state.buildings[b.id]||0;
+      if(count<=0){ util[b.id]={frac:0,reason:'idle'}; return; }
+      const richMult = t===0 ? (state.richness[b.id]||1) : 1;
+      const speedMult = speedMultForTier(t);
+      const calc=runProdBuilding(b, dt, richMult, speedMult);
+      const cls=wf[CLASS_OF_TIER[t]];
+      const factors={staff:cls.staffing, comfort:cls.satisfaction, input:calc.inputFraction, storage:calc.outCapFraction};
+      let fraction=1, reason='full';
+      ['staff','comfort','input','storage'].forEach(k=>{
+        if(factors[k]<fraction-1e-6){ fraction=factors[k]; reason=k; }
+      });
+      fraction=Math.max(0,Math.min(1,fraction));
+      if(fraction>=0.999) reason='full';
+      calc.entries.forEach(([rid,q])=>{
+        const next=(state.resources[rid]||0)-calc.desiredIns[rid]*fraction;
+        state.resources[rid]=next<0?0:next;
+      });
+      state.resources[b.id]=(state.resources[b.id]||0)+calc.desiredOut*fraction;
+      util[b.id]={frac:fraction,reason};
+    });
+  });
+  state.playSeconds=(state.playSeconds||0)+dt;
+}
+
+let offlineInfo=null;
+if(!isNew){
+  const now=Date.now();
+  const elapsedSec=(now-state.lastTs)/1000;
+  if(elapsedSec>5){
+    const capped=Math.min(elapsedSec, OFFLINE_CAP_SEC);
+    const before={}; RESOURCES.concat(POP_GOODS).forEach(r=>before[r.id]=state.resources[r.id]||0);
+    let remaining=capped;
+    while(remaining>0){
+      const step=Math.min(OFFLINE_STEP,remaining);
+      simulateStep(step);
+      remaining-=step;
+    }
+    const deltas={};
+    RESOURCES.concat(POP_GOODS).forEach(r=>{
+      const d=(state.resources[r.id]||0)-before[r.id];
+      if(Math.abs(d)>0.05) deltas[r.id]=d;
+    });
+    offlineInfo={deltas,elapsedSec,capped:elapsedSec>OFFLINE_CAP_SEC};
+  }
+}
+state.lastTs=Date.now();
+saveState();
+
+let activeTier=0;
+let activeSection='production';
+
+function netRate(resId){
+  let rate=0;
+  BUILDINGS.concat(SERVICE_BUILDINGS).forEach(b=>{
+    const count=state.buildings[b.id]||0;
+    if(count<=0) return;
+    const u=(util[b.id]&&util[b.id].frac)||0;
+    if(b.out && b.out[resId]!=null){
+      const rich = (b.tier===0) ? (state.richness[b.id]||1) : 1;
+      rate += (b.out[resId]*count/b.cycle)*u*rich;
+    }
+    if(b.in && b.in[resId]!=null){
+      rate -= (b.in[resId]*count/b.cycle)*u;
+    }
+  });
+  return rate;
+}
+
+function scaledCost(b,count){
+  const result={};
+  Object.entries(b.cost).forEach(([rid,q])=>{
+    result[rid]=Math.ceil(q*Math.pow(1.15,count));
+  });
+  return result;
+}
+
+function fmtElapsed(ms){
+  let s=Math.floor(ms/1000);
+  const d=Math.floor(s/86400); s%=86400;
+  const h=Math.floor(s/3600); s%=3600;
+  const m=Math.floor(s/60);
+  if(d>0) return d+'д '+h+'ч '+m+'м';
+  if(h>0) return h+'ч '+m+'м';
+  return m+'м';
+}
+
+const ledgerEl=document.getElementById('ledger');
+const sectionsEl=document.getElementById('sections');
+const tabsEl=document.getElementById('tabs');
+const bgridEl=document.getElementById('bgrid');
+const popPanelEl=document.getElementById('popPanel');
+const skillsPanelEl=document.getElementById('skillsPanel');
+const modalEl=document.getElementById('offlineModal');
+
+function renderLedger(){
+  let html='';
+  [0,1,2,3,4].forEach(t=>{
+    RESOURCES.filter(r=>r.tier===t).forEach(r=>{
+      const amt=state.resources[r.id]||0;
+      const pct=Math.max(0,Math.min(100,(amt/r.cap)*100));
+      const rate=netRate(r.id);
+      const rateClass = rate>0.01?'pos':(rate<-0.01?'neg':'zero');
+      const rateStr=(rate>=0?'+':'')+rate.toFixed(1);
+      html+='<div class="chip t'+t+'"><div>'+iconSvg(r.id,'tier'+t)+'</div>'+
+        '<div class="chip-body">'+
+          '<div class="chip-name">'+r.name+'</div>'+
+          '<div class="chip-amt">'+Math.floor(amt)+'<span class="chip-cap">/'+r.cap+'</span></div>'+
+          '<div class="chip-bar"><div class="chip-bar-fill" style="width:'+pct+'%"></div></div>'+
+          '<div class="chip-rate '+rateClass+'">'+rateStr+'/с</div>'+
+        '</div></div>';
+    });
+  });
+  ledgerEl.innerHTML=html;
+}
+
+function tierUnlocked(t){
+  if(t===0) return true;
+  return BUILDINGS.filter(b=>b.tier===t-1).some(b=>(state.buildings[b.id]||0)>0);
+}
+
+const REASON_LABELS={
+  full:'Работает на полную мощность',
+  input:'Не хватает сырья',
+  storage:'Склад заполнен',
+  staff:'Не хватает персонала',
+  comfort:'Персонал недоволен бытом',
+};
+
+function renderSections(){
+  let html='';
+  SECTIONS.forEach(s=>{
+    let badge='';
+    if(s.id==='population'){
+      const count=Object.values(lastWorkforce).reduce((sum,c)=>sum+Math.floor(c.assigned),0);
+      badge=' · '+count+' чел.';
+    }else if(s.id==='skills'){
+      const totalLevels=SKILLS.reduce((sum,sk)=>sum+skillLevelOf(sk.tier),0);
+      badge=' · ур. '+totalLevels+'/'+(SKILLS.length*MAX_SKILL_LEVEL);
+    }else{
+      const count=Object.values(state.buildings).length?BUILDINGS.reduce((sum,b)=>sum+(state.buildings[b.id]||0),0):0;
+      badge=' · '+count+' объектов';
+    }
+    html+='<button class="section-btn" style="--sec-color:var(--'+s.color+')" data-section="'+s.id+'" '+
+      (s.id===activeSection?'class="active"':'')+'>'+s.label+badge+'</button>';
+  });
+  sectionsEl.innerHTML=html;
+}
+
+function renderTabs(){
+  let html='';
+  TAB_LABELS.forEach((label,t)=>{
+    const cls='t'+t;
+    const count=BUILDINGS.filter(b=>b.tier===t).reduce((s,b)=>s+(state.buildings[b.id]||0),0);
+    const badge='T'+t+' · '+count;
+    html+='<button class="tab-btn '+cls+' '+(t===activeTier?'active':'')+'" data-tier="'+t+'">'+label+
+      '<span class="tab-badge">'+badge+'</span></button>';
+  });
+  tabsEl.innerHTML=html;
+}
+
+function renderBuildings(){
+  const unlocked=tierUnlocked(activeTier);
+  let html='';
+  if(!unlocked){
+    html+='<div class="locked-banner">Постройте хотя бы один объект уровня T'+(activeTier-1)+', чтобы открыть этот раздел цепочки.</div>';
+  }
+  const cls=CLASS_OF_TIER[activeTier];
+  const className=CLASSES.find(c=>c.id===cls).name;
+  BUILDINGS.filter(b=>b.tier===activeTier).forEach(b=>{
+    const count=state.buildings[b.id]||0;
+    const cost=scaledCost(b,count);
+    const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
+    const uInfo=util[b.id]||{frac:0,reason:'idle'};
+    const uPct=Math.round(uInfo.frac*100);
+    const uClass = count===0?'idle':(uInfo.frac>0.95?'full':(uInfo.frac>0.05?'partial':'blocked'));
+    const uLabel = count===0?'Ещё не построено':(REASON_LABELS[uInfo.reason]+(uInfo.reason==='full'?'':' · '+uPct+'%'));
+    const inputsStr = Object.keys(b.in||{}).length
+      ? Object.entries(b.in).map(([rid,q])=>q+' '+resName(rid)).join(' + ')
+      : 'Месторождение';
+    const outRes=resById(b.id);
+    const richBadge = b.tier===0 ? '<div class="bcard-richness">Богатство месторождения: '+Math.round((state.richness[b.id]||1)*100)+'%</div>' : '';
+    const wCut=workforceCutForTier(b.tier);
+    const effWorkers=Math.max(1,Math.round(b.workers*(1-wCut)));
+    const staffBadge = '<div class="bcard-staff">Персонал: '+effWorkers+' × '+className+(wCut>0?' (база '+b.workers+')':'')+'</div>';
+    const sMult=speedMultForTier(b.tier);
+    const speedBadge = sMult>1 ? '<div class="bcard-staff">Скорость с учётом навыка: ×'+sMult.toFixed(2)+'</div>' : '';
+    const costStr=Object.entries(cost).map(([rid,q])=>{
+      const ok=(state.resources[rid]||0)>=q;
+      return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
+    }).join('');
+    html+='<div class="bcard t'+b.tier+'">'+
+      '<div class="bcard-head">'+iconSvg(outRes.id,'tier'+b.tier)+
+        '<div><h3>'+b.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[b.id]+' '+outRes.name+'</div>'+richBadge+staffBadge+speedBadge+'</div>'+
+      '</div>'+
+      '<div class="bcard-stats"><span>Построено: <strong>'+count+'</strong></span><span>Цикл: '+b.cycle+' с</span></div>'+
+      '<div class="util-bar '+uClass+'"><div class="util-fill" style="width:'+(count===0?0:uPct)+'%"></div></div>'+
+      '<div class="util-label">'+uLabel+'</div>'+
+      '<div class="bcard-cost">'+costStr+'</div>'+
+      '<button class="build-btn" data-build="'+b.id+'" '+((!unlocked||!afford)?'disabled':'')+'>Построить (+1)</button>'+
+    '</div>';
+  });
+  bgridEl.innerHTML=html;
+}
+
+function popUnlocked(cls){
+  if(cls===1) return true;
+  return tierUnlocked(cls);
+}
+
+function renderServiceCard(sb){
+  const count=state.buildings[sb.id]||0;
+  const cost=scaledCost(sb,count);
+  const unlocked=popUnlocked(sb.cls);
+  const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
+  const uInfo=util[sb.id]||{frac:0,reason:'idle'};
+  const uPct=Math.round(uInfo.frac*100);
+  const uClass = count===0?'idle':(uInfo.frac>0.95?'full':(uInfo.frac>0.05?'partial':'blocked'));
+  const uLabel = count===0?'Ещё не построено':(REASON_LABELS[uInfo.reason]+(uInfo.reason==='full'?'':' · '+uPct+'%'));
+  const inputsStr=Object.entries(sb.in).map(([rid,q])=>q+' '+resName(rid)).join(' + ');
+  const outRes=resById(sb.id);
+  const cv='class'+sb.cls;
+  const costStr=Object.entries(cost).map(([rid,q])=>{
+    const ok=(state.resources[rid]||0)>=q;
+    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
+  }).join('');
+  return '<div class="bcard" style="--tier-color:var(--'+cv+')">'+
+    '<div class="bcard-head">'+iconSvg(outRes.id,cv)+
+      '<div><h3>'+sb.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+sb.out[sb.id]+' '+outRes.name+'</div></div>'+
+    '</div>'+
+    '<div class="bcard-stats"><span>Построено: <strong>'+count+'</strong></span><span>Цикл: '+sb.cycle+' с</span></div>'+
+    '<div class="util-bar '+uClass+'"><div class="util-fill" style="width:'+(count===0?0:uPct)+'%"></div></div>'+
+    '<div class="util-label">'+uLabel+'</div>'+
+    '<div class="bcard-cost">'+costStr+'</div>'+
+    '<button class="build-btn" data-build="'+sb.id+'" '+((!unlocked||!afford)?'disabled':'')+'>Построить (+1)</button>'+
+  '</div>';
+}
+
+function renderHousingCard(h){
+  const count=state.buildings[h.id]||0;
+  const cost=scaledCost(h,count);
+  const unlocked=popUnlocked(h.cls);
+  const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
+  const cv='class'+h.cls;
+  const totalCap=count*h.capacity+(BASE_FREE_CAPACITY[h.cls]||0);
+  const costStr=Object.entries(cost).map(([rid,q])=>{
+    const ok=(state.resources[rid]||0)>=q;
+    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
+  }).join('');
+  return '<div class="bcard" style="--tier-color:var(--'+cv+')">'+
+    '<div class="bcard-head">'+iconSvg('housing',cv)+
+      '<div><h3>'+h.name+'</h3><div class="bcard-recipe">Вместимость: '+h.capacity+' чел. за блок</div></div>'+
+    '</div>'+
+    '<div class="bcard-stats"><span>Построено: <strong>'+count+'</strong></span><span>Всего мест: '+totalCap+'</span></div>'+
+    '<div class="bcard-cost">'+costStr+'</div>'+
+    '<button class="build-btn" data-build="'+h.id+'" '+((!unlocked||!afford)?'disabled':'')+'>Построить (+1)</button>'+
+  '</div>';
+}
+
+function needRow(label,weightLabel,fraction,barColorVar){
+  const pct=Math.round(fraction*100);
+  const barColor = fraction>0.95?'var(--good)':(fraction>0.5?'var('+barColorVar+')':'var(--bad)');
+  return '<div class="need-row"><span class="need-label">'+label+'</span><span class="need-weight">'+weightLabel+'</span>'+
+    '<div class="need-bar"><div class="need-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div>'+
+    '<span class="need-pct">'+pct+'%</span></div>';
+}
+
+function renderPopulation(){
+  let html='';
+  CLASSES.forEach(c=>{
+    const wf=lastWorkforce[c.id]||blankWf();
+    const unlocked=popUnlocked(c.id);
+    const cv='class'+c.id;
+    const productivity=Math.round(wf.staffing*wf.satisfaction*100);
+    const prodClass = productivity>=90?'ok':(productivity>=50?'warn':'bad');
+
+    let stockIds, breakdownHtml;
+    if(c.id===1){
+      stockIds=c.needsWeighted.map(n=>n.id);
+      breakdownHtml='<div class="need-list">'+wf.weighted.map(n=>
+        needRow(n.label,'вес '+Math.round(n.weight*100)+'%',n.fraction,'--'+cv)
+      ).join('')+'</div>';
+    }else{
+      stockIds=c.extraNeeds||[];
+      const baseRow=needRow('Базовые нужды (разнорабочие)','наследуется',wf.base||0,'--'+cv);
+      const extraRows=wf.extras.map(e=>needRow(resName(e.id),'min',e.fraction,'--'+cv)).join('');
+      breakdownHtml='<div class="need-list">'+baseRow+extraRows+'</div>';
+    }
+
+    const stockHtml=stockIds.map(gid=>{
+      const g=resById(gid);
+      const amt=state.resources[gid]||0;
+      const pct=Math.max(0,Math.min(100,(amt/g.cap)*100));
+      const rate=netRate(gid);
+      const rateClass=rate>0.01?'pos':(rate<-0.01?'neg':'zero');
+      return '<div class="chip" style="--chip-color:var(--'+colorVarOf(g)+')"><div>'+iconSvg(g.id,colorVarOf(g))+'</div>'+
+        '<div class="chip-body"><div class="chip-name">'+g.name+'</div>'+
+        '<div class="chip-amt">'+Math.floor(amt)+'<span class="chip-cap">/'+g.cap+'</span></div>'+
+        '<div class="chip-bar"><div class="chip-bar-fill" style="width:'+pct+'%"></div></div>'+
+        '<div class="chip-rate '+rateClass+'">'+(rate>=0?'+':'')+rate.toFixed(1)+'/с</div></div></div>';
+    }).join('');
+
+    const housing=HOUSING.find(h=>h.cls===c.id);
+    const services=SERVICE_BUILDINGS.filter(s=>s.cls===c.id);
+    const serviceCards=services.map(renderServiceCard).join('');
+    html+='<div class="pop-class">'+
+      '<div class="pop-class-head" style="--tier-color:var(--'+cv+')">'+iconSvg('class'+c.id,cv)+'<h3>'+c.name+'</h3>'+
+        '<div class="pop-metrics">'+
+          '<span>Занято: '+Math.floor(wf.assigned)+' / '+Math.floor(wf.demand)+'</span>'+
+          '<span>Мест: '+Math.floor(wf.cap)+'</span>'+
+          '<span class="'+(wf.staffing>0.95?'ok':'bad')+'">Штат: '+Math.round(wf.staffing*100)+'%</span>'+
+          '<span class="'+prodClass+'">Производительность: '+productivity+'%</span>'+
+        '</div></div>'+
+      (unlocked?'':'<div class="locked-banner">Откроется вместе с уровнем T'+c.id+' производственной цепочки.</div>')+
+      breakdownHtml+
+      '<div class="pop-needs">'+stockHtml+'</div>'+
+      '<div class="pop-grid">'+renderHousingCard(housing)+serviceCards+'</div>'+
+    '</div>';
+  });
+  popPanelEl.innerHTML=html;
+}
+
+function renderAcademyCard(){
+  const count=state.buildings[ACADEMY.id]||0;
+  const cost=scaledCost(ACADEMY,count);
+  const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
+  const costStr=Object.entries(cost).map(([rid,q])=>{
+    const ok=(state.resources[rid]||0)>=q;
+    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
+  }).join('');
+  return '<div class="bcard" style="--tier-color:var(--skill)">'+
+    '<div class="bcard-head">'+iconSvg('academy','skill')+
+      '<div><h3>'+ACADEMY.name+'</h3><div class="bcard-recipe">+'+ACADEMY_SP_PER_HOUR+' SP/ч за блок</div></div>'+
+    '</div>'+
+    '<div class="bcard-stats"><span>Построено: <strong>'+count+'</strong></span></div>'+
+    '<div class="bcard-cost">'+costStr+'</div>'+
+    '<button class="build-btn" data-build="'+ACADEMY.id+'" '+(afford?'':'disabled')+'>Построить (+1)</button>'+
+  '</div>';
+}
+
+function renderSkills(){
+  const spInfo=spPerHourTotal();
+  let html='<div class="panel">'+
+    '<h2>Обучение</h2>'+
+    '<div class="pop-metrics" style="margin-bottom:12px;">'+
+      '<span>От производства: <strong style="font-family:var(--font-mono)">'+spInfo.fromBuildings.toFixed(1)+' SP/ч</strong></span>'+
+      '<span>От учебных центров: <strong style="font-family:var(--font-mono)">'+spInfo.fromAcademy+' SP/ч</strong></span>'+
+      '<span>Итого: <strong style="font-family:var(--font-mono)">'+spInfo.total.toFixed(1)+' SP/ч</strong></span>'+
+    '</div>'+
+    '<div class="pop-grid">'+renderAcademyCard()+'</div>'+
+  '</div>'+
+  '<div class="pop-grid" style="margin-top:14px;">';
+  SKILLS.forEach(sk=>{
+    const st=state.skills[sk.id];
+    const level=st.level;
+    const isTraining=state.training===sk.id;
+    const maxed=level>=MAX_SKILL_LEVEL;
+    const nextCost=maxed?0:skillLevelCost(level+1);
+    const pct=maxed?100:Math.max(0,Math.min(100,(st.sp/nextCost)*100));
+    const speedBonus=Math.round(SKILL_SPEED_BONUS*level*100);
+    const workforceCut=Math.round(SKILL_WORKFORCE_CUT*level*100);
+    const barClass=maxed?'full':(isTraining?'partial':'idle');
+    html+='<div class="bcard" style="--tier-color:var(--skill)">'+
+      '<div class="bcard-head">'+iconSvg('skillT'+sk.tier,'skill')+
+        '<div><h3>'+sk.name+'</h3><div class="bcard-recipe">Уровень '+level+' / '+MAX_SKILL_LEVEL+(isTraining?' · изучается сейчас':'')+'</div></div>'+
+      '</div>'+
+      '<div class="util-bar '+barClass+'"><div class="util-fill" style="width:'+pct+'%"></div></div>'+
+      '<div class="util-label">'+(maxed?'Максимальный уровень':(Math.floor(st.sp)+' / '+nextCost+' SP до следующего уровня'))+'</div>'+
+      '<div class="bcard-staff">Бонус: +'+speedBonus+'% скорость, −'+workforceCut+'% персонал</div>'+
+      '<button class="build-btn" data-train="'+sk.id+'" '+((isTraining||maxed)?'disabled':'')+'>'+(isTraining?'Изучается':'Обучать')+'</button>'+
+    '</div>';
+  });
+  html+='</div>';
+  skillsPanelEl.innerHTML=html;
+}
+
+function trySetTraining(skId){
+  if(!state.skills[skId]) return;
+  if(state.skills[skId].level>=MAX_SKILL_LEVEL) return;
+  state.training=skId;
+  saveState();
+  renderAll();
+}
+
+function renderStats(){
+  document.getElementById('statTime').textContent=fmtElapsed(Date.now()-state.startTs);
+  document.getElementById('statBuilt').textContent=Object.values(state.buildings).reduce((s,n)=>s+n,0);
+  document.getElementById('statWorkers').textContent=Object.values(lastWorkforce).reduce((s,c)=>s+Math.floor(c.assigned),0);
+  document.getElementById('statSaved').textContent=new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+}
+
+function renderView(){
+  bgridEl.hidden = activeSection!=='production';
+  tabsEl.style.display = activeSection==='production' ? '' : 'none';
+  popPanelEl.hidden = activeSection!=='population';
+  skillsPanelEl.hidden = activeSection!=='skills';
+  if(activeSection==='production') renderBuildings();
+  else if(activeSection==='population') renderPopulation();
+  else renderSkills();
+}
+
+function renderAll(){
+  renderLedger();
+  renderSections();
+  if(activeSection==='production') renderTabs();
+  renderView();
+  renderStats();
+}
+
+function tryBuild(id){
+  let b=BUILDINGS.find(x=>x.id===id) || SERVICE_BUILDINGS.find(x=>x.id===id) || HOUSING.find(x=>x.id===id) || SKILL_BUILDINGS.find(x=>x.id===id);
+  if(!b) return;
+  let unlocked=true;
+  if(b.tier!=null) unlocked=tierUnlocked(b.tier);
+  else if(b.cls!=null) unlocked=popUnlocked(b.cls);
+  if(!unlocked) return;
+  const count=state.buildings[id]||0;
+  const cost=scaledCost(b,count);
+  const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
+  if(!afford) return;
+  Object.entries(cost).forEach(([rid,q])=>{ state.resources[rid]-=q; });
+  state.buildings[id]=count+1;
+  saveState();
+  renderAll();
+}
+
+sectionsEl.addEventListener('click', e=>{
+  const btn=e.target.closest('[data-section]');
+  if(!btn) return;
+  activeSection=btn.dataset.section;
+  renderSections();
+  if(activeSection==='production') renderTabs();
+  renderView();
+});
+tabsEl.addEventListener('click', e=>{
+  const btn=e.target.closest('[data-tier]');
+  if(!btn) return;
+  activeTier=parseInt(btn.dataset.tier,10);
+  renderTabs();
+  renderView();
+});
+bgridEl.addEventListener('click', e=>{
+  const btn=e.target.closest('[data-build]');
+  if(!btn) return;
+  tryBuild(btn.dataset.build);
+});
+popPanelEl.addEventListener('click', e=>{
+  const btn=e.target.closest('[data-build]');
+  if(!btn) return;
+  tryBuild(btn.dataset.build);
+});
+skillsPanelEl.addEventListener('click', e=>{
+  const buildBtn=e.target.closest('[data-build]');
+  if(buildBtn){ tryBuild(buildBtn.dataset.build); return; }
+  const trainBtn=e.target.closest('[data-train]');
+  if(trainBtn){ trySetTraining(trainBtn.dataset.train); }
+});
+
+if(offlineInfo){
+  const entries=Object.entries(offlineInfo.deltas).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,8);
+  const rows=entries.length ? entries.map(([rid,d])=>{
+    const r=resById(rid);
+    const cls=d>=0?'pos':'neg';
+    return '<div class="delta-row">'+iconSvg(r.id,colorVarOf(r))+'<span class="delta-name">'+r.name+'</span><span class="delta-val '+cls+'">'+(d>=0?'+':'')+Math.round(d)+'</span></div>';
+  }).join('') : '<div class="delta-row muted">Производство простаивало — не хватало сырья или персонала.</div>';
+  document.getElementById('modalTime').textContent='Пока вас не было: '+fmtElapsed(offlineInfo.elapsedSec*1000);
+  document.getElementById('modalRows').innerHTML=rows;
+  document.getElementById('modalCapNote').style.display = offlineInfo.capped ? 'block' : 'none';
+  modalEl.hidden=false;
+}
+document.getElementById('modalClose').addEventListener('click', ()=>{ modalEl.hidden=true; });
+
+renderAll();
+
+let tickCount=0;
+setInterval(()=>{
+  simulateStep(1);
+  state.lastTs=Date.now();
+  renderAll();
+  tickCount++;
+  if(tickCount%5===0) saveState();
+}, 1000);
+
+window.addEventListener('pagehide', saveState);
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) saveState(); });
+</script>
