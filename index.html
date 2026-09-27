@@ -32,6 +32,7 @@
 }
 body{background:var(--bg);color:var(--text-primary);font-family:var(--font-body);}
 *{box-sizing:border-box;}
+[hidden]{display:none!important;}
 .page{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:28px 60px;display:flex;flex-direction:column;gap:22px;}
 .eyebrow{font-family:var(--font-body);font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);}
 h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing:.01em;margin:2px 0 0;text-wrap:balance;color:var(--text-primary);}
@@ -120,6 +121,51 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .pop-needs .chip{min-width:140px;flex:1 0 140px;}
 .pop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
 
+.devbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px;color:var(--text-muted);}
+.devbar button{font-family:var(--font-mono);font-size:12px;background:var(--card);color:var(--text-secondary);border:1px solid var(--border);border-radius:7px;padding:6px 10px;cursor:pointer;}
+.devbar button.active{background:var(--skill);border-color:var(--skill);color:#0A0D18;}
+.bcard.locked{opacity:.6;}
+.bcard-lock{font-size:11px;color:var(--tier1);}
+.retool{display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-size:10.5px;color:var(--text-muted);}
+.retool button{font-family:var(--font-body);font-size:10.5px;background:var(--panel);color:var(--text-secondary);border:1px solid var(--border);border-radius:5px;padding:3px 7px;cursor:pointer;}
+.retool button:hover:not(:disabled){border-color:var(--tier-color,var(--tier0));color:var(--text-primary);}
+.retool button:disabled{opacity:.45;cursor:not-allowed;}
+.durability-bar{height:5px;border-radius:3px;background:var(--border);overflow:hidden;}
+.durability-fill{height:100%;transition:width .3s;}
+.durability-bar.ok .durability-fill{background:var(--good);}
+.durability-bar.warn .durability-fill{background:var(--tier1);}
+.durability-bar.bad .durability-fill{background:var(--bad);}
+.durability-label{font-size:10.5px;color:var(--text-muted);}
+.cycle-row{display:flex;align-items:center;gap:7px;margin-top:-2px;}
+.cycle-bar{flex:1;height:3px;border-radius:2px;background:var(--border);overflow:hidden;}
+.cycle-fill{height:100%;background:var(--tier-color,var(--tier0));opacity:.55;width:0%;}
+.cycle-time{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);white-space:nowrap;min-width:38px;text-align:right;font-variant-numeric:tabular-nums;}
+.repair-btn{margin-top:2px;font-family:var(--font-body);font-weight:600;font-size:11px;letter-spacing:.02em;background:var(--panel);color:var(--tier1);border:1px solid var(--border);border-radius:7px;padding:7px 10px;cursor:pointer;}
+.repair-btn:hover:not(:disabled){border-color:var(--tier1);}
+.repair-btn:disabled{opacity:.4;cursor:not-allowed;}
+.demolish-btn{margin-top:2px;font-family:var(--font-body);font-weight:600;font-size:11px;letter-spacing:.02em;background:var(--panel);color:var(--bad);border:1px solid var(--border);border-radius:7px;padding:7px 10px;cursor:pointer;}
+.demolish-btn:hover{border-color:var(--bad);}
+.unit-list{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+.unit-row{display:flex;align-items:center;gap:8px;font-size:11px;background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:6px 8px;flex-wrap:wrap;}
+.unit-id{font-family:var(--font-mono);color:var(--text-muted);width:32px;flex-shrink:0;}
+.unit-pct{font-family:var(--font-mono);width:34px;text-align:right;flex-shrink:0;}
+.unit-ok{color:var(--good);font-size:10.5px;flex-shrink:0;white-space:nowrap;}
+.repair-btn.small,.demolish-btn.small{padding:4px 8px;font-size:10px;margin-top:0;flex-shrink:0;}
+.unit-select{font-family:var(--font-mono);font-size:11px;background:var(--panel);color:var(--text-primary);border:1px solid var(--border);border-radius:5px;padding:3px 5px;}
+.warehouse-summary{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:14px;}
+.warehouse-bar{flex:1;min-width:180px;height:10px;border-radius:5px;background:var(--border);overflow:hidden;}
+.warehouse-bar-fill{height:100%;background:var(--tier1);transition:width .3s;}
+.warehouse-bar.full .warehouse-bar-fill{background:var(--bad);}
+.warehouse-value{font-family:var(--font-mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--text-secondary);white-space:nowrap;}
+.wh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;}
+.wh-tile{aspect-ratio:1;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--chip-color,var(--tier0));border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;cursor:grab;user-select:none;transition:transform .12s,opacity .12s;}
+.wh-tile.empty{opacity:.4;}
+.wh-tile:active{cursor:grabbing;}
+.wh-tile.dragging{opacity:.35;}
+.wh-tile.drag-over{outline:2px dashed var(--tier1);outline-offset:2px;transform:scale(1.04);}
+.wh-name{font-size:9.5px;color:var(--text-secondary);line-height:1.2;}
+.wh-amt{font-family:var(--font-mono);font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--text-primary);}
+.wh-weight{font-family:var(--font-mono);font-size:9px;color:var(--text-muted);}
 .footnote{font-size:12px;color:var(--text-muted);line-height:1.6;border-top:1px solid var(--border);padding-top:16px;}
 
 .modal-backdrop{position:fixed;inset:0;background:rgba(6,8,14,.72);display:flex;align-items:center;justify-content:center;padding:20px;z-index:10;}
@@ -157,18 +203,26 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
     </div>
   </header>
 
-  <section class="panel">
-    <h2>Склад колонии</h2>
-    <div class="ledger-grid" id="ledger"></div>
-  </section>
-
   <section>
     <nav class="sections" id="sections"></nav>
     <nav class="tabs" id="tabs" style="margin-top:10px;"></nav>
-    <div class="bgrid" id="bgrid" style="margin-top:14px;"></div>
+    <div class="pop-panel" id="hqPanel" style="margin-top:14px;" hidden></div>
+    <div class="pop-panel" id="buildingsPanel" style="margin-top:14px;" hidden></div>
+    <div class="bgrid" id="bgrid" style="margin-top:14px;" hidden></div>
+    <div class="pop-panel" id="productionPanel" style="margin-top:14px;" hidden></div>
     <div class="pop-panel" id="popPanel" style="margin-top:14px;" hidden></div>
     <div class="pop-panel" id="skillsPanel" style="margin-top:14px;" hidden></div>
+    <div class="pop-panel" id="warehousePanel" style="margin-top:14px;" hidden></div>
   </section>
+
+  <div class="devbar" id="devbar">
+    <span>Тест: ускорение времени</span>
+    <button data-speed="1" class="active">×1</button>
+    <button data-speed="60">×60</button>
+    <button data-speed="600">×600</button>
+    <button data-speed="3600">×3600</button>
+    <span id="devHint">1 с реального времени = 1 с игры</span>
+  </div>
 
   <div class="footnote">Экономика замкнута: сырьё поступает только с месторождений (у каждого — своё случайное богатство), а любой полуфабрикат, изделие, жильё или бытовой товар требует ровно тех ресурсов, что указаны в его цепочке. Каждая фабрика набирает персонал своего класса из жилых модулей и не выйдет на полную мощность, пока штат не укомплектован, а быт — не обеспечен нужными товарами (как в градостроительных стратегиях: чем выше класс персонала, тем больше видов товаров ему нужно одновременно). Симуляция идёт в реальном времени и продолжается, пока вкладка закрыта — при следующем заходе колония досчитает прогресс (не более 12 часов офлайн за раз).</div>
 </div>
@@ -184,53 +238,106 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 </div>
 
 <script>
+// Единый грузовой склад колонии — вес в кг, не отдельный лимит на ресурс (WAREHOUSE_BASE_KG ниже).
 const RESOURCES=[
-  {id:'iron_ore',name:'Железная руда',tier:0,cap:300,shapeIdx:0},
-  {id:'silicate',name:'Силикатный песок',tier:0,cap:300,shapeIdx:1},
-  {id:'ice',name:'Лёд',tier:0,cap:300,shapeIdx:2},
-  {id:'hydrogen',name:'Водород',tier:0,cap:300,shapeIdx:3},
-  {id:'carbon',name:'Угольная пыль',tier:0,cap:300,shapeIdx:4},
+  {id:'iron_g1',name:'Железная пыль',tier:0,weight:1,shapeIdx:0,family:'iron'},
+  {id:'iron_g2',name:'Железный шлих',tier:0,weight:1.3,shapeIdx:0,family:'iron'},
+  {id:'iron_g3',name:'Железная крошка',tier:0,weight:1.7,shapeIdx:0,family:'iron'},
+  {id:'iron_ore',name:'Железная руда',tier:0,weight:2.2,shapeIdx:0,family:'iron'},
+  {id:'iron_g5',name:'Богатая руда',tier:0,weight:2.8,shapeIdx:0,family:'iron'},
+  {id:'iron_g6',name:'Магнетитовая руда',tier:0,weight:3.6,shapeIdx:0,family:'iron'},
+  {id:'iron_g7',name:'Самородное железо',tier:0,weight:4.5,shapeIdx:0,family:'iron'},
+  {id:'silicate',name:'Силикатный песок',tier:0,weight:1,shapeIdx:1},
+  {id:'ice',name:'Лёд',tier:0,weight:1,shapeIdx:2},
+  {id:'hydrogen',name:'Водород',tier:0,weight:0.1,shapeIdx:3},
+  {id:'carbon',name:'Угольная пыль',tier:0,weight:0.9,shapeIdx:4},
+  {id:'biomass',name:'Биомасса',tier:0,weight:0.7,shapeIdx:5},
 
-  {id:'iron_plate',name:'Железная пластина',tier:1,cap:220,shapeIdx:0},
-  {id:'silicon_pure',name:'Очищенный кремний',tier:1,cap:220,shapeIdx:1},
-  {id:'water',name:'Вода',tier:1,cap:220,shapeIdx:2},
-  {id:'graphite',name:'Графит',tier:1,cap:220,shapeIdx:3},
-  {id:'liquid_h2',name:'Жидкий водород',tier:1,cap:220,shapeIdx:4},
+  {id:'iron_plate',name:'Железная пластина',tier:1,weight:2.5,shapeIdx:0},
+  {id:'silicon_pure',name:'Очищенный кремний',tier:1,weight:1.6,shapeIdx:1},
+  {id:'water',name:'Вода',tier:1,weight:1,shapeIdx:2},
+  {id:'graphite',name:'Графит',tier:1,weight:1.2,shapeIdx:3},
+  {id:'liquid_h2',name:'Жидкий водород',tier:1,weight:0.4,shapeIdx:4},
 
-  {id:'steel',name:'Сталь',tier:2,cap:160,shapeIdx:0},
-  {id:'silicon_wafer',name:'Кремниевая пластина',tier:2,cap:160,shapeIdx:1},
-  {id:'polymer',name:'Полимер',tier:2,cap:160,shapeIdx:2},
+  {id:'steel',name:'Сталь',tier:2,weight:3.5,shapeIdx:0},
+  {id:'silicon_wafer',name:'Кремниевая пластина',tier:2,weight:0.15,shapeIdx:1},
+  {id:'polymer',name:'Полимер',tier:2,weight:1,shapeIdx:2},
 
-  {id:'circuit',name:'Электронная плата',tier:3,cap:110,shapeIdx:0},
-  {id:'hull_plate',name:'Броневая плита',tier:3,cap:110,shapeIdx:1},
-  {id:'fuel_cell',name:'Топливный элемент',tier:3,cap:110,shapeIdx:2},
+  {id:'circuit',name:'Электронная плата',tier:3,weight:0.25,shapeIdx:0},
+  {id:'hull_plate',name:'Броневая плита',tier:3,weight:5,shapeIdx:1},
+  {id:'fuel_cell',name:'Топливный элемент',tier:3,weight:1.8,shapeIdx:2},
 
-  {id:'processor',name:'Процессорный блок',tier:4,cap:60,shapeIdx:0},
-  {id:'drone_frame',name:'Корпус дрона',tier:4,cap:60,shapeIdx:1},
-  {id:'reactor_core',name:'Реакторное ядро',tier:4,cap:60,shapeIdx:2},
+  {id:'processor',name:'Процессорный блок',tier:4,weight:0.1,shapeIdx:0},
+  {id:'drone_frame',name:'Корпус дрона',tier:4,weight:12,shapeIdx:1},
+  {id:'reactor_core',name:'Реакторное ядро',tier:4,weight:7,shapeIdx:2},
 ];
 
 const POP_GOODS=[
-  {id:'food_basic',name:'Протеиновая паста',cls:1,cap:4000,shapeIdx:2,colorVar:'class1'},
-  {id:'clothing',name:'Комбинезон',cls:1,cap:500,shapeIdx:4,colorVar:'class1'},
-  {id:'leisure',name:'Досуг',cls:1,cap:500,shapeIdx:1,colorVar:'class1'},
-  {id:'o2_mix',name:'Кислородный коктейль',cls:2,cap:300,shapeIdx:2,colorVar:'class2'},
-  {id:'stimulant',name:'Стимулятор',cls:3,cap:200,shapeIdx:2,colorVar:'class3'},
-  {id:'datafeed',name:'Инфопакет',cls:4,cap:150,shapeIdx:2,colorVar:'class4'},
+  {id:'food_basic',name:'Протеиновая паста',cls:1,weight:0.5,shapeIdx:2,colorVar:'class1'},
+  {id:'clothing',name:'Комбинезон',cls:1,weight:0.4,shapeIdx:4,colorVar:'class1'},
+  {id:'leisure',name:'Досуг',cls:1,weight:0.05,shapeIdx:1,colorVar:'class1'},
+  {id:'o2_mix',name:'Кислородный коктейль',cls:2,weight:1,shapeIdx:2,colorVar:'class2'},
+  {id:'stimulant',name:'Стимулятор',cls:3,weight:0.05,shapeIdx:2,colorVar:'class3'},
+  {id:'datafeed',name:'Инфопакет',cls:4,weight:0.01,shapeIdx:2,colorVar:'class4'},
 ];
 
-const BUILDINGS=[
-  {id:'iron_ore',name:'Железный экскаватор',tier:0,cycle:6,in:{},out:{iron_ore:4},cost:{iron_plate:15,steel:8},workers:3},
-  {id:'silicate',name:'Харвестер реголита',tier:0,cycle:6,in:{},out:{silicate:4},cost:{iron_plate:15,steel:8},workers:3},
-  {id:'ice',name:'Крио-бур',tier:0,cycle:8,in:{},out:{ice:3},cost:{iron_plate:18,steel:8},workers:4},
-  {id:'hydrogen',name:'Газовый скиммер',tier:0,cycle:8,in:{},out:{hydrogen:3},cost:{iron_plate:18,steel:10},workers:4},
-  {id:'carbon',name:'Углеродный скрейпер',tier:0,cycle:6,in:{},out:{carbon:4},cost:{iron_plate:15,steel:8},workers:3},
+const WAREHOUSE_BASE_KG=10000; // единый грузовой склад колонии, 10 тонн на старте
+function totalCargoWeight(){
+  let sum=0;
+  RESOURCES.forEach(r=>{ sum+=(state.resources[r.id]||0)*(r.weight||0); });
+  POP_GOODS.forEach(r=>{ sum+=(state.resources[r.id]||0)*(r.weight||0); });
+  return sum;
+}
+function warehouseCapacityKg(){ return WAREHOUSE_BASE_KG; }
+function warehouseFreeKg(){ return Math.max(0, warehouseCapacityKg()-totalCargoWeight()); }
 
-  {id:'iron_plate',name:'Плавильня',tier:1,cycle:5,in:{iron_ore:5},out:{iron_plate:3},cost:{steel:12,water:6},workers:4},
-  {id:'silicon_pure',name:'Обогатительный узел',tier:1,cycle:5,in:{silicate:5},out:{silicon_pure:3},cost:{steel:12,water:6},workers:4},
-  {id:'water',name:'Конденсатор',tier:1,cycle:6,in:{ice:4},out:{water:3},cost:{steel:12,graphite:6},workers:5},
-  {id:'graphite',name:'Угольный компрессор',tier:1,cycle:5,in:{carbon:5},out:{graphite:3},cost:{steel:12,water:6},workers:4},
-  {id:'liquid_h2',name:'Крио-компрессор',tier:1,cycle:7,in:{hydrogen:4},out:{liquid_h2:3},cost:{steel:12,water:6},workers:6},
+// Тип здания = универсальная установка (цена, рост цены). Рецепт = что она выпускает.
+// Рецепт открывается уровнем навыка recipe.skill (по умолчанию навык своего тира) >= recipe.unlock.
+// У рецептов T2+ пока нет type: каждый из них — сам себе тип со своей ценой (старая схема).
+const BUILDING_TYPES=[
+  {id:'miner',name:'Добывающая установка',cost:{iron_plate:280}},
+  {id:'refinery',name:'Перерабатывающий завод',cost:{iron_plate:250,graphite:170}},
+  {id:'farm',name:'Гидропонная ферма',cost:{iron_plate:280}},
+];
+const RETOOL_FEE=0.1; // доля базовой цены за перенастройку одной установки на другой рецепт
+
+// Износ: прочность 0-100, падает со временем независимо от того, работает ли установка.
+// Ссылочная точка: -30 п.п. за 45 суток непрерывной работы. Ниже пола установка не изнашивается
+// дальше сама (иначе она бы совсем переставала работать) — чинится ремонтом за стройматериалы.
+const DURABILITY_MAX=100;
+const DURABILITY_FLOOR=20;
+const DURABILITY_LIFE_DAYS=45;
+const DURABILITY_LOSS_AT_LIFE=30;
+const DURABILITY_DECAY_PER_SEC=DURABILITY_LOSS_AT_LIFE/(DURABILITY_LIFE_DAYS*86400);
+const REPAIR_FACTOR=1; // ремонт 1% прочности = 1% ресурсов, потраченных на установку (полный ремонт = полная цена)
+const DEMOLISH_REFUND=0.25; // снос возвращает 25% ресурсов, потраченных на последнюю построенную установку
+
+const BUILDINGS=[
+  {id:'iron_g1',type:'miner',unlock:0,tier:0,cycle:377,in:{},out:{iron_g1:4},workers:3},
+  {id:'iron_g2',type:'miner',unlock:1,tier:0,cycle:400,in:{},out:{iron_g2:4},workers:3},
+  {id:'iron_g3',type:'miner',unlock:1,tier:0,cycle:400,in:{},out:{iron_g3:4},workers:3},
+  {id:'iron_ore',type:'miner',unlock:2,tier:0,cycle:444,in:{},out:{iron_ore:4},workers:3},
+  {id:'iron_g5',type:'miner',unlock:3,tier:0,cycle:480,in:{},out:{iron_g5:4},workers:3},
+  {id:'iron_g6',type:'miner',unlock:4,tier:0,cycle:580,in:{},out:{iron_g6:4},workers:3},
+  {id:'iron_g7',type:'miner',unlock:5,tier:0,cycle:800,in:{},out:{iron_g7:4},workers:3},
+  {id:'silicate',type:'miner',unlock:1,tier:0,cycle:444,in:{},out:{silicate:4},workers:3},
+  {id:'ice',type:'miner',unlock:1,tier:0,cycle:592,in:{},out:{ice:3},workers:4},
+  {id:'hydrogen',type:'miner',unlock:2,tier:0,cycle:592,in:{},out:{hydrogen:3},workers:4},
+  {id:'carbon',type:'miner',unlock:0,tier:0,cycle:444,in:{},out:{carbon:4},workers:3},
+  {id:'biomass',type:'farm',skill:'agri',unlock:0,tier:0,cycle:444,in:{},out:{biomass:4},workers:3},
+
+  {id:'plate_g1',type:'refinery',optional:true,label:'Пластины из пыли',tier:1,cycle:370,in:{iron_g1:12},out:{iron_plate:3},workers:4},
+  {id:'plate_g2',type:'refinery',optional:true,label:'Пластины из шлиха',tier:1,cycle:370,in:{iron_g2:9},out:{iron_plate:3},workers:4},
+  {id:'plate_g3',type:'refinery',optional:true,label:'Пластины из крошки',tier:1,cycle:370,in:{iron_g3:7},out:{iron_plate:3},workers:4},
+  {id:'plate_g4',type:'refinery',optional:true,label:'Пластины из руды',tier:1,cycle:370,in:{iron_ore:5},out:{iron_plate:3},workers:4},
+  {id:'plate_g5',type:'refinery',optional:true,label:'Пластины из богатой руды',tier:1,cycle:370,in:{iron_g5:4},out:{iron_plate:3},workers:4},
+  {id:'plate_g6',type:'refinery',optional:true,label:'Пластины из магнетита',tier:1,cycle:370,in:{iron_g6:3},out:{iron_plate:3},workers:4},
+  {id:'plate_g7',type:'refinery',optional:true,label:'Пластины из самородного железа',tier:1,cycle:370,in:{iron_g7:2},out:{iron_plate:3},workers:4},
+  {id:'graphite',type:'refinery',unlock:0,tier:1,cycle:370,in:{carbon:5},out:{graphite:3},workers:4},
+  {id:'silicon_pure',type:'refinery',unlock:1,tier:1,cycle:370,in:{silicate:5},out:{silicon_pure:3},workers:4},
+  {id:'water',type:'refinery',unlock:1,tier:1,cycle:444,in:{ice:4},out:{water:3},workers:5},
+  {id:'liquid_h2',type:'refinery',unlock:2,tier:1,cycle:518,in:{hydrogen:4},out:{liquid_h2:3},workers:6},
+  {id:'food_basic',type:'farm',skill:'agri',unlock:1,tier:1,cycle:444,in:{biomass:4},out:{food_basic:3},workers:3},
 
   {id:'steel',name:'Литейный цех',tier:2,cycle:8,in:{iron_plate:4,graphite:3},out:{steel:3},cost:{iron_plate:20,water:10},workers:6},
   {id:'silicon_wafer',name:'Вафельная фабрика',tier:2,cycle:9,in:{silicon_pure:4,water:3},out:{silicon_wafer:3},cost:{steel:20,silicon_pure:10},workers:7},
@@ -246,16 +353,15 @@ const BUILDINGS=[
 ];
 
 const SERVICE_BUILDINGS=[
-  {id:'food_basic',name:'Гидропонная ферма',cls:1,cycle:6,in:{water:2},out:{food_basic:3},cost:{iron_plate:15,water:10}},
-  {id:'clothing',name:'Швейный цех',cls:1,cycle:8,in:{carbon:2},out:{clothing:1},cost:{iron_plate:12,carbon:10}},
-  {id:'leisure',name:'Комната отдыха',cls:1,cycle:10,in:{graphite:1},out:{leisure:1},cost:{iron_plate:12,graphite:8}},
+  {id:'clothing',name:'Швейный цех',cls:1,cycle:592,in:{carbon:2},out:{clothing:1},cost:{iron_plate:50,carbon:40}},
+  {id:'leisure',name:'Комната отдыха',cls:1,cycle:740,in:{graphite:1},out:{leisure:1},cost:{iron_plate:50,graphite:30}},
   {id:'o2_mix',name:'Оксигенатор',cls:2,cycle:7,in:{hydrogen:2,water:1},out:{o2_mix:2},cost:{steel:15,water:10}},
   {id:'stimulant',name:'Синтезатор стимуляторов',cls:3,cycle:8,in:{carbon:2,water:1},out:{stimulant:2},cost:{steel:18,graphite:10}},
   {id:'datafeed',name:'Медиа-центр',cls:4,cycle:10,in:{polymer:1,water:1},out:{datafeed:1},cost:{circuit:10,polymer:8}},
 ];
 
 const HOUSING=[
-  {id:'house_c1',name:'Жилой блок: разнорабочие',cls:1,capacity:20,cost:{iron_plate:25,water:15}},
+  {id:'house_c1',name:'Жилой блок: разнорабочие',cls:1,capacity:20,cost:{iron_plate:100,water:60}},
   {id:'house_c2',name:'Жилой блок: техники',cls:2,capacity:15,cost:{steel:20,polymer:10}},
   {id:'house_c3',name:'Жилой блок: инженеры',cls:3,capacity:10,cost:{steel:25,circuit:8}},
   {id:'house_c4',name:'Жилой блок: специалисты',cls:4,capacity:8,cost:{hull_plate:10,processor:6}},
@@ -287,11 +393,12 @@ const PER_WORKER_RATE={
 };
 
 const SKILLS=[
-  {id:'t0',tier:0,name:'Горное дело'},
-  {id:'t1',tier:1,name:'Переработка сырья'},
-  {id:'t2',tier:2,name:'Промышленный синтез'},
-  {id:'t3',tier:3,name:'Точное машиностроение'},
-  {id:'t4',tier:4,name:'Робототехника и системы'},
+  {id:'t0',tier:0,name:'Горное дело',icon:'skillT0'},
+  {id:'t1',tier:1,name:'Переработка сырья',icon:'skillT1'},
+  {id:'agri',tier:0,name:'Гидропоника',icon:'skillAgri'},
+  {id:'t2',tier:2,name:'Промышленный синтез',icon:'skillT2'},
+  {id:'t3',tier:3,name:'Точное машиностроение',icon:'skillT3'},
+  {id:'t4',tier:4,name:'Робототехника и системы',icon:'skillT4'},
 ];
 const MAX_SKILL_LEVEL=5;
 const SKILL_SPEED_BONUS=0.08;
@@ -303,17 +410,68 @@ const ACADEMY={id:'academy',name:'Учебный центр',cost:{steel:30,sili
 const SKILL_BUILDINGS=[ACADEMY];
 
 function skillLevelCost(level){ return Math.round(SKILL_BASE_SP*Math.pow(level,2.5)); }
-function skillLevelOf(tier){ return (state.skills && state.skills['t'+tier] && state.skills['t'+tier].level) || 0; }
-function speedMultForTier(tier){ return 1+SKILL_SPEED_BONUS*skillLevelOf(tier); }
-function workforceCutForTier(tier){ return SKILL_WORKFORCE_CUT*skillLevelOf(tier); }
+function skillLevelById(id){ return (state.skills && state.skills[id] && state.skills[id].level) || 0; }
+function skillName(id){ const sk=SKILLS.find(x=>x.id===id); return sk?sk.name:id; }
+function recipeSkillId(b){ return b.skill || ('t'+b.tier); }
+function recipeUnlocked(b){ return skillLevelById(recipeSkillId(b))>=(b.unlock||0); }
+function speedMultForRecipe(b){ return 1+SKILL_SPEED_BONUS*skillLevelById(recipeSkillId(b)); }
+function workforceCutForRecipe(b){ return SKILL_WORKFORCE_CUT*skillLevelById(recipeSkillId(b)); }
+function outId(b){ return Object.keys(b.out)[0]; }
+function recipeLabel(b){ return b.label || resName(outId(b)); }
+function richOf(b){ const r=resById(outId(b)); return state.richness[(r&&r.family)||outId(b)]||1; }
+function resourceVisible(r){
+  if((state.resources[r.id]||0)>0.05) return true;
+  if(Math.abs(netRate(r.id))>1e-6) return true;
+  return BUILDINGS.some(b=>outId(b)===r.id && recipeUnlocked(b));
+}
+function recipeVisible(b){
+  if(!b.optional) return true;
+  return Object.keys(b.in).every(rid=>{ const r=resById(rid); return r && resourceVisible(r); });
+}
+function typeKey(b){ return b.type || b.id; }
+function typeOf(b){ return b.type ? BUILDING_TYPES.find(t=>t.id===b.type) : b; }
+function typeCount(b){ const k=typeKey(b); return BUILDINGS.filter(x=>typeKey(x)===k).reduce((sum,x)=>sum+(state.buildings[x.id]||0),0); }
+// Каждая установка — отдельный объект в state.units: {id, recipe, builtAt, durability}.
+// state.buildings[recipeId] остаётся синхронным кэшем количества (используется везде,
+// где нужна просто цифра: наём персонала, разблокировка тиров, очки навыков, бейджи).
+function unitsOf(recipeId){ return state.units.filter(u=>u.recipe===recipeId); }
+function syncBuildingCount(recipeId){ state.buildings[recipeId]=unitsOf(recipeId).length; }
+function baseCostOf(b){ return (b.type?typeOf(b):b).cost; }
+function repairCost(u,b){
+  const wear=Math.max(0,(DURABILITY_MAX-u.durability)/100);
+  const result={};
+  if(wear<=0.001) return result;
+  Object.entries(baseCostOf(b)).forEach(([rid,q])=>{
+    const amt=Math.ceil(q*wear*REPAIR_FACTOR);
+    if(amt>0) result[rid]=amt;
+  });
+  return result;
+}
+function retoolFee(b){
+  const fee={};
+  Object.entries(typeOf(b).cost).forEach(([rid,q])=>{ fee[rid]=Math.ceil(q*RETOOL_FEE); });
+  return fee;
+}
+function unlockListFor(skId){ /* по label/выходу рецепта */
+  const byLvl={};
+  BUILDINGS.filter(b=>recipeSkillId(b)===skId && b.unlock!=null).forEach(b=>{
+    (byLvl[b.unlock]=byLvl[b.unlock]||[]).push(recipeLabel(b));
+  });
+  const lvls=Object.keys(byLvl).map(Number).sort((a,b)=>a-b);
+  return lvls.map(l=>'ур. '+l+': '+byLvl[l].join(', ')).join(' · ');
+}
 
 const SECTIONS=[
-  {id:'production',label:'Производство',color:'tier0'},
-  {id:'population',label:'Население',color:'class1'},
+  {id:'hq',label:'Штаб-квартира',color:'tier0'},
+  {id:'buildings',label:'Здания',color:'tier1'},
+  {id:'build',label:'Построить',color:'tier2'},
+  {id:'workers',label:'Рабочие',color:'class1'},
   {id:'skills',label:'Навыки',color:'skill'},
+  {id:'production',label:'Производство',color:'tier3'},
+  {id:'warehouse',label:'Склад',color:'tier4'},
 ];
 const TAB_LABELS=['Добыча','Переработка','Компоненты','Продвинутые узлы','Готовые изделия'];
-const SAVE_KEY='industrial_belt_v5';
+const SAVE_KEY='industrial_belt_v13';
 const OFFLINE_CAP_SEC=12*3600;
 const OFFLINE_STEP=30;
 
@@ -356,10 +514,13 @@ const ICONS={
   skillT2:'<path d="M6 7L14 7L10 14Z" opacity="0.35"/><circle cx="6" cy="7" r="2.6"/><circle cx="14" cy="7" r="2.6"/><circle cx="10" cy="14" r="2.6"/>',
   skillT3:'<path d="M3 16L15 4M8 3l2 2M14 9l2 2M5 13l2 2" stroke="currentColor" stroke-width="2" fill="none"/>',
   skillT4:'<rect x="5" y="6" width="10" height="9" rx="2"/><circle cx="8" cy="10.5" r="1.2"/><circle cx="12" cy="10.5" r="1.2"/><rect x="9" y="2" width="2" height="4"/><circle cx="10" cy="2" r="1.2"/>',
+  biomass:'<path d="M3 17C3 8 8 3 17 3c0 9-5 14-14 14z"/><path d="M4 16L13 7" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.5"/>',
+  skillAgri:'<path d="M3 17C3 8 8 3 17 3c0 9-5 14-14 14z"/><path d="M4 16L13 7" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.5"/>',
   housing:'<path d="M10 2 2 8v10h16V8z"/><rect x="8" y="12" width="4" height="6" opacity="0.5"/>',
   academy:'<path d="M10 3 1 7l9 4 9-4z"/><path d="M5 9v4c0 1.5 2.5 3 5 3s5-1.5 5-3V9" fill="none" stroke="currentColor" stroke-width="1.4"/>',
 };
 
+['iron_g1','iron_g2','iron_g3','iron_g5','iron_g6','iron_g7'].forEach(k=>{ ICONS[k]=ICONS.iron_ore; });
 function iconSvg(key,colorVar){
   const inner=ICONS[key] || '<circle cx="10" cy="10" r="7"/>';
   return '<svg viewBox="0 0 20 20" width="20" height="20" style="color:var(--'+colorVar+')" fill="currentColor">'+inner+'</svg>';
@@ -369,14 +530,14 @@ function freshState(){
   const resources={};
   RESOURCES.forEach(r=>resources[r.id]=0);
   POP_GOODS.forEach(r=>resources[r.id]=0);
-  const cargo={iron_plate:40,steel:30,water:25,graphite:20,liquid_h2:15,food_basic:20,clothing:5,leisure:5};
+  const cargo={iron_plate:1000,water:450,graphite:400,food_basic:60,clothing:8,leisure:8};
   Object.entries(cargo).forEach(([k,v])=>resources[k]=v);
   const richness={};
-  RESOURCES.filter(r=>r.tier===0).forEach(r=>{ richness[r.id]=Math.round((0.8+Math.random()*0.5)*100)/100; });
+  RESOURCES.filter(r=>r.tier===0).forEach(r=>{ const k=r.family||r.id; if(richness[k]==null) richness[k]=Math.round((0.8+Math.random()*0.5)*100)/100; });
   const skills={};
   SKILLS.forEach(s=>skills[s.id]={level:0,sp:0});
   const now=Date.now();
-  return {resources,buildings:{},richness,skills,training:'t0',lastTs:now,startTs:now,playSeconds:0};
+  return {resources,buildings:{},richness,skills,units:[],nextUnitId:1,training:'t0',lastTs:now,startTs:now,playSeconds:0};
 }
 
 function loadState(){
@@ -394,16 +555,18 @@ let state=loadState();
 let isNew=!state;
 if(!state) state=freshState();
 POP_GOODS.forEach(r=>{ if(state.resources[r.id]==null) state.resources[r.id]=0; });
+if(!state.units) state.units=[];
+if(!state.nextUnitId) state.nextUnitId=1;
 
 const util={};
 function blankWf(){ return {cap:0,demand:0,assigned:0,staffing:1,satisfaction:1,weighted:[],extras:[],base:null}; }
 let lastWorkforce={1:blankWf(),2:blankWf(),3:blankWf(),4:blankWf()};
 
-function runProdBuilding(b, dt, richMult, speedMult){
+function runProdBuilding(b, dt, richMult, speedMult, countOverride){
   if(speedMult==null) speedMult=1;
-  const count=state.buildings[b.id]||0;
+  const count = countOverride!=null ? countOverride : (state.buildings[b.id]||0);
   if(count<=0){ return {frac:0, reason:'idle'}; }
-  const outQty=b.out[b.id];
+  const outQty=b.out[outId(b)];
   const outPerSec=outQty*count/b.cycle*speedMult;
   const desiredOut=outPerSec*dt*richMult;
   const entries=Object.entries(b.in||{});
@@ -418,10 +581,10 @@ function runProdBuilding(b, dt, richMult, speedMult){
       inputFraction=Math.min(inputFraction, avail/desired);
     }
   });
-  const outMeta=resById(b.id);
-  const capSpace=outMeta.cap-(state.resources[b.id]||0);
+  const outMeta=resById(outId(b));
+  const capSpaceUnits=warehouseFreeKg()/(outMeta.weight||1);
   let outCapFraction=1;
-  if(desiredOut>0){ outCapFraction=Math.min(1, Math.max(0,capSpace)/desiredOut); }
+  if(desiredOut>0){ outCapFraction=Math.min(1, Math.max(0,capSpaceUnits)/desiredOut); }
   return {inputFraction, outCapFraction, desiredOut, desiredIns, entries};
 }
 
@@ -432,7 +595,7 @@ function computeWorkforce(dt){
     const housing=HOUSING.find(h=>h.cls===c);
     const builtCap=(state.buildings[housing.id]||0)*housing.capacity;
     const cap=builtCap+(BASE_FREE_CAPACITY[c]||0);
-    const demand=BUILDINGS.filter(b=>CLASS_OF_TIER[b.tier]===c).reduce((s,b)=>s+(state.buildings[b.id]||0)*b.workers*(1-workforceCutForTier(b.tier)),0);
+    const demand=BUILDINGS.filter(b=>CLASS_OF_TIER[b.tier]===c).reduce((s,b)=>s+(state.buildings[b.id]||0)*b.workers*(1-workforceCutForRecipe(b)),0);
     const staffing=demand>0?Math.min(1,cap/demand):1;
     const assigned=Math.min(cap,demand);
     const cls=CLASSES.find(x=>x.id===c);
@@ -500,8 +663,16 @@ function tickSkills(dt){
   }
 }
 
+function decayDurability(dt){
+  state.units.forEach(u=>{
+    if(u.durability<=DURABILITY_FLOOR) return;
+    u.durability=Math.max(DURABILITY_FLOOR, u.durability-DURABILITY_DECAY_PER_SEC*dt);
+  });
+}
+
 function simulateStep(dt){
   tickSkills(dt);
+  decayDurability(dt);
   SERVICE_BUILDINGS.forEach(sb=>{
     const count=state.buildings[sb.id]||0;
     if(count<=0){ util[sb.id]={frac:0,reason:'idle'}; return; }
@@ -524,11 +695,13 @@ function simulateStep(dt){
 
   [0,1,2,3,4].forEach(t=>{
     BUILDINGS.filter(b=>b.tier===t).forEach(b=>{
-      const count=state.buildings[b.id]||0;
-      if(count<=0){ util[b.id]={frac:0,reason:'idle'}; return; }
-      const richMult = t===0 ? (state.richness[b.id]||1) : 1;
-      const speedMult = speedMultForTier(t);
-      const calc=runProdBuilding(b, dt, richMult, speedMult);
+      const units=unitsOf(b.id);
+      const unitCount=units.length;
+      if(unitCount<=0){ util[b.id]={frac:0,reason:'idle'}; return; }
+      const effCapacity=units.reduce((s,u)=>s+Math.max(0,u.durability)/100,0);
+      const richMult = t===0 ? richOf(b) : 1;
+      const speedMult = speedMultForRecipe(b);
+      const calc=runProdBuilding(b, dt, richMult, speedMult, effCapacity);
       const cls=wf[CLASS_OF_TIER[t]];
       const factors={staff:cls.staffing, comfort:cls.satisfaction, input:calc.inputFraction, storage:calc.outCapFraction};
       let fraction=1, reason='full';
@@ -536,13 +709,14 @@ function simulateStep(dt){
         if(factors[k]<fraction-1e-6){ fraction=factors[k]; reason=k; }
       });
       fraction=Math.max(0,Math.min(1,fraction));
-      if(fraction>=0.999) reason='full';
+      const avgWear=unitCount>0?effCapacity/unitCount:1;
+      if(fraction>=0.999 && avgWear<0.999-1e-6){ reason='wear'; }
       calc.entries.forEach(([rid,q])=>{
         const next=(state.resources[rid]||0)-calc.desiredIns[rid]*fraction;
         state.resources[rid]=next<0?0:next;
       });
-      state.resources[b.id]=(state.resources[b.id]||0)+calc.desiredOut*fraction;
-      util[b.id]={frac:fraction,reason};
+      state.resources[outId(b)]=(state.resources[outId(b)]||0)+calc.desiredOut*fraction;
+      util[b.id]={frac:fraction*avgWear,reason};
     });
   });
   state.playSeconds=(state.playSeconds||0)+dt;
@@ -573,7 +747,7 @@ state.lastTs=Date.now();
 saveState();
 
 let activeTier=0;
-let activeSection='production';
+let activeSection='hq';
 
 function netRate(resId){
   let rate=0;
@@ -582,7 +756,7 @@ function netRate(resId){
     if(count<=0) return;
     const u=(util[b.id]&&util[b.id].frac)||0;
     if(b.out && b.out[resId]!=null){
-      const rich = (b.tier===0) ? (state.richness[b.id]||1) : 1;
+      const rich = (b.tier===0) ? richOf(b) : 1;
       rate += (b.out[resId]*count/b.cycle)*u*rich;
     }
     if(b.in && b.in[resId]!=null){
@@ -600,6 +774,11 @@ function scaledCost(b,count){
   return result;
 }
 
+function fmtDuration(sec){
+  sec=Math.round(sec);
+  const m=Math.floor(sec/60), r=sec%60;
+  return m+':'+String(r).padStart(2,'0');
+}
 function fmtElapsed(ms){
   let s=Math.floor(ms/1000);
   const d=Math.floor(s/86400); s%=86400;
@@ -610,34 +789,110 @@ function fmtElapsed(ms){
   return m+'м';
 }
 
-const ledgerEl=document.getElementById('ledger');
 const sectionsEl=document.getElementById('sections');
 const tabsEl=document.getElementById('tabs');
 const bgridEl=document.getElementById('bgrid');
+const hqPanelEl=document.getElementById('hqPanel');
+const buildingsPanelEl=document.getElementById('buildingsPanel');
+const productionPanelEl=document.getElementById('productionPanel');
+const warehousePanelEl=document.getElementById('warehousePanel');
 const popPanelEl=document.getElementById('popPanel');
 const skillsPanelEl=document.getElementById('skillsPanel');
 const modalEl=document.getElementById('offlineModal');
 
-function renderLedger(){
-  let html='';
-  [0,1,2,3,4].forEach(t=>{
-    RESOURCES.filter(r=>r.tier===t).forEach(r=>{
-      const amt=state.resources[r.id]||0;
-      const pct=Math.max(0,Math.min(100,(amt/r.cap)*100));
-      const rate=netRate(r.id);
-      const rateClass = rate>0.01?'pos':(rate<-0.01?'neg':'zero');
-      const rateStr=(rate>=0?'+':'')+rate.toFixed(1);
-      html+='<div class="chip t'+t+'"><div>'+iconSvg(r.id,'tier'+t)+'</div>'+
-        '<div class="chip-body">'+
-          '<div class="chip-name">'+r.name+'</div>'+
-          '<div class="chip-amt">'+Math.floor(amt)+'<span class="chip-cap">/'+r.cap+'</span></div>'+
-          '<div class="chip-bar"><div class="chip-bar-fill" style="width:'+pct+'%"></div></div>'+
-          '<div class="chip-rate '+rateClass+'">'+rateStr+'/с</div>'+
-        '</div></div>';
-    });
-  });
-  ledgerEl.innerHTML=html;
+function defaultWarehouseOrder(){
+  const ids=[];
+  [0,1,2,3,4].forEach(t=>{ RESOURCES.filter(r=>r.tier===t).forEach(r=>ids.push(r.id)); });
+  POP_GOODS.forEach(r=>ids.push(r.id));
+  return ids;
 }
+function warehouseOrder(){
+  const all=defaultWarehouseOrder();
+  if(!state.warehouseOrder) state.warehouseOrder=all.slice();
+  const known=new Set(all);
+  let order=state.warehouseOrder.filter(id=>known.has(id));
+  all.forEach(id=>{ if(!order.includes(id)) order.push(id); });
+  state.warehouseOrder=order;
+  return order;
+}
+function whTile(r,colorVar){
+  const amt=state.resources[r.id]||0;
+  const w=r.weight||0;
+  const empty = amt<0.05 ? ' empty' : '';
+  return '<div class="wh-tile'+empty+'" draggable="true" data-res="'+r.id+'" style="--chip-color:var(--'+colorVar+')">'+
+    iconSvg(r.id,colorVar)+
+    '<div class="wh-name">'+r.name+'</div>'+
+    '<div class="wh-amt">'+Math.floor(amt)+'</div>'+
+    '<div class="wh-weight">'+(w?(w+' кг/ед'):'')+'</div>'+
+  '</div>';
+}
+function renderWarehouse(){
+  const used=totalCargoWeight();
+  const cap=warehouseCapacityKg();
+  const pct=Math.max(0,Math.min(100,(used/cap)*100));
+  const barClass = pct>=99.5?'full':'';
+  const order=warehouseOrder();
+  let html='<div class="panel"><h2>Грузовой склад</h2>'+
+    '<div class="warehouse-summary">'+
+      '<div class="warehouse-bar '+barClass+'"><div class="warehouse-bar-fill" style="width:'+pct.toFixed(1)+'%"></div></div>'+
+      '<div class="warehouse-value">'+Math.round(used).toLocaleString('ru-RU')+' / '+cap.toLocaleString('ru-RU')+' кг</div>'+
+    '</div>'+
+    '<div class="wh-grid" id="whGrid">';
+  order.forEach(id=>{
+    const r=resById(id);
+    if(!r) return;
+    const isPop=POP_GOODS.some(p=>p.id===id);
+    if(!isPop && !resourceVisible(r)) return;
+    const colorVar = r.tier!=null ? 'tier'+r.tier : (r.colorVar||'class1');
+    html+=whTile(r,colorVar);
+  });
+  html+='</div></div>';
+  warehousePanelEl.innerHTML=html;
+}
+let dragSrcId=null;
+let warehouseDragging=false;
+warehousePanelEl.addEventListener('dragstart', e=>{
+  const tile=e.target.closest('.wh-tile');
+  if(!tile) return;
+  dragSrcId=tile.dataset.res;
+  warehouseDragging=true;
+  tile.classList.add('dragging');
+  e.dataTransfer.effectAllowed='move';
+  try{ e.dataTransfer.setData('text/plain', dragSrcId); }catch(err){}
+});
+warehousePanelEl.addEventListener('dragover', e=>{
+  const tile=e.target.closest('.wh-tile');
+  if(!tile) return;
+  e.preventDefault();
+  document.querySelectorAll('.wh-tile.drag-over').forEach(t=>{ if(t!==tile) t.classList.remove('drag-over'); });
+  if(tile.dataset.res!==dragSrcId) tile.classList.add('drag-over');
+});
+warehousePanelEl.addEventListener('drop', e=>{
+  const tile=e.target.closest('.wh-tile');
+  warehouseDragging=false;
+  if(!tile || !dragSrcId){ return; }
+  e.preventDefault();
+  const targetId=tile.dataset.res;
+  tile.classList.remove('drag-over');
+  if(targetId!==dragSrcId){
+    const order=warehouseOrder().slice();
+    const from=order.indexOf(dragSrcId);
+    const to=order.indexOf(targetId);
+    if(from>=0 && to>=0){
+      order.splice(from,1);
+      order.splice(to,0,dragSrcId);
+      state.warehouseOrder=order;
+      saveState();
+    }
+  }
+  dragSrcId=null;
+  renderWarehouse();
+});
+warehousePanelEl.addEventListener('dragend', e=>{
+  warehouseDragging=false;
+  dragSrcId=null;
+  document.querySelectorAll('.wh-tile.dragging,.wh-tile.drag-over').forEach(t=>t.classList.remove('dragging','drag-over'));
+});
 
 function tierUnlocked(t){
   if(t===0) return true;
@@ -650,24 +905,26 @@ const REASON_LABELS={
   storage:'Склад заполнен',
   staff:'Не хватает персонала',
   comfort:'Персонал недоволен бытом',
+  wear:'Изношено оборудование',
 };
 
 function renderSections(){
   let html='';
   SECTIONS.forEach(s=>{
     let badge='';
-    if(s.id==='population'){
+    if(s.id==='workers'){
       const count=Object.values(lastWorkforce).reduce((sum,c)=>sum+Math.floor(c.assigned),0);
       badge=' · '+count+' чел.';
     }else if(s.id==='skills'){
-      const totalLevels=SKILLS.reduce((sum,sk)=>sum+skillLevelOf(sk.tier),0);
+      const totalLevels=SKILLS.reduce((sum,sk)=>sum+skillLevelById(sk.id),0);
       badge=' · ур. '+totalLevels+'/'+(SKILLS.length*MAX_SKILL_LEVEL);
-    }else{
-      const count=Object.values(state.buildings).length?BUILDINGS.reduce((sum,b)=>sum+(state.buildings[b.id]||0),0):0;
+    }else if(s.id==='warehouse'){
+      badge=' · '+Math.round(totalCargoWeight()).toLocaleString('ru-RU')+' / '+warehouseCapacityKg().toLocaleString('ru-RU')+' кг';
+    }else if(s.id==='buildings' || s.id==='production'){
+      const count=BUILDINGS.reduce((sum,b)=>sum+(state.buildings[b.id]||0),0);
       badge=' · '+count+' объектов';
     }
-    html+='<button class="section-btn" style="--sec-color:var(--'+s.color+')" data-section="'+s.id+'" '+
-      (s.id===activeSection?'class="active"':'')+'>'+s.label+badge+'</button>';
+    html+='<button class="section-btn'+(s.id===activeSection?' active':'')+'" style="--sec-color:var(--'+s.color+')" data-section="'+s.id+'">'+s.label+badge+'</button>';
   });
   sectionsEl.innerHTML=html;
 }
@@ -685,47 +942,169 @@ function renderTabs(){
 }
 
 function renderBuildings(){
-  const unlocked=tierUnlocked(activeTier);
+  const tierOk=tierUnlocked(activeTier);
   let html='';
-  if(!unlocked){
+  if(!tierOk){
     html+='<div class="locked-banner">Постройте хотя бы один объект уровня T'+(activeTier-1)+', чтобы открыть этот раздел цепочки.</div>';
   }
   const cls=CLASS_OF_TIER[activeTier];
   const className=CLASSES.find(c=>c.id===cls).name;
-  BUILDINGS.filter(b=>b.tier===activeTier).forEach(b=>{
+  BUILDINGS.filter(b=>b.tier===activeTier && recipeVisible(b)).forEach(b=>{
     const count=state.buildings[b.id]||0;
-    const cost=scaledCost(b,count);
+    const type=typeOf(b);
+    const cost=scaledCost(type,typeCount(b));
+    const skOk=recipeUnlocked(b);
     const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
-    const uInfo=util[b.id]||{frac:0,reason:'idle'};
-    const uPct=Math.round(uInfo.frac*100);
-    const uClass = count===0?'idle':(uInfo.frac>0.95?'full':(uInfo.frac>0.05?'partial':'blocked'));
-    const uLabel = count===0?'Ещё не построено':(REASON_LABELS[uInfo.reason]+(uInfo.reason==='full'?'':' · '+uPct+'%'));
+    const outRes=resById(outId(b));
+    const title = b.type ? type.name+' · '+recipeLabel(b) : b.name;
     const inputsStr = Object.keys(b.in||{}).length
       ? Object.entries(b.in).map(([rid,q])=>q+' '+resName(rid)).join(' + ')
       : 'Месторождение';
-    const outRes=resById(b.id);
-    const richBadge = b.tier===0 ? '<div class="bcard-richness">Богатство месторождения: '+Math.round((state.richness[b.id]||1)*100)+'%</div>' : '';
-    const wCut=workforceCutForTier(b.tier);
+    const richBadge = (b.tier===0 && b.type!=null) ? '<div class="bcard-richness">Богатство месторождения: '+Math.round(richOf(b)*100)+'%</div>' : '';
+    const wCut=workforceCutForRecipe(b);
     const effWorkers=Math.max(1,Math.round(b.workers*(1-wCut)));
     const staffBadge = '<div class="bcard-staff">Персонал: '+effWorkers+' × '+className+(wCut>0?' (база '+b.workers+')':'')+'</div>';
-    const sMult=speedMultForTier(b.tier);
+    const sMult=speedMultForRecipe(b);
     const speedBadge = sMult>1 ? '<div class="bcard-staff">Скорость с учётом навыка: ×'+sMult.toFixed(2)+'</div>' : '';
+    const lockNote = skOk ? '' : '<div class="bcard-lock">Нужен навык «'+skillName(recipeSkillId(b))+'» ур. '+(b.unlock||0)+'</div>';
     const costStr=Object.entries(cost).map(([rid,q])=>{
       const ok=(state.resources[rid]||0)>=q;
       return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
     }).join('');
-    html+='<div class="bcard t'+b.tier+'">'+
+    html+='<div class="bcard t'+b.tier+(skOk?'':' locked')+'">'+
       '<div class="bcard-head">'+iconSvg(outRes.id,'tier'+b.tier)+
-        '<div><h3>'+b.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[b.id]+' '+outRes.name+'</div>'+richBadge+staffBadge+speedBadge+'</div>'+
+        '<div><h3>'+title+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[outRes.id]+' '+outRes.name+'</div>'+richBadge+staffBadge+speedBadge+'</div>'+
       '</div>'+
-      '<div class="bcard-stats"><span>Построено: <strong>'+count+'</strong></span><span>Цикл: '+b.cycle+' с</span></div>'+
-      '<div class="util-bar '+uClass+'"><div class="util-fill" style="width:'+(count===0?0:uPct)+'%"></div></div>'+
-      '<div class="util-label">'+uLabel+'</div>'+
+      '<div class="bcard-stats"><span>Уже построено: <strong>'+count+'</strong></span><span>Цикл: '+b.cycle+' с ('+fmtDuration(b.cycle)+')</span></div>'+
+      lockNote+
       '<div class="bcard-cost">'+costStr+'</div>'+
-      '<button class="build-btn" data-build="'+b.id+'" '+((!unlocked||!afford)?'disabled':'')+'>Построить (+1)</button>'+
+      '<button class="build-btn" data-build="'+b.id+'" '+((!tierOk||!skOk||!afford)?'disabled':'')+'>Построить (+1)</button>'+
     '</div>';
   });
   bgridEl.innerHTML=html;
+}
+
+function renderProductionCard(b){
+  const units=unitsOf(b.id);
+  if(!units.length) return '';
+  const type=typeOf(b);
+  const outRes=resById(outId(b));
+  const title = b.type ? type.name+' · '+recipeLabel(b) : b.name;
+  const uInfo=util[b.id]||{frac:0,reason:'idle'};
+  const uPct=Math.round(uInfo.frac*100);
+  const uClass = uInfo.frac>0.95?'full':(uInfo.frac>0.05?'partial':'blocked');
+  const uLabel = REASON_LABELS[uInfo.reason]+(uInfo.reason==='full'?'':' · '+uPct+'%');
+  const cls=CLASS_OF_TIER[b.tier];
+  const className=CLASSES.find(c=>c.id===cls).name;
+  const wCut=workforceCutForRecipe(b);
+  const effWorkers=Math.max(1,Math.round(b.workers*(1-wCut)));
+  const staffBadge = '<div class="bcard-staff">Персонал: '+effWorkers+' × '+className+' на установку</div>';
+  const sMult=speedMultForRecipe(b);
+  const speedBadge = sMult>1 ? '<div class="bcard-staff">Скорость с учётом навыка: ×'+sMult.toFixed(2)+'</div>' : '';
+  const inputsStr = Object.keys(b.in||{}).length
+    ? Object.entries(b.in).map(([rid,q])=>q+' '+resName(rid)).join(' + ')
+    : 'Месторождение';
+  let retoolBlock='';
+  if(b.type){
+    const others=BUILDINGS.filter(x=>x.type===b.type && x.id!==b.id && recipeUnlocked(x) && recipeVisible(x));
+    if(others.length){
+      const fee=retoolFee(b);
+      const feeOk=Object.entries(fee).every(([rid,q])=>(state.resources[rid]||0)>=q);
+      const feeStr=Object.entries(fee).map(([rid,q])=>q+' '+resName(rid)).join(' + ');
+      const options=units.map(u=>'<option value="'+u.id+'">#'+u.id+' ('+Math.round(u.durability)+'% прочности)</option>').join('');
+      retoolBlock='<div class="retool"><span>Перенастроить <select class="unit-select" data-unit-select="'+b.id+'">'+options+'</select> ('+feeStr+') на:</span>'+
+        others.map(x=>'<button data-retool-select="'+b.id+'" data-retool-to="'+x.id+'" '+(feeOk?'':'disabled')+'>'+recipeLabel(x)+'</button>').join('')+
+      '</div>';
+    }
+  }
+  const unitsHtml=units.map(u=>
+    '<div class="unit-row"><span class="unit-id">#'+u.id+'</span>'+
+      '<div class="cycle-bar" style="flex:1"><div class="cycle-fill" data-cyclebar="'+u.id+'"></div></div>'+
+      '<span class="cycle-time" data-cycletime="'+u.id+'">—:—</span></div>'
+  ).join('');
+  return '<div class="bcard t'+b.tier+'">'+
+    '<div class="bcard-head">'+iconSvg(outRes.id,'tier'+b.tier)+
+      '<div><h3>'+title+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[outRes.id]+' '+outRes.name+'</div>'+staffBadge+speedBadge+'</div>'+
+    '</div>'+
+    '<div class="bcard-stats"><span>Построено: <strong>'+units.length+'</strong></span><span>Цикл: '+b.cycle+' с ('+fmtDuration(b.cycle)+')</span></div>'+
+    '<div class="util-bar '+uClass+'"><div class="util-fill" style="width:'+uPct+'%"></div></div>'+
+    '<div class="util-label">'+uLabel+' · у каждой установки свой цикл, отсчёт ниже</div>'+
+    '<div class="unit-list">'+unitsHtml+'</div>'+
+    retoolBlock+
+  '</div>';
+}
+function renderProduction(){
+  const cards=BUILDINGS.filter(b=>unitsOf(b.id).length>0).map(renderProductionCard).join('');
+  productionPanelEl.innerHTML = cards ? '<div class="bgrid">'+cards+'</div>' : '<div class="locked-banner">Пока ничего не работает — загляните во вкладку «Построить».</div>';
+}
+
+function demolishCost(b){
+  const count=state.buildings[b.id]||0;
+  if(count<=0) return {};
+  const marginal=scaledCost(typeOf(b), count-1);
+  const refund={};
+  Object.entries(marginal).forEach(([rid,q])=>{ const r=Math.floor(q*DEMOLISH_REFUND); if(r>0) refund[rid]=r; });
+  return refund;
+}
+function renderBuildingStatusCard(b){
+  const units=unitsOf(b.id);
+  if(!units.length) return '';
+  const outRes=resById(outId(b));
+  const type=typeOf(b);
+  const title = b.type ? type.name+' · '+recipeLabel(b) : b.name;
+  const inputsStr = Object.keys(b.in||{}).length
+    ? Object.entries(b.in).map(([rid,q])=>q+' '+resName(rid)).join(' + ')
+    : 'Месторождение';
+  const dCost=demolishCost(b);
+  const dKeys=Object.keys(dCost);
+  const dStr=dKeys.length ? dKeys.map(rid=>dCost[rid]+' '+resName(rid)).join(' + ') : 'ничего';
+  const rowsHtml=units.map(u=>{
+    const durPct=Math.round(u.durability);
+    const durClass = u.durability>=80?'ok':(u.durability>=45?'warn':'bad');
+    const rCost=repairCost(u,b);
+    const rKeys=Object.keys(rCost);
+    const rAfford=rKeys.every(rid=>(state.resources[rid]||0)>=rCost[rid]);
+    return '<div class="unit-row">'+
+      '<span class="unit-id">#'+u.id+'</span>'+
+      '<div class="durability-bar '+durClass+'" style="flex:1"><div class="durability-fill" style="width:'+durPct+'%"></div></div>'+
+      '<span class="unit-pct">'+durPct+'%</span>'+
+      (rKeys.length
+        ? '<button class="repair-btn small" data-repair-unit="'+u.id+'" '+(rAfford?'':'disabled')+'>Ремонт ('+rKeys.map(rid=>rCost[rid]+' '+resName(rid)).join(' + ')+')</button>'
+        : '<span class="unit-ok">исправно</span>')+
+      '<button class="demolish-btn small" data-demolish-unit="'+u.id+'">Снести</button>'+
+    '</div>';
+  }).join('');
+  return '<div class="bcard t'+b.tier+'">'+
+    '<div class="bcard-head">'+iconSvg(outRes.id,'tier'+b.tier)+
+      '<div><h3>'+title+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[outRes.id]+' '+outRes.name+'</div></div>'+
+    '</div>'+
+    '<div class="bcard-stats"><span>Построено: <strong>'+units.length+'</strong></span><span>Снос одной вернёт: '+dStr+'</span></div>'+
+    '<div class="unit-list">'+rowsHtml+'</div>'+
+  '</div>';
+}
+function renderBuildingsStatus(){
+  const cards=BUILDINGS.filter(b=>unitsOf(b.id).length>0).map(renderBuildingStatusCard).join('');
+  buildingsPanelEl.innerHTML = cards ? '<div class="bgrid">'+cards+'</div>' : '<div class="locked-banner">Пока ничего не построено — загляните во вкладку «Построить».</div>';
+}
+
+function renderHQ(){
+  const totalBuilt=Object.values(state.buildings).reduce((s,n)=>s+n,0);
+  const workers=Object.values(lastWorkforce).reduce((s,c)=>s+Math.floor(c.assigned),0);
+  const slots=Object.values(lastWorkforce).reduce((s,c)=>s+Math.floor(c.cap),0);
+  const usedKg=totalCargoWeight(), capKg=warehouseCapacityKg();
+  const trainSk=SKILLS.find(x=>x.id===state.training);
+  const byTier=[0,1,2,3,4].map(t=>({t,count:BUILDINGS.filter(b=>b.tier===t).reduce((s,b)=>s+(state.buildings[b.id]||0),0)}));
+  let html='<div class="panel"><h2>Обзор базы</h2>'+
+    '<div class="pop-metrics" style="margin-bottom:14px;">'+
+      '<span>Время работы: <strong>'+fmtElapsed(Date.now()-state.startTs)+'</strong></span>'+
+      '<span>Построено объектов: <strong>'+totalBuilt+'</strong></span>'+
+      '<span>Персонал: <strong>'+workers+' / '+slots+'</strong></span>'+
+      '<span>Склад: <strong>'+Math.round(usedKg).toLocaleString('ru-RU')+' / '+capKg.toLocaleString('ru-RU')+' кг</strong></span>'+
+      '<span>Изучается: <strong>'+(trainSk?trainSk.name+' (ур. '+skillLevelById(trainSk.id)+')':'—')+'</strong></span>'+
+    '</div>'+
+    '<div class="ledger-grid">'+byTier.map(x=>'<div class="chip t'+x.t+'"><div class="chip-body"><div class="chip-name">'+TAB_LABELS[x.t]+' (T'+x.t+')</div><div class="chip-amt">'+x.count+'</div></div></div>').join('')+'</div>'+
+  '</div>';
+  hqPanelEl.innerHTML=html;
 }
 
 function popUnlocked(cls){
@@ -753,7 +1132,7 @@ function renderServiceCard(sb){
     '<div class="bcard-head">'+iconSvg(outRes.id,cv)+
       '<div><h3>'+sb.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+sb.out[sb.id]+' '+outRes.name+'</div></div>'+
     '</div>'+
-    '<div class="bcard-stats"><span>Построено: <strong>'+count+'</strong></span><span>Цикл: '+sb.cycle+' с</span></div>'+
+    '<div class="bcard-stats"><span>Построено: <strong>'+count+'</strong></span><span>Цикл: '+sb.cycle+' с ('+fmtDuration(sb.cycle)+')</span></div>'+
     '<div class="util-bar '+uClass+'"><div class="util-fill" style="width:'+(count===0?0:uPct)+'%"></div></div>'+
     '<div class="util-label">'+uLabel+'</div>'+
     '<div class="bcard-cost">'+costStr+'</div>'+
@@ -791,7 +1170,8 @@ function needRow(label,weightLabel,fraction,barColorVar){
 }
 
 function renderPopulation(){
-  let html='';
+  const totalPop=[1,2,3,4].reduce((s,c)=>s+Math.floor((lastWorkforce[c]||blankWf()).assigned),0);
+  let html='<div class="pop-metrics" style="margin-bottom:14px;"><span>Всего населения на планете: <strong>'+totalPop+'</strong></span></div>';
   CLASSES.forEach(c=>{
     const wf=lastWorkforce[c.id]||blankWf();
     const unlocked=popUnlocked(c.id);
@@ -815,14 +1195,20 @@ function renderPopulation(){
     const stockHtml=stockIds.map(gid=>{
       const g=resById(gid);
       const amt=state.resources[gid]||0;
-      const pct=Math.max(0,Math.min(100,(amt/g.cap)*100));
       const rate=netRate(gid);
       const rateClass=rate>0.01?'pos':(rate<-0.01?'neg':'zero');
+      const perWorker=PER_WORKER_RATE[gid];
+      const consumeHr = perWorker!=null ? perWorker*wf.assigned*3600 : 0;
+      const daysLeft = consumeHr>0 ? amt/(consumeHr*24) : Infinity;
+      const supplyStr = consumeHr<=0.0001 ? '' : (
+        '<div class="chip-rate zero">−'+consumeHr.toFixed(2)+'/ч · запас '+(daysLeft>99?'99+ дн':(daysLeft<1?Math.round(daysLeft*24)+' ч':daysLeft.toFixed(1)+' дн'))+'</div>'
+      );
       return '<div class="chip" style="--chip-color:var(--'+colorVarOf(g)+')"><div>'+iconSvg(g.id,colorVarOf(g))+'</div>'+
         '<div class="chip-body"><div class="chip-name">'+g.name+'</div>'+
-        '<div class="chip-amt">'+Math.floor(amt)+'<span class="chip-cap">/'+g.cap+'</span></div>'+
-        '<div class="chip-bar"><div class="chip-bar-fill" style="width:'+pct+'%"></div></div>'+
-        '<div class="chip-rate '+rateClass+'">'+(rate>=0?'+':'')+rate.toFixed(1)+'/с</div></div></div>';
+        '<div class="chip-amt">'+Math.floor(amt)+'</div>'+
+        '<div class="chip-rate '+rateClass+'">'+(rate>=0?'+':'')+rate.toFixed(1)+'/с</div>'+
+        supplyStr+
+        '</div></div>';
     }).join('');
 
     const housing=HOUSING.find(h=>h.cls===c.id);
@@ -840,6 +1226,7 @@ function renderPopulation(){
       breakdownHtml+
       '<div class="pop-needs">'+stockHtml+'</div>'+
       '<div class="pop-grid">'+renderHousingCard(housing)+serviceCards+'</div>'+
+      (c.id===1?'<div class="bcard-staff">Еда выращивается на гидропонных фермах: раздел «Производство», вкладки «Добыча» (биомасса) и «Переработка» (протеиновая паста).</div>':'')+
     '</div>';
   });
   popPanelEl.innerHTML=html;
@@ -886,12 +1273,13 @@ function renderSkills(){
     const workforceCut=Math.round(SKILL_WORKFORCE_CUT*level*100);
     const barClass=maxed?'full':(isTraining?'partial':'idle');
     html+='<div class="bcard" style="--tier-color:var(--skill)">'+
-      '<div class="bcard-head">'+iconSvg('skillT'+sk.tier,'skill')+
+      '<div class="bcard-head">'+iconSvg(sk.icon,'skill')+
         '<div><h3>'+sk.name+'</h3><div class="bcard-recipe">Уровень '+level+' / '+MAX_SKILL_LEVEL+(isTraining?' · изучается сейчас':'')+'</div></div>'+
       '</div>'+
       '<div class="util-bar '+barClass+'"><div class="util-fill" style="width:'+pct+'%"></div></div>'+
       '<div class="util-label">'+(maxed?'Максимальный уровень':(Math.floor(st.sp)+' / '+nextCost+' SP до следующего уровня'))+'</div>'+
       '<div class="bcard-staff">Бонус: +'+speedBonus+'% скорость, −'+workforceCut+'% персонал</div>'+
+      (unlockListFor(sk.id)?'<div class="bcard-staff">Открывает: '+unlockListFor(sk.id)+'</div>':'')+
       '<button class="build-btn" data-train="'+sk.id+'" '+((isTraining||maxed)?'disabled':'')+'>'+(isTraining?'Изучается':'Обучать')+'</button>'+
     '</div>';
   });
@@ -915,19 +1303,26 @@ function renderStats(){
 }
 
 function renderView(){
-  bgridEl.hidden = activeSection!=='production';
-  tabsEl.style.display = activeSection==='production' ? '' : 'none';
-  popPanelEl.hidden = activeSection!=='population';
+  hqPanelEl.hidden = activeSection!=='hq';
+  buildingsPanelEl.hidden = activeSection!=='buildings';
+  bgridEl.hidden = activeSection!=='build';
+  tabsEl.style.display = activeSection==='build' ? '' : 'none';
+  productionPanelEl.hidden = activeSection!=='production';
+  popPanelEl.hidden = activeSection!=='workers';
   skillsPanelEl.hidden = activeSection!=='skills';
-  if(activeSection==='production') renderBuildings();
-  else if(activeSection==='population') renderPopulation();
-  else renderSkills();
+  warehousePanelEl.hidden = activeSection!=='warehouse';
+  if(activeSection==='hq') renderHQ();
+  else if(activeSection==='buildings') renderBuildingsStatus();
+  else if(activeSection==='build') renderBuildings();
+  else if(activeSection==='production') renderProduction();
+  else if(activeSection==='workers') renderPopulation();
+  else if(activeSection==='skills') renderSkills();
+  else if(activeSection==='warehouse'){ if(!warehouseDragging) renderWarehouse(); }
 }
 
 function renderAll(){
-  renderLedger();
   renderSections();
-  if(activeSection==='production') renderTabs();
+  if(activeSection==='build') renderTabs();
   renderView();
   renderStats();
 }
@@ -939,12 +1334,71 @@ function tryBuild(id){
   if(b.tier!=null) unlocked=tierUnlocked(b.tier);
   else if(b.cls!=null) unlocked=popUnlocked(b.cls);
   if(!unlocked) return;
+  const isRecipe=BUILDINGS.includes(b);
+  if(isRecipe && !recipeUnlocked(b)) return;
   const count=state.buildings[id]||0;
-  const cost=scaledCost(b,count);
+  const cost=isRecipe ? scaledCost(typeOf(b),typeCount(b)) : scaledCost(b,count);
   const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
   if(!afford) return;
   Object.entries(cost).forEach(([rid,q])=>{ state.resources[rid]-=q; });
-  state.buildings[id]=count+1;
+  if(isRecipe){
+    const uid=state.nextUnitId++;
+    state.units.push({id:uid, recipe:id, builtAt:Date.now(), durability:DURABILITY_MAX});
+    syncBuildingCount(id);
+  }else{
+    state.buildings[id]=count+1;
+  }
+  saveState();
+  renderAll();
+}
+
+function tryRepairUnit(unitId){
+  const u=state.units.find(x=>x.id===unitId);
+  if(!u) return;
+  const b=BUILDINGS.find(x=>x.id===u.recipe);
+  if(!b) return;
+  const cost=repairCost(u,b);
+  if(!Object.keys(cost).length) return;
+  if(!Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q)) return;
+  Object.entries(cost).forEach(([rid,q])=>{ state.resources[rid]-=q; });
+  u.durability=DURABILITY_MAX;
+  saveState();
+  renderAll();
+}
+
+function tryDemolishUnit(unitId){
+  const idx=state.units.findIndex(x=>x.id===unitId);
+  if(idx<0) return;
+  const u=state.units[idx];
+  const b=BUILDINGS.find(x=>x.id===u.recipe);
+  if(!b) return;
+  const refund=demolishCost(b);
+  state.units.splice(idx,1);
+  syncBuildingCount(u.recipe);
+  const refundKg=Object.entries(refund).reduce((sum,[rid,q])=>sum+q*(resById(rid).weight||0),0);
+  const free=warehouseFreeKg();
+  const scale = (refundKg>free && refundKg>0) ? free/refundKg : 1;
+  Object.entries(refund).forEach(([rid,q])=>{
+    const add=Math.floor(q*scale);
+    if(add>0) state.resources[rid]=(state.resources[rid]||0)+add;
+  });
+  saveState();
+  renderAll();
+}
+
+function tryRetoolUnit(unitId,toId){
+  const u=state.units.find(x=>x.id===unitId);
+  if(!u) return;
+  const from=BUILDINGS.find(x=>x.id===u.recipe), to=BUILDINGS.find(x=>x.id===toId);
+  if(!from || !to || !from.type || from.type!==to.type) return;
+  if(!recipeUnlocked(to)) return;
+  const fee=retoolFee(from);
+  if(!Object.entries(fee).every(([rid,q])=>(state.resources[rid]||0)>=q)) return;
+  Object.entries(fee).forEach(([rid,q])=>{ state.resources[rid]-=q; });
+  const oldRecipe=u.recipe;
+  u.recipe=toId;
+  syncBuildingCount(oldRecipe);
+  syncBuildingCount(toId);
   saveState();
   renderAll();
 }
@@ -968,6 +1422,21 @@ bgridEl.addEventListener('click', e=>{
   const btn=e.target.closest('[data-build]');
   if(!btn) return;
   tryBuild(btn.dataset.build);
+});
+buildingsPanelEl.addEventListener('click', e=>{
+  const repBtn=e.target.closest('[data-repair-unit]');
+  if(repBtn){ tryRepairUnit(Number(repBtn.dataset.repairUnit)); return; }
+  const demBtn=e.target.closest('[data-demolish-unit]');
+  if(demBtn){ tryDemolishUnit(Number(demBtn.dataset.demolishUnit)); }
+});
+productionPanelEl.addEventListener('click', e=>{
+  const btn=e.target.closest('[data-retool-select]');
+  if(!btn) return;
+  const recipeId=btn.dataset.retoolSelect;
+  const card=btn.closest('.bcard');
+  const sel=card?card.querySelector('[data-unit-select="'+recipeId+'"]'):null;
+  const unitId=sel?Number(sel.value):null;
+  if(unitId!=null) tryRetoolUnit(unitId, btn.dataset.retoolTo);
 });
 popPanelEl.addEventListener('click', e=>{
   const btn=e.target.closest('[data-build]');
@@ -998,13 +1467,51 @@ document.getElementById('modalClose').addEventListener('click', ()=>{ modalEl.hi
 renderAll();
 
 let tickCount=0;
+let timeScale=1;
+document.getElementById('devbar').addEventListener('click', e=>{
+  const btn=e.target.closest('[data-speed]');
+  if(!btn) return;
+  timeScale=parseInt(btn.dataset.speed,10);
+  document.querySelectorAll('#devbar [data-speed]').forEach(b=>b.classList.toggle('active', b===btn));
+  const HINTS={1:'1 с = 1 с игры',60:'1 с = 1 мин игры',600:'1 с = 10 мин игры',3600:'1 с = 1 ч игры'};
+  document.getElementById('devHint').textContent=HINTS[timeScale]||'';
+});
 setInterval(()=>{
-  simulateStep(1);
+  let left=timeScale;
+  while(left>0){ const st=Math.min(OFFLINE_STEP,left); simulateStep(st); left-=st; }
   state.lastTs=Date.now();
   renderAll();
   tickCount++;
   if(tickCount%5===0) saveState();
 }, 1000);
+
+function fmtMMSS(sec){
+  sec=Math.max(0,Math.round(sec));
+  const m=Math.floor(sec/60), r=sec%60;
+  return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0');
+}
+function tickCycleBars(){
+  const now=Date.now()/1000;
+  document.querySelectorAll('[data-cyclebar]').forEach(el=>{
+    const uid=Number(el.dataset.cyclebar);
+    const row=el.closest('.unit-row');
+    const timeEl=row?row.querySelector('.cycle-time'):null;
+    const unit=state.units.find(x=>x.id===uid);
+    if(!unit){ el.style.width='0%'; if(timeEl) timeEl.textContent='—:—'; return; }
+    const b=BUILDINGS.find(x=>x.id===unit.recipe);
+    if(!b) return;
+    const uInfo=util[b.id];
+    if(!uInfo || uInfo.frac<=0.001){ el.style.width='0%'; if(timeEl) timeEl.textContent='простой'; return; }
+    const eff=Math.max(0.5, b.cycle/speedMultForRecipe(b));
+    const builtSec=unit.builtAt/1000;
+    const phase=(((now-builtSec)%eff)+eff)%eff/eff;
+    el.style.width=(phase*100).toFixed(1)+'%';
+    el.style.opacity = uInfo.frac>=0.95 ? '0.55' : '0.3';
+    if(timeEl) timeEl.textContent=fmtMMSS(eff-phase*eff);
+  });
+}
+setInterval(tickCycleBars, 250);
+tickCycleBars();
 
 window.addEventListener('pagehide', saveState);
 document.addEventListener('visibilitychange', ()=>{ if(document.hidden) saveState(); });
