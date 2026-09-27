@@ -400,16 +400,21 @@ const SKILLS=[
   {id:'t3',tier:3,name:'Точное машиностроение',icon:'skillT3'},
   {id:'t4',tier:4,name:'Робототехника и системы',icon:'skillT4'},
 ];
-const MAX_SKILL_LEVEL=5;
-const SKILL_SPEED_BONUS=0.08;
-const SKILL_WORKFORCE_CUT=0.05;
-const SKILL_BASE_SP=300;
+// 150 уровней вместо 5: тот же максимальный бонус (+40% скорость, −25% персонал),
+// просто размазанный на длинную дистанцию, плюс новая линейная прибавка к богатству
+// месторождения (до +100% на максимуме) — раньше richness была статичной на весь забег.
+const MAX_SKILL_LEVEL=150;
+const SKILL_SPEED_BONUS=0.40/MAX_SKILL_LEVEL;
+const SKILL_WORKFORCE_CUT=0.25/MAX_SKILL_LEVEL;
+const SKILL_RICHNESS_BONUS=1.0/MAX_SKILL_LEVEL;
+const SKILL_BASE_SP=20;
+const SKILL_COST_STEP=15; // арифметический рост цены уровня вместо экспоненциального
 const SP_PER_HOUR_BY_TIER={0:1,1:1.5,2:2,3:2.5,4:3};
 const ACADEMY_SP_PER_HOUR=90;
 const ACADEMY={id:'academy',name:'Учебный центр',cost:{steel:30,silicon_wafer:15}};
 const SKILL_BUILDINGS=[ACADEMY];
 
-function skillLevelCost(level){ return Math.round(SKILL_BASE_SP*Math.pow(level,2.5)); }
+function skillLevelCost(level){ return Math.round(SKILL_BASE_SP+SKILL_COST_STEP*(level-1)); }
 function skillLevelById(id){ return (state.skills && state.skills[id] && state.skills[id].level) || 0; }
 function skillName(id){ const sk=SKILLS.find(x=>x.id===id); return sk?sk.name:id; }
 function recipeSkillId(b){ return b.skill || ('t'+b.tier); }
@@ -418,7 +423,12 @@ function speedMultForRecipe(b){ return 1+SKILL_SPEED_BONUS*skillLevelById(recipe
 function workforceCutForRecipe(b){ return SKILL_WORKFORCE_CUT*skillLevelById(recipeSkillId(b)); }
 function outId(b){ return Object.keys(b.out)[0]; }
 function recipeLabel(b){ return b.label || resName(outId(b)); }
-function richOf(b){ const r=resById(outId(b)); return state.richness[(r&&r.family)||outId(b)]||1; }
+function richOf(b){
+  const r=resById(outId(b));
+  const base=state.richness[(r&&r.family)||outId(b)]||1;
+  return base+SKILL_RICHNESS_BONUS*skillLevelById(recipeSkillId(b));
+}
+function skillAffectsRichness(skId){ return BUILDINGS.some(b=>b.tier===0 && recipeSkillId(b)===skId); }
 function resourceVisible(r){
   if((state.resources[r.id]||0)>0.05) return true;
   if(Math.abs(netRate(r.id))>1e-6) return true;
@@ -471,7 +481,7 @@ const SECTIONS=[
   {id:'warehouse',label:'Склад',color:'tier4'},
 ];
 const TAB_LABELS=['Добыча','Переработка','Компоненты','Продвинутые узлы','Готовые изделия'];
-const SAVE_KEY='industrial_belt_v13';
+const SAVE_KEY='industrial_belt_v14';
 const OFFLINE_CAP_SEC=12*3600;
 const OFFLINE_STEP=30;
 
@@ -1271,6 +1281,7 @@ function renderSkills(){
     const pct=maxed?100:Math.max(0,Math.min(100,(st.sp/nextCost)*100));
     const speedBonus=Math.round(SKILL_SPEED_BONUS*level*100);
     const workforceCut=Math.round(SKILL_WORKFORCE_CUT*level*100);
+    const richBonus=skillAffectsRichness(sk.id)?Math.round(SKILL_RICHNESS_BONUS*level*100):null;
     const barClass=maxed?'full':(isTraining?'partial':'idle');
     html+='<div class="bcard" style="--tier-color:var(--skill)">'+
       '<div class="bcard-head">'+iconSvg(sk.icon,'skill')+
@@ -1278,7 +1289,7 @@ function renderSkills(){
       '</div>'+
       '<div class="util-bar '+barClass+'"><div class="util-fill" style="width:'+pct+'%"></div></div>'+
       '<div class="util-label">'+(maxed?'Максимальный уровень':(Math.floor(st.sp)+' / '+nextCost+' SP до следующего уровня'))+'</div>'+
-      '<div class="bcard-staff">Бонус: +'+speedBonus+'% скорость, −'+workforceCut+'% персонал</div>'+
+      '<div class="bcard-staff">Бонус: +'+speedBonus+'% скорость, −'+workforceCut+'% персонал'+(richBonus!=null?', +'+richBonus+'% богатство месторождения':'')+'</div>'+
       (unlockListFor(sk.id)?'<div class="bcard-staff">Открывает: '+unlockListFor(sk.id)+'</div>':'')+
       '<button class="build-btn" data-train="'+sk.id+'" '+((isTraining||maxed)?'disabled':'')+'>'+(isTraining?'Изучается':'Обучать')+'</button>'+
     '</div>';
