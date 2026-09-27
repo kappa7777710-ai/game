@@ -407,14 +407,22 @@ const MAX_SKILL_LEVEL=150;
 const SKILL_SPEED_BONUS=0.40/MAX_SKILL_LEVEL;
 const SKILL_WORKFORCE_CUT=0.25/MAX_SKILL_LEVEL;
 const SKILL_RICHNESS_BONUS=1.0/MAX_SKILL_LEVEL;
-const SKILL_BASE_SP=20;
-const SKILL_COST_STEP=15; // арифметический рост цены уровня вместо экспоненциального
-const SP_PER_HOUR_BY_TIER={0:1,1:1.5,2:2,3:2.5,4:3};
+// SP на T0 = фактически добытые ресурсы (1 добытая единица = 1 SP, с учётом реальной
+// загрузки/богатства/бонуса скорости), а не плоская ставка за факт существования здания.
+// Стоимость уровня выведена из этого: L-й уровень стоит ровно столько SP, сколько
+// добудет ОДНА базовая установка (пыль, iron_g1, доступна с уровня 0) за L часов
+// работы на богатстве месторождения 100% без бонуса скорости — то есть в одиночку
+// такая установка левелит уровень L примерно за L часов, дальше настоящий разгон
+// даёт богатство/скорость самого навыка и лишние установки/тиры/академии.
+const SP_PER_UNIT_T0=1;
+const REF_T0_BUILDING=BUILDINGS.find(b=>b.id==='iron_g1');
+const SP_PER_HOUR_REF_T0_BUILDING=Math.round(REF_T0_BUILDING.out[REF_T0_BUILDING.id]*3600/REF_T0_BUILDING.cycle);
+const SP_PER_HOUR_BY_TIER={1:1.5,2:2,3:2.5,4:3}; // T0 больше не тут — считается по факту добычи
 const ACADEMY_SP_PER_HOUR=90;
 const ACADEMY={id:'academy',name:'Учебный центр',cost:{steel:30,silicon_wafer:15}};
 const SKILL_BUILDINGS=[ACADEMY];
 
-function skillLevelCost(level){ return Math.round(SKILL_BASE_SP+SKILL_COST_STEP*(level-1)); }
+function skillLevelCost(level){ return SP_PER_HOUR_REF_T0_BUILDING*level; }
 function skillLevelById(id){ return (state.skills && state.skills[id] && state.skills[id].level) || 0; }
 function skillName(id){ const sk=SKILLS.find(x=>x.id===id); return sk?sk.name:id; }
 function recipeSkillId(b){ return b.skill || ('t'+b.tier); }
@@ -481,7 +489,7 @@ const SECTIONS=[
   {id:'warehouse',label:'Склад',color:'tier4'},
 ];
 const TAB_LABELS=['Добыча','Переработка','Компоненты','Продвинутые узлы','Готовые изделия'];
-const SAVE_KEY='industrial_belt_v14';
+const SAVE_KEY='industrial_belt_v15';
 const OFFLINE_CAP_SEC=12*3600;
 const OFFLINE_STEP=30;
 
@@ -655,18 +663,39 @@ function computeWorkforce(dt){
   return wf;
 }
 
-function spPerHourTotal(){
-  const fromBuildings=BUILDINGS.reduce((s,b)=>s+(state.buildings[b.id]||0)*SP_PER_HOUR_BY_TIER[b.tier],0);
+// T0 больше не даёт плоскую ставку — это фактический выпуск (то же, что видно
+// в netRate), т.е. простаивающая установка (нет персонала/сырья/места на складе)
+// добывает 0 SP, а не свою "долю" просто за факт существования.
+function spFromT0PerHour(){
+  return BUILDINGS.filter(b=>b.tier===0).reduce((s,b)=>{
+    const count=state.buildings[b.id]||0;
+    if(count<=0) return s;
+    const u=(util[b.id]&&util[b.id].frac)||0;
+    if(u<=0) return s;
+    const rate=(b.out[outId(b)]*count/b.cycle)*3600*richOf(b)*speedMultForRecipe(b)*u;
+    return s+rate*SP_PER_UNIT_T0;
+  },0);
+}
+function spFromOtherTiersPerHour(){
+  const fromTiers=BUILDINGS.filter(b=>b.tier>0).reduce((s,b)=>s+(state.buildings[b.id]||0)*(SP_PER_HOUR_BY_TIER[b.tier]||0),0);
   const academies=state.buildings[ACADEMY.id]||0;
-  return {fromBuildings, fromAcademy:academies*ACADEMY_SP_PER_HOUR, total:fromBuildings+academies*ACADEMY_SP_PER_HOUR};
+  return {fromTiers, fromAcademy:academies*ACADEMY_SP_PER_HOUR};
+}
+function spPerHourTotal(){
+  const fromT0=spFromT0PerHour();
+  const other=spFromOtherTiersPerHour();
+  const fromBuildings=fromT0+other.fromTiers;
+  return {fromBuildings, fromAcademy:other.fromAcademy, total:fromBuildings+other.fromAcademy};
 }
 
-function tickSkills(dt){
-  const spPerSec=spPerHourTotal().total/3600;
+function tickSkills(dt, t0OutputUnits){
+  const other=spFromOtherTiersPerHour();
+  const otherSpPerSec=(other.fromTiers+other.fromAcademy)/3600;
+  const spGain=(t0OutputUnits||0)*SP_PER_UNIT_T0+otherSpPerSec*dt;
   if(!state.training) return;
   const sk=state.skills[state.training];
   if(!sk || sk.level>=MAX_SKILL_LEVEL) return;
-  sk.sp+=spPerSec*dt;
+  sk.sp+=spGain;
   while(sk.level<MAX_SKILL_LEVEL && sk.sp>=skillLevelCost(sk.level+1)){
     sk.sp-=skillLevelCost(sk.level+1);
     sk.level+=1;
@@ -681,7 +710,6 @@ function decayDurability(dt){
 }
 
 function simulateStep(dt){
-  tickSkills(dt);
   decayDurability(dt);
   SERVICE_BUILDINGS.forEach(sb=>{
     const count=state.buildings[sb.id]||0;
@@ -703,6 +731,7 @@ function simulateStep(dt){
   const wf=computeWorkforce(dt);
   lastWorkforce=wf;
 
+  let t0OutputUnits=0;
   [0,1,2,3,4].forEach(t=>{
     BUILDINGS.filter(b=>b.tier===t).forEach(b=>{
       const units=unitsOf(b.id);
@@ -725,10 +754,13 @@ function simulateStep(dt){
         const next=(state.resources[rid]||0)-calc.desiredIns[rid]*fraction;
         state.resources[rid]=next<0?0:next;
       });
-      state.resources[outId(b)]=(state.resources[outId(b)]||0)+calc.desiredOut*fraction;
+      const producedNow=calc.desiredOut*fraction;
+      state.resources[outId(b)]=(state.resources[outId(b)]||0)+producedNow;
+      if(t===0) t0OutputUnits+=producedNow;
       util[b.id]={frac:fraction*avgWear,reason};
     });
   });
+  tickSkills(dt, t0OutputUnits);
   state.playSeconds=(state.playSeconds||0)+dt;
 }
 
