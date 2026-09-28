@@ -214,47 +214,50 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .mi-chip{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 7px;font-family:var(--font-mono);font-size:12.5px;font-variant-numeric:tabular-nums;}
 .mi-chip svg{width:20px;height:20px;}
 .mi-chip.bad{color:var(--bad);}
-.mi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:8px;padding:12px;}
-.mi-cell{position:relative;aspect-ratio:1;overflow:hidden;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;font:inherit;color:inherit;}
-.mi-cell .fill{position:absolute;left:0;right:0;bottom:0;height:calc(var(--p,0)*100%);background:linear-gradient(0deg,color-mix(in srgb,var(--oc) 55%,transparent),color-mix(in srgb,var(--oc) 18%,transparent));border-top:2px solid var(--oc);}
-.mi-cell svg{position:relative;width:56%;height:56%;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6));}
-.mi-cell .t{position:absolute;right:4px;bottom:2px;font-family:var(--font-mono);font-size:9.5px;color:var(--text-primary);text-shadow:0 1px 2px #000;}
-.mi-cell .n{position:absolute;left:5px;top:3px;font-family:var(--font-mono);font-size:9px;color:var(--text-muted);}
-.mi-cell:hover{filter:brightness(1.15);}
-.mi-cell.sel{box-shadow:0 0 0 2px var(--oc),0 0 16px color-mix(in srgb,var(--oc) 50%,transparent);}
-.mi-cell.idle svg{opacity:.35;}
-.mi-cell.idle .fill{display:none;}
-.mi-cell.idle::after{content:"!";position:absolute;top:2px;right:6px;font-family:var(--font-display);font-weight:700;color:var(--bad);}
-.mi-empty{aspect-ratio:1;border-radius:12px;border:1px dashed #243056;background:rgba(11,16,34,.5);}
-.mi-empty.plus{display:flex;align-items:center;justify-content:center;color:#3A4468;font-size:28px;font-family:var(--font-display);cursor:pointer;padding:0;}
-.mi-empty.plus:hover{color:var(--miner);border-color:var(--miner);}
-.mi-detail{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:12px 14px;}
-.mi-rig{width:64px;height:64px;flex-shrink:0;}
-.mi-picks{display:flex;gap:10px;}
-.mi-pick{width:74px;height:84px;padding:4px 0 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;border-radius:12px;font:inherit;color:var(--text-secondary);
-  background:linear-gradient(180deg,#252D55,#161C38);border:1px solid #0B0F20;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 1px 0 rgba(0,0,0,.4);transition:filter .15s,transform .1s;}
-.mi-pick svg{width:32px;height:32px;opacity:.6;}
-.mi-pick b{font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--text-primary);line-height:1.1;}
-.mi-pick span{font-family:var(--font-mono);font-size:10px;}
-.mi-pick:not(:disabled):hover{filter:brightness(1.2);}
-.mi-pick:not(:disabled):active{transform:translateY(1px);}
-.mi-pick:disabled{cursor:default;}
-.mi-pick:disabled:not(.on){opacity:.45;}
-.mi-pick.on{background:linear-gradient(180deg,color-mix(in srgb,var(--oc) 40%,#1A2142),#171E3C);box-shadow:0 0 0 2px var(--oc),0 0 12px color-mix(in srgb,var(--oc) 50%,transparent);color:var(--text-primary);}
-.mi-pick.on svg{opacity:1;}
-.mi-prog{flex:1;min-width:190px;display:flex;flex-direction:column;gap:6px;}
-.mi-row{display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:13px;font-variant-numeric:tabular-nums;}
-.mi-row > :last-child{margin-left:auto;}
-.mi-id{color:var(--text-muted);}
-.mi-rich{display:flex;align-items:center;gap:4px;color:var(--text-secondary);font-size:12px;}
-.mi-rich svg{width:15px;height:15px;}
-.mi-bad{color:var(--bad);font-family:var(--font-body);font-size:12px;}
-.mi-bar{height:12px;overflow:hidden;padding:0;}
-.mi-bar i{display:block;height:100%;width:calc(var(--p,0)*100%);background:linear-gradient(90deg,color-mix(in srgb,var(--oc) 60%,transparent),var(--oc));}
-.mi-fee{font-size:10.5px;color:var(--text-muted);}
-.mi-type .rig-wheel,.mi-rig .rig-wheel{transform-box:fill-box;transform-origin:center;}
-.mi-type.working .rig-wheel,.mi-rig.working .rig-wheel{animation:hb-spin 2.2s linear infinite;}
-@media (prefers-reduced-motion:reduce){ .mi-type.working .rig-wheel,.mi-rig.working .rig-wheel{animation:none;} }
+.mi-sum{cursor:pointer;user-select:none;}
+.mi-sum:hover{filter:brightness(1.08);}
+.mi-chev{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--text-secondary);transition:transform .2s;}
+.mi-chev svg{width:14px;height:14px;}
+.mi-group.collapsed .mi-chev{transform:rotate(-90deg);}
+.mi-group.collapsed{gap:0;margin-bottom:12px;}
+/* Конвейерные линии: одна строка = одна установка */
+.cv-lines{display:flex;flex-direction:column;gap:10px;padding:12px;}
+.cv-row{position:relative;display:flex;align-items:center;gap:12px;padding:8px 12px;}
+.cv-id{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);width:22px;flex-shrink:0;}
+.cv-tog{display:flex;flex-direction:column;gap:4px;flex-shrink:0;}
+.cv-ore{width:26px;height:26px;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:7px;
+  background:linear-gradient(180deg,#252D55,#161C38);border:1px solid #0B0F20;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 1px 0 rgba(0,0,0,.4);}
+.cv-ore svg{width:70%;height:70%;opacity:.5;}
+.cv-ore:not(:disabled):hover svg{opacity:.9;}
+.cv-ore:disabled{cursor:default;}
+.cv-ore.on{background:linear-gradient(180deg,color-mix(in srgb,var(--oc) 40%,#1A2142),#171E3C);box-shadow:0 0 0 2px var(--oc),0 0 10px color-mix(in srgb,var(--oc) 50%,transparent);}
+.cv-ore.on svg{opacity:1;}
+.cv-rig{width:52px;height:52px;flex-shrink:0;}
+.cv-track{position:relative;flex:1;min-width:80px;height:22px;overflow:hidden;padding:0;}
+.cv-track::before{content:"";position:absolute;inset:3px;border-radius:6px;
+  background:radial-gradient(circle at 6px 50%,var(--oc) 0 4px,transparent 4.5px) 0 0/22px 100% repeat-x;opacity:.9;animation:cv-belt 1.1s linear infinite;}
+.cv-track::after{content:"";position:absolute;left:0;top:0;bottom:0;width:calc(var(--p,0)*100%);background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--oc) 28%,transparent));border-right:2px solid var(--oc);}
+@keyframes cv-belt{to{background-position:22px 0;}}
+.cv-out{position:relative;width:46px;height:46px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.cv-out svg{width:28px;height:28px;}
+.cv-out b{position:absolute;right:-4px;bottom:-6px;font-family:var(--font-display);font-weight:700;font-size:13px;line-height:1.3;background:var(--oc);color:var(--ink);border-radius:6px;padding:0 4px;border:2px solid #0E1328;}
+.cv-out.pop svg{animation:cv-pop .5s ease-out;}
+@keyframes cv-pop{0%{transform:scale(1);}35%{transform:scale(1.4);}100%{transform:scale(1);}}
+.cv-time{width:52px;flex-shrink:0;text-align:right;font-family:var(--font-mono);font-size:13px;font-variant-numeric:tabular-nums;}
+.cv-row.idle{filter:saturate(.4);}
+.cv-row.idle .cv-track::before{animation-play-state:paused;opacity:.25;}
+.cv-row.idle .cv-track::after{display:none;}
+.cv-row.idle .cv-time{color:var(--bad);}
+.cv-gain{position:absolute;right:74px;top:-4px;pointer-events:none;font-family:var(--font-display);font-weight:700;font-size:16px;color:var(--oc);text-shadow:0 1px 3px rgba(0,0,0,.9);animation:cv-float 1s ease-out forwards;z-index:3;}
+@keyframes cv-float{0%{opacity:0;transform:translateY(6px);}20%{opacity:1;}100%{opacity:0;transform:translateY(-22px);}}
+.cv-add{display:flex;align-items:center;justify-content:center;height:34px;border-radius:12px;border:1px dashed #243056;background:rgba(11,16,34,.5);color:#3A4468;font-family:var(--font-display);font-size:22px;cursor:pointer;padding:0;}
+.cv-add:hover{color:var(--miner);border-color:var(--miner);}
+.cv-fee{font-size:10.5px;color:var(--text-muted);padding:0 4px;}
+@media (max-width:560px){ .cv-rig{width:40px;height:40px;} .cv-time{width:44px;font-size:11.5px;} .cv-row{gap:8px;padding:8px;} .cv-id{display:none;} .cv-out{width:40px;height:40px;} .cv-out svg{width:24px;height:24px;} .cv-gain{right:58px;} }
+@media (prefers-reduced-motion:reduce){ .cv-track::before{animation:none;} }
+.mi-type .rig-wheel,.cv-rig .rig-wheel{transform-box:fill-box;transform-origin:center;}
+.mi-type.working .rig-wheel,.cv-rig.working .rig-wheel{animation:hb-spin 2.2s linear infinite;}
+@media (prefers-reduced-motion:reduce){ .mi-type.working .rig-wheel,.cv-rig.working .rig-wheel{animation:none;} }
 .res-f{white-space:nowrap;}
 .warehouse-summary{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:14px;}
 .warehouse-bar{flex:1;min-width:180px;height:10px;border-radius:5px;background:var(--border);overflow:hidden;}
@@ -1202,9 +1205,9 @@ function renderBuildings(){
   bgridEl.innerHTML=html;
 }
 
-// «Производство»: установки одного типа лежат сеткой ячеек, как предметы в инвентаре —
-// ячейка «наливается» цветом руды по ходу цикла. Клик по ячейке — снизу панель этой
-// установки с крупным выбором руды. Текста минимум: сводка — значками, ресурсы — формулами.
+// «Производство»: каждый тип установок — сворачиваемая группа. Шапка — сводка значками,
+// в развёрнутом виде каждая установка — конвейерная линия: переключатель руды → копёр →
+// лента, которая заполняется по ходу цикла → выход с «+N» → таймер.
 const RES48={
   iron_ore:'<ellipse cx="24" cy="42.5" rx="17" ry="2.6" opacity=".22"/>'+
     '<polygon points="8,34 5,24 11,13 22,7 34,9 42,18 43,30 35,39 18,41" opacity=".92"/>'+
@@ -1261,15 +1264,23 @@ function fmtRate(r){ return r>=10?String(Math.round(r)):r.toFixed(1); }
 function unitPotentialPerHour(b){ return b.out[outId(b)]*3600/b.cycle*richOf(b)*speedMultForRecipe(b); }
 function unitWorking(b){ const u=util[b.id]; return !!(u && u.frac>0.001); }
 
-const selUnitByType={};
+// Свёрнутые группы помнятся в браузере — это удобство интерфейса, не часть сохранения игры.
+const PROD_UI_KEY='industrial_belt_prod_ui';
+let prodCollapsed={};
+try{ prodCollapsed=JSON.parse(localStorage.getItem(PROD_UI_KEY)||'{}')||{}; }catch(e){ prodCollapsed={}; }
+function toggleProdGroup(typeId){
+  prodCollapsed[typeId]=!prodCollapsed[typeId];
+  try{ localStorage.setItem(PROD_UI_KEY,JSON.stringify(prodCollapsed)); }catch(e){}
+  renderProduction();
+}
+const CHEVRON='<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 5 7 9.5 11.5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const ALERT20='<svg viewBox="0 0 20 20" fill="currentColor" style="color:var(--bad)" aria-hidden="true"><path d="M10 2 19 18H1z"/><rect x="9" y="7.5" width="2" height="5.5" rx="1" style="fill:var(--ink)"/><circle cx="10" cy="15.3" r="1.1" style="fill:var(--ink)"/></svg>';
+
 function renderProductionGroup(type){
   const recipes=BUILDINGS.filter(b=>b.type===type.id && recipeVisible(b));
   const units=state.units.filter(u=>recipes.some(b=>b.id===u.recipe));
   if(!units.length) return '';
-  const sel=units.find(u=>u.id===selUnitByType[type.id]) || units[0];
-  selUnitByType[type.id]=sel.id;
-  const selB=BUILDINGS.find(b=>b.id===sel.recipe);
-  const selCv=colorVarOf(resById(outId(selB)));
+  const collapsed=!!prodCollapsed[type.id];
   const typeCv=type.neutralColor||'tier0';
   const anyWork=recipes.some(unitWorking);
   const wf=lastWorkforce[CLASS_OF_TIER[0]]||blankWf();
@@ -1279,48 +1290,42 @@ function renderProductionGroup(type){
   const groupAssigned=Math.floor(groupDemand*wf.staffing+1e-6);
 
   const chips=recipes.map(b=>'<span class="mi-chip sunk" title="'+resFullName(outId(b))+' в час">'+resIcon48(outId(b))+'+'+fmtRate(recipeRatePerHour(b))+'/ч</span>').join('');
-  const summary='<div class="mi-sum bevel-frame">'+
+  const summary='<div class="mi-sum bevel-frame" data-prod-toggle="'+type.id+'" role="button" tabindex="0" aria-expanded="'+(!collapsed)+'" title="'+type.name+(collapsed?' — развернуть':' — свернуть')+'">'+
     svg48(TYPE48[type.id]||'',typeCv,'mi-type'+(anyWork?' working':''))+
-    '<span class="mi-cnt" title="'+type.name+'">×'+units.length+'</span>'+chips+'<span class="mi-sp"></span>'+
+    '<span class="mi-cnt">×'+units.length+'</span>'+chips+'<span class="mi-sp"></span>'+
     '<span class="mi-chip sunk'+(staffOk?'':' bad')+'" title="Персонал этих установок: есть / нужно">'+ui20('worker','class1')+groupAssigned+'/'+Math.round(groupDemand)+'</span>'+
+    '<span class="mi-chev sunk">'+CHEVRON+'</span>'+
   '</div>';
+  if(collapsed) return '<div class="mi-group collapsed">'+summary+'</div>';
 
-  const cells=units.map(u=>{
+  let feeStr='';
+  const rows=units.map(u=>{
     const b=BUILDINGS.find(x=>x.id===u.recipe);
-    const oid=outId(b);
+    const oid=outId(b), cv=colorVarOf(resById(oid));
     const idle=!unitWorking(b);
-    return '<button type="button" class="mi-cell bevel'+(idle?' idle':'')+(u.id===sel.id?' sel':'')+'" style="--oc:var(--'+colorVarOf(resById(oid))+')" data-mi-sel="'+u.id+'" data-mi-type="'+type.id+'" data-cycle-unit="'+u.id+'" title="#'+u.id+' · '+resFullName(oid)+'">'+
-      '<span class="fill"></span><span class="n">'+u.id+'</span>'+resIcon48(oid)+'<span class="t" data-cycle-time="'+u.id+'"></span></button>';
+    const fee=retoolFee(b);
+    const feeOk=Object.entries(fee).every(([rid,q])=>(state.resources[rid]||0)>=q);
+    feeStr=Object.entries(fee).map(([rid,q])=>q+' '+resName(rid)).join(' + ');
+    const tog=recipes.map(r=>{
+      const rid=outId(r), cur=r.id===b.id;
+      const dis=recipes.length<2||cur||!recipeUnlocked(r)||!feeOk;
+      const tip=resFullName(rid)+' · +'+fmtRate(unitPotentialPerHour(r))+'/ч'+(cur?' — добывается сейчас':(recipes.length>1?' — переключить за '+feeStr+', цикл начнётся заново':''));
+      return '<button type="button" class="cv-ore'+(cur?' on':'')+'" style="--oc:var(--'+colorVarOf(resById(rid))+')" data-retool-unit="'+u.id+'" data-retool-to="'+r.id+'" '+(dis?'disabled':'')+' title="'+tip+'">'+resIcon48(rid)+'</button>';
+    }).join('');
+    const reason=REASON_LABELS[(util[b.id]||{}).reason]||'Простой';
+    const outTip=idle?reason:'+'+b.out[oid]+' '+resFullName(oid)+' за цикл';
+    return '<div class="cv-row bevel'+(idle?' idle':'')+'" style="--oc:var(--'+cv+')" data-cycle-unit="'+u.id+'">'+
+      '<span class="cv-id">#'+u.id+'</span><div class="cv-tog">'+tog+'</div>'+
+      '<span title="Богатство месторождения: '+Math.round(richOf(b)*100)+'%">'+svg48(TYPE48[type.id]||'',typeCv,'cv-rig'+(idle?'':' working'),';--oc:var(--'+cv+')')+'</span>'+
+      '<div class="cv-track sunk"></div>'+
+      '<div class="cv-out sunk" data-cycle-out="'+u.id+'" title="'+outTip+'">'+(idle?ALERT20:resIcon48(oid)+'<b>+'+b.out[oid]+'</b>')+'</div>'+
+      '<div class="cv-time" data-cycle-time="'+u.id+'" title="'+(idle?reason:'До конца цикла')+'"></div></div>';
   }).join('');
-  const free=Math.max(0,7-units.length);
-  const grid='<div class="mi-grid bevel-frame">'+cells+
-    '<button type="button" class="mi-empty plus" data-section-go="build" title="Построить ещё">+</button>'+
-    '<div class="mi-empty"></div>'.repeat(free)+'</div>';
-
-  const selIdle=!unitWorking(selB);
-  const fee=retoolFee(selB);
-  const feeOk=Object.entries(fee).every(([rid,q])=>(state.resources[rid]||0)>=q);
-  const feeStr=Object.entries(fee).map(([rid,q])=>q+' '+resName(rid)).join(' + ');
-  const picks=recipes.map(b=>{
-    const oid=outId(b), cur=b.id===selB.id, locked=!recipeUnlocked(b);
-    const dis=recipes.length<2||cur||locked||!feeOk;
-    const tip=resFullName(oid)+(cur?' — добывается сейчас':(recipes.length>1?' — переключить за '+feeStr+', цикл начнётся заново':''));
-    return '<button type="button" class="mi-pick'+(cur?' on':'')+'" style="--oc:var(--'+colorVarOf(resById(oid))+')" data-retool-unit="'+sel.id+'" data-retool-to="'+b.id+'" '+(dis?'disabled':'')+' title="'+tip+'">'+
-      resIcon48(oid)+'<b>'+resName(oid)+'</b><span>+'+fmtRate(unitPotentialPerHour(b))+'/ч</span></button>';
-  }).join('');
-  const uInfo=util[selB.id]||{reason:'idle'};
-  const status=selIdle
-    ? '<span class="mi-bad">'+(REASON_LABELS[uInfo.reason]||'Простой')+'</span>'
-    : '<span data-cycle-time="'+sel.id+'"></span>';
-  const detail='<div class="mi-detail bevel-frame" style="--oc:var(--'+selCv+')">'+
-    svg48(TYPE48[type.id]||'',typeCv,'mi-rig'+(selIdle?'':' working'),';--oc:var(--'+selCv+')')+
-    '<div class="mi-picks">'+picks+'</div>'+
-    '<div class="mi-prog"><div class="mi-row"><span class="mi-id">#'+sel.id+'</span>'+
-      '<span class="mi-rich" title="Богатство месторождения">'+ui20('gem','skill')+Math.round(richOf(selB)*100)+'%</span>'+status+'</div>'+
-      '<div class="mi-bar sunk" data-cycle-unit="'+sel.id+'"><i></i></div>'+
-      (recipes.length>1?'<div class="mi-fee">смена руды: '+feeStr+'</div>':'')+
+  return '<div class="mi-group">'+summary+
+    '<div class="cv-lines bevel-frame">'+rows+
+      '<button type="button" class="cv-add" data-section-go="build" title="Построить ещё">+</button>'+
+      (recipes.length>1?'<div class="cv-fee">смена руды: '+feeStr+'</div>':'')+
     '</div></div>';
-  return '<div class="mi-group">'+summary+grid+detail+'</div>';
 }
 let lastProdHtml='';
 function renderProduction(){
@@ -1771,9 +1776,13 @@ buildingsPanelEl.addEventListener('click', e=>{
 productionPanelEl.addEventListener('click', e=>{
   const btn=e.target.closest('[data-retool-unit]');
   if(btn){ tryRetoolUnit(Number(btn.dataset.retoolUnit), btn.dataset.retoolTo); return; }
-  const cell=e.target.closest('[data-mi-sel]');
-  if(cell){ selUnitByType[cell.dataset.miType]=Number(cell.dataset.miSel); renderProduction(); return; }
+  const tg=e.target.closest('[data-prod-toggle]');
+  if(tg){ toggleProdGroup(tg.dataset.prodToggle); return; }
   if(e.target.closest('[data-section-go]')) openSection(e.target.closest('[data-section-go]').dataset.sectionGo);
+});
+productionPanelEl.addEventListener('keydown', e=>{
+  const tg=e.target.closest('[data-prod-toggle]');
+  if(tg && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); toggleProdGroup(tg.dataset.prodToggle); }
 });
 popPanelEl.addEventListener('click', e=>{
   const btn=e.target.closest('[data-build]');
@@ -1838,7 +1847,19 @@ function unitCycleState(uid,now){
 function tickCycleBars(){
   const now=Date.now()/1000;
   document.querySelectorAll('[data-cycle-unit]').forEach(el=>{
-    el.style.setProperty('--p', unitCycleState(Number(el.dataset.cycleUnit),now).p.toFixed(4));
+    const st=unitCycleState(Number(el.dataset.cycleUnit),now);
+    const prev=parseFloat(el.style.getPropertyValue('--p'));
+    el.style.setProperty('--p', st.p.toFixed(4));
+    // Цикл замкнулся — партия руды ушла на склад: всплывает «+N», значок на выходе подпрыгивает.
+    if(!st.idle && el.classList.contains('cv-row') && prev-st.p>0.5){
+      const out=el.querySelector('[data-cycle-out]');
+      const b=out && out.querySelector('b');
+      if(b){
+        const g=document.createElement('span'); g.className='cv-gain'; g.textContent=b.textContent; el.appendChild(g);
+        setTimeout(()=>g.remove(),1000);
+        out.classList.remove('pop'); void out.offsetWidth; out.classList.add('pop');
+      }
+    }
   });
   document.querySelectorAll('[data-cycle-time]').forEach(el=>{
     const st=unitCycleState(Number(el.dataset.cycleTime),now);
