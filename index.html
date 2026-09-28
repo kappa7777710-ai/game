@@ -132,16 +132,6 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .bcard-cost span.bad{color:var(--bad);}
 .build-btn{margin-top:2px;font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:.03em;text-transform:uppercase;background:var(--tier-color,var(--tier0));color:#0A0D18;border:none;border-radius:7px;padding:9px 10px;cursor:pointer;}
 .build-btn:disabled{background:var(--border);color:var(--text-muted);cursor:not-allowed;}
-.recipe-picker{display:flex;gap:6px;flex-wrap:wrap;}
-.recipe-pick{display:flex;align-items:center;gap:6px;font-family:var(--font-body);font-size:12px;background:var(--panel);color:var(--text-secondary);border:1px solid var(--border);border-radius:8px;padding:7px 10px;cursor:pointer;transition:border-color .15s,color .15s;}
-.recipe-pick:hover{color:var(--text-primary);border-color:var(--border-strong);}
-.recipe-pick.active{color:#0A0D18;background:var(--pick-color,var(--tier0));border-color:var(--pick-color,var(--tier0));}
-.recipe-pick.active svg{color:#0A0D18!important;}
-.recipe-picker.small{gap:4px;}
-.recipe-pick.small{padding:4px 6px;}
-.recipe-pick.small span{display:none;}
-.recipe-pick.small svg{width:18px;height:18px;}
-.recipe-pick:disabled{opacity:.4;cursor:not-allowed;}
 .area-summary{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:12px;color:var(--text-secondary);margin-bottom:13px;grid-column:1/-1;}
 
 .t0{--chip-color:var(--tier0);--tier-color:var(--tier0);--tab-color:var(--tier0);}
@@ -187,14 +177,6 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .devbar button.active{background:var(--skill);border-color:var(--skill);color:#0A0D18;}
 .bcard.locked{opacity:.6;}
 .bcard-lock{font-size:11px;color:var(--tier1);}
-.cycle-row{display:flex;align-items:center;gap:7px;margin-top:-2px;}
-.cycle-bar{flex:1;height:3px;border-radius:2px;background:var(--border);overflow:hidden;}
-.cycle-fill{height:100%;background:var(--tier-color,var(--tier0));opacity:.55;width:0%;}
-.cycle-time{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);white-space:nowrap;min-width:38px;text-align:right;font-variant-numeric:tabular-nums;}
-.cycle-pct{font-family:var(--font-mono);font-size:10px;color:var(--text-secondary);white-space:nowrap;min-width:30px;text-align:right;font-variant-numeric:tabular-nums;}
-.unit-list{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
-.unit-row{display:flex;align-items:center;gap:8px;font-size:11px;background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:6px 8px;flex-wrap:wrap;}
-.unit-id{font-family:var(--font-mono);color:var(--text-muted);width:32px;flex-shrink:0;}
 .unit-yard{display:flex;flex-wrap:wrap;gap:9px;margin-top:2px;}
 .unit-tile{position:relative;width:78px;display:flex;flex-direction:column;align-items:center;gap:5px;background:radial-gradient(circle at 50% 30%,var(--card-hover),var(--panel));border:1px solid var(--border);border-radius:11px;padding:9px 6px 8px;}
 .unit-tile.worn{border-color:var(--tier1);}
@@ -218,6 +200,62 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .tile-btn.demolish{color:var(--bad);}
 .tile-btn.demolish:hover{border-color:var(--bad);}
 .tile-btn.ok-mark{color:var(--good);font-size:12px;cursor:default;}
+/* ===== «Производство»: инвентарь установок (материал как у хотбара) ===== */
+.bevel-frame{border-radius:16px;background:linear-gradient(180deg,#1A2143,#0E1328);border:2px solid #2B3563;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 -2px 0 rgba(0,0,0,.4),0 10px 26px rgba(0,0,0,.4);}
+.bevel{background:linear-gradient(180deg,#2A3360 0%,#1A2142 55%,#141A34 100%);border:1px solid #0B0F20;border-radius:12px;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.10),inset 0 -3px 0 rgba(0,0,0,.35),0 2px 0 rgba(0,0,0,.35);}
+.sunk{background:#0B1022;border:1px solid #070A16;border-radius:10px;box-shadow:inset 0 2px 6px rgba(0,0,0,.6);}
+.mi-group{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;}
+.mi-sum{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 12px;}
+.mi-type{width:46px;height:46px;flex-shrink:0;}
+.mi-cnt{font-family:var(--font-display);font-weight:700;font-size:24px;margin-right:6px;}
+.mi-sp{flex:1;}
+.mi-chip{display:flex;align-items:center;gap:6px;padding:5px 10px 5px 7px;font-family:var(--font-mono);font-size:12.5px;font-variant-numeric:tabular-nums;}
+.mi-chip svg{width:20px;height:20px;}
+.mi-chip.bad{color:var(--bad);}
+.mi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:8px;padding:12px;}
+.mi-cell{position:relative;aspect-ratio:1;overflow:hidden;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;font:inherit;color:inherit;}
+.mi-cell .fill{position:absolute;left:0;right:0;bottom:0;height:calc(var(--p,0)*100%);background:linear-gradient(0deg,color-mix(in srgb,var(--oc) 55%,transparent),color-mix(in srgb,var(--oc) 18%,transparent));border-top:2px solid var(--oc);}
+.mi-cell svg{position:relative;width:56%;height:56%;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6));}
+.mi-cell .t{position:absolute;right:4px;bottom:2px;font-family:var(--font-mono);font-size:9.5px;color:var(--text-primary);text-shadow:0 1px 2px #000;}
+.mi-cell .n{position:absolute;left:5px;top:3px;font-family:var(--font-mono);font-size:9px;color:var(--text-muted);}
+.mi-cell:hover{filter:brightness(1.15);}
+.mi-cell.sel{box-shadow:0 0 0 2px var(--oc),0 0 16px color-mix(in srgb,var(--oc) 50%,transparent);}
+.mi-cell.idle svg{opacity:.35;}
+.mi-cell.idle .fill{display:none;}
+.mi-cell.idle::after{content:"!";position:absolute;top:2px;right:6px;font-family:var(--font-display);font-weight:700;color:var(--bad);}
+.mi-empty{aspect-ratio:1;border-radius:12px;border:1px dashed #243056;background:rgba(11,16,34,.5);}
+.mi-empty.plus{display:flex;align-items:center;justify-content:center;color:#3A4468;font-size:28px;font-family:var(--font-display);cursor:pointer;padding:0;}
+.mi-empty.plus:hover{color:var(--miner);border-color:var(--miner);}
+.mi-detail{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:12px 14px;}
+.mi-rig{width:64px;height:64px;flex-shrink:0;}
+.mi-picks{display:flex;gap:10px;}
+.mi-pick{width:74px;height:84px;padding:4px 0 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;border-radius:12px;font:inherit;color:var(--text-secondary);
+  background:linear-gradient(180deg,#252D55,#161C38);border:1px solid #0B0F20;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 1px 0 rgba(0,0,0,.4);transition:filter .15s,transform .1s;}
+.mi-pick svg{width:32px;height:32px;opacity:.6;}
+.mi-pick b{font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--text-primary);line-height:1.1;}
+.mi-pick span{font-family:var(--font-mono);font-size:10px;}
+.mi-pick:not(:disabled):hover{filter:brightness(1.2);}
+.mi-pick:not(:disabled):active{transform:translateY(1px);}
+.mi-pick:disabled{cursor:default;}
+.mi-pick:disabled:not(.on){opacity:.45;}
+.mi-pick.on{background:linear-gradient(180deg,color-mix(in srgb,var(--oc) 40%,#1A2142),#171E3C);box-shadow:0 0 0 2px var(--oc),0 0 12px color-mix(in srgb,var(--oc) 50%,transparent);color:var(--text-primary);}
+.mi-pick.on svg{opacity:1;}
+.mi-prog{flex:1;min-width:190px;display:flex;flex-direction:column;gap:6px;}
+.mi-row{display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:13px;font-variant-numeric:tabular-nums;}
+.mi-row > :last-child{margin-left:auto;}
+.mi-id{color:var(--text-muted);}
+.mi-rich{display:flex;align-items:center;gap:4px;color:var(--text-secondary);font-size:12px;}
+.mi-rich svg{width:15px;height:15px;}
+.mi-bad{color:var(--bad);font-family:var(--font-body);font-size:12px;}
+.mi-bar{height:12px;overflow:hidden;padding:0;}
+.mi-bar i{display:block;height:100%;width:calc(var(--p,0)*100%);background:linear-gradient(90deg,color-mix(in srgb,var(--oc) 60%,transparent),var(--oc));}
+.mi-fee{font-size:10.5px;color:var(--text-muted);}
+.mi-type .rig-wheel,.mi-rig .rig-wheel{transform-box:fill-box;transform-origin:center;}
+.mi-type.working .rig-wheel,.mi-rig.working .rig-wheel{animation:hb-spin 2.2s linear infinite;}
+@media (prefers-reduced-motion:reduce){ .mi-type.working .rig-wheel,.mi-rig.working .rig-wheel{animation:none;} }
+.res-f{white-space:nowrap;}
 .warehouse-summary{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:14px;}
 .warehouse-bar{flex:1;min-width:180px;height:10px;border-radius:5px;background:var(--border);overflow:hidden;}
 .warehouse-bar-fill{height:100%;background:var(--tier1);transition:width .3s;}
@@ -308,9 +346,9 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 // Этап 1: только T0. Остальные тиры удалены до тех пор, пока эта цепочка не будет
 // полностью проработана — см. README (v17) для деталей и что было убрано.
 const RESOURCES=[
-  {id:'iron_ore',name:'Железная руда',tier:0,weight:2,shapeIdx:0,family:'iron',colorVar:'iron'},
-  {id:'copper_ore',name:'Медная руда',tier:0,weight:2.2,shapeIdx:1,family:'copper',colorVar:'copper'},
-  {id:'water',name:'Вода',tier:0,weight:1,shapeIdx:2,colorVar:'water'},
+  {id:'iron_ore',name:'Железная руда',formula:'Fe₂O₃',tier:0,weight:2,shapeIdx:0,family:'iron',colorVar:'iron'},
+  {id:'copper_ore',name:'Медная руда',formula:'Cu₂S',tier:0,weight:2.2,shapeIdx:1,family:'copper',colorVar:'copper'},
+  {id:'water',name:'Вода',formula:'H₂O',tier:0,weight:1,shapeIdx:2,colorVar:'water'},
 ];
 
 const POP_GOODS=[];
@@ -520,7 +558,11 @@ const OFFLINE_CAP_SEC=12*3600;
 const OFFLINE_STEP=30;
 
 function resById(id){ return RESOURCES.find(r=>r.id===id) || POP_GOODS.find(r=>r.id===id); }
-function resName(id){ const r=resById(id); return r?r.name:id; }
+// В интерфейсе ресурс подписан химической формулой (руда — формулой минерала: Fe₂O₃ гематит,
+// Cu₂S халькозин — чтобы голые Fe/Cu остались за чистым металлом). Полное название — во всплывающей подсказке.
+function resName(id){ const r=resById(id); return r?(r.formula||r.name):id; }
+function resFullName(id){ const r=resById(id); return r?r.name:id; }
+function resTag(id){ return '<span class="res-f" title="'+resFullName(id)+'">'+resName(id)+'</span>'; }
 function colorVarOf(res){ return res.colorVar || ('tier'+res.tier); }
 
 const ICONS={
@@ -876,7 +918,7 @@ function whTile(r,colorVar){
   const empty = amt<0.05 ? ' empty' : '';
   return '<div class="wh-tile'+empty+'" draggable="true" data-res="'+r.id+'" style="--chip-color:var(--'+colorVar+')">'+
     iconSvg(r.id,colorVar)+
-    '<div class="wh-name">'+r.name+'</div>'+
+    '<div class="wh-name" title="'+r.name+'">'+resName(r.id)+'</div>'+
     '<div class="wh-amt">'+Math.floor(amt)+'</div>'+
     '<div class="wh-weight">'+(w?(w+' кг/ед'):'')+'</div>'+
   '</div>';
@@ -1053,7 +1095,7 @@ function buildingCardBody(b,tierOk,type,count){
   const areaNote = (skOk && !areaOk) ? '<div class="bcard-lock">Не хватает площади участка ('+(type.area||0)+' нужно, '+freeArea()+' свободно)</div>' : '';
   const costStr=Object.entries(cost).map(([rid,q])=>{
     const ok=(state.resources[rid]||0)>=q;
-    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
+    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resTag(rid)+'</span>';
   }).join('');
   return {
     outRes, richBadge, staffBadge, speedBadge, lockNote, areaNote, costStr, count,
@@ -1068,7 +1110,7 @@ function renderSingleRecipeCard(b,tierOk){
   const cv=colorVarOf(bb.outRes);
   return '<div class="bcard" style="--tier-color:var(--'+cv+')'+(bb.disabled&&tierOk?';opacity:.6':'')+'">'+
     '<div class="bcard-head">'+iconSvg(type.icon||bb.outRes.id,cv)+
-      '<div><h3>'+type.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[bb.outRes.id]+' '+bb.outRes.name+'</div>'+bb.richBadge+bb.staffBadge+bb.speedBadge+'</div>'+
+      '<div><h3>'+type.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[bb.outRes.id]+' '+resTag(bb.outRes.id)+'</div>'+bb.richBadge+bb.staffBadge+bb.speedBadge+'</div>'+
     '</div>'+
     '<div class="bcard-stats"><span>Уже построено: <strong>'+bb.count+'</strong></span><span>Цикл: '+fmtDuration(b.cycle)+' · '+fmtDurationWords(b.cycle)+'</span></div>'+
     bb.lockNote+bb.areaNote+
@@ -1085,7 +1127,7 @@ function renderTypeBuildCard(type,recipes,tierOk){
   const areaNote=(!areaOk)?'<div class="bcard-lock">Не хватает площади участка ('+(type.area||0)+' нужно, '+freeArea()+' свободно)</div>':'';
   const costStr=Object.entries(cost).map(([rid,q])=>{
     const ok=(state.resources[rid]||0)>=q;
-    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
+    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resTag(rid)+'</span>';
   }).join('');
   const recipeNames=recipes.map(r=>recipeLabel(r)).join(' / ');
   const buildId=recipes[0].id; // строится "вслепую" — конкретная руда выбирается позже, во вкладке «Производство»
@@ -1127,65 +1169,136 @@ function renderBuildings(){
   bgridEl.innerHTML=html;
 }
 
-function renderProductionCard(b){
-  const units=unitsOf(b.id);
+// «Производство»: установки одного типа лежат сеткой ячеек, как предметы в инвентаре —
+// ячейка «наливается» цветом руды по ходу цикла. Клик по ячейке — снизу панель этой
+// установки с крупным выбором руды. Текста минимум: сводка — значками, ресурсы — формулами.
+const RES48={
+  iron_ore:'<ellipse cx="24" cy="42.5" rx="17" ry="2.6" opacity=".22"/>'+
+    '<polygon points="8,34 5,24 11,13 22,7 34,9 42,18 43,30 35,39 18,41" opacity=".92"/>'+
+    '<polygon points="11,13 22,7 34,9 27,17 16,19" style="fill:var(--hi)" opacity=".28"/>'+
+    '<polygon points="35,39 43,30 42,18 34,24 30,36" style="fill:var(--ink)" opacity=".28"/>'+
+    '<polygon points="8,34 5,24 11,13 16,19 14,31" style="fill:var(--ink)" opacity=".14"/>'+
+    '<g style="fill:var(--hi)" opacity=".85"><polygon points="18,24 22,21 25,25 21,28"/><polygon points="28,28 31,26 33,29 30,31"/><polygon points="24,33 26,32 27,34 25,35"/><circle cx="37" cy="15" r="1.3"/></g>'+
+    '<path d="M11 13 22 7 34 9" style="stroke:var(--hi)" stroke-width="1.2" fill="none" opacity=".5"/>',
+  copper_ore:'<ellipse cx="24" cy="42.5" rx="17" ry="2.6" opacity=".22"/>'+
+    '<circle cx="24" cy="16" r="8.5" opacity=".78"/><circle cx="15" cy="28" r="10.5" opacity=".92"/><circle cx="32.5" cy="28.5" r="9.5"/>'+
+    '<g style="fill:var(--hi)" opacity=".55"><ellipse cx="21" cy="12.5" rx="2.6" ry="1.5" transform="rotate(-30 21 12.5)"/><ellipse cx="11" cy="23.5" rx="3.2" ry="1.9" transform="rotate(-30 11 23.5)"/><ellipse cx="29" cy="24.5" rx="2.8" ry="1.7" transform="rotate(-30 29 24.5)"/></g>'+
+    '<path d="M22 33c3 2.5 6 2.5 8 .5M20 20c2 1.5 4.5 1.5 6.5 0" style="stroke:var(--ink)" stroke-width="1.2" fill="none" opacity=".3"/>'+
+    '<path d="M39 8.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z" style="fill:var(--hi)" opacity=".85"/>',
+  water:'<ellipse cx="24" cy="44" rx="12" ry="2.2" opacity=".22"/>'+
+    '<path d="M24 3C24 3 9.5 19.5 9.5 29a14.5 14.5 0 0 0 29 0C38.5 19.5 24 3 24 3z" opacity=".9"/>'+
+    '<path d="M10.8 32.5c4.2-2.6 8.8-2.6 13.2 0s9 2.6 13.2 0A14.5 14.5 0 0 1 10.8 32.5z" style="fill:var(--ink)" opacity=".18"/>'+
+    '<path d="M11.5 29c4-2.4 8.4-2.4 12.5 0s8.5 2.4 12.5 0" style="stroke:var(--hi)" stroke-width="1.5" fill="none" opacity=".45"/>'+
+    '<ellipse cx="17.5" cy="22" rx="2.3" ry="4.8" transform="rotate(-25 17.5 22)" style="fill:var(--hi)" opacity=".75"/><circle cx="16" cy="30" r="1.2" style="fill:var(--hi)" opacity=".6"/>',
+};
+// Крупные силуэты установок. Колесо/шкив (.rig-wheel) крутится, пока установка работает;
+// руда в вагонетке и вода в баке красятся в цвет того, что сейчас добывается (--oc).
+const TYPE48={
+  miner:'<rect x="2" y="41" width="44" height="2.5" rx="1.25" opacity=".3"/>'+
+    '<path d="M12 30 17 10M26 30 21 10" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/>'+
+    '<path d="M14.2 22.5h9.6M15.8 16h6.4" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".7"/>'+
+    '<path d="M19 12.4V30" stroke="currentColor" stroke-width="1" opacity=".7"/>'+
+    '<g class="rig-wheel"><circle cx="19" cy="8" r="4.4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19 3.6v8.8M14.6 8h8.8" stroke="currentColor" stroke-width="1" opacity=".65"/><circle cx="19" cy="8" r="1.3" style="fill:var(--hi)"/></g>'+
+    '<rect x="4" y="30" width="30" height="11" rx="1.5" opacity=".62"/>'+
+    '<g style="fill:var(--hi)" opacity=".7"><rect x="7" y="33" width="3.2" height="2.6" rx=".4"/><rect x="12" y="33" width="3.2" height="2.6" rx=".4"/><rect x="27" y="33" width="3.2" height="2.6" rx=".4"/></g>'+
+    '<rect x="17.5" y="34" width="4" height="7" rx=".8" style="fill:var(--ink)" opacity=".5"/>'+
+    '<path d="M34 41.8h12" stroke="currentColor" stroke-width="1" opacity=".5"/>'+
+    '<g style="fill:var(--oc,var(--hi))"><circle cx="37.6" cy="32.4" r="1.7"/><circle cx="40.6" cy="31.6" r="1.9"/><circle cx="43.2" cy="32.6" r="1.5"/></g>'+
+    '<path d="M35 33.2h10.4l-1.6 5.8h-7.2z"/>'+
+    '<circle cx="37.8" cy="40.2" r="1.4" style="fill:var(--ink)"/><circle cx="42.6" cy="40.2" r="1.4" style="fill:var(--ink)"/>',
+  drill:'<rect x="2" y="41" width="44" height="2.5" rx="1.25" opacity=".3"/>'+
+    '<path d="M11 37 18 8M29 37 22 8" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/>'+
+    '<path d="M13 30h14M15 22h10M17 14.5h6M13 30l12-8M27 30l-12-8M15 22l8-7.5M25 22l-8-7.5" stroke="currentColor" stroke-width="1.1" fill="none" opacity=".55"/>'+
+    '<path d="M20 7.5V36" stroke="currentColor" stroke-width="1" opacity=".7"/>'+
+    '<g class="rig-wheel"><circle cx="20" cy="5" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M20 2v6M17 5h6" stroke="currentColor" stroke-width=".9" opacity=".65"/></g>'+
+    '<rect x="6" y="36" width="28" height="5" rx="1" opacity=".65"/>'+
+    '<path d="M34 38.5h3" stroke="currentColor" stroke-width="2"/>'+
+    '<rect x="36.5" y="24" width="9.5" height="17" rx="2" opacity=".45"/>'+
+    '<rect x="38" y="31" width="6.5" height="8.5" rx="1" style="fill:var(--oc,var(--hi))"/>'+
+    '<path d="M38.8 27v10" style="stroke:var(--hi)" stroke-width=".9" opacity=".45"/>',
+};
+const UI20={
+  worker:'<path d="M4.5 9a5.5 5.5 0 0 1 11 0z"/><rect x="3" y="8.3" width="14" height="2" rx="1"/><circle cx="10" cy="12" r="2.6" opacity=".85"/><path d="M4 19.5c0-3.6 2.6-5.3 6-5.3s6 1.7 6 5.3z" opacity=".7"/>',
+  gem:'<path d="M5 3h10l3.5 5L10 18 1.5 8z" opacity=".9"/><path d="M1.5 8h17M7 3 5.8 8 10 18M13 3l1.2 5L10 18" style="stroke:var(--ink)" stroke-width=".9" fill="none" opacity=".4"/>',
+};
+function svg48(inner,colorVar,cls,extraStyle){ return '<svg class="'+(cls||'')+'" viewBox="0 0 48 48" fill="currentColor" style="color:var(--'+colorVar+')'+(extraStyle||'')+'" aria-hidden="true">'+inner+'</svg>'; }
+function resIcon48(id){ const r=resById(id); return svg48(RES48[id]||'<circle cx="24" cy="24" r="16"/>',colorVarOf(r)); }
+function ui20(k,colorVar){ return '<svg viewBox="0 0 20 20" fill="currentColor" style="color:var(--'+colorVar+')" aria-hidden="true">'+UI20[k]+'</svg>'; }
+function fmtRate(r){ return r>=10?String(Math.round(r)):r.toFixed(1); }
+function unitPotentialPerHour(b){ return b.out[outId(b)]*3600/b.cycle*richOf(b)*speedMultForRecipe(b); }
+function unitWorking(b){ const u=util[b.id]; return !!(u && u.frac>0.001); }
+
+const selUnitByType={};
+function renderProductionGroup(type){
+  const recipes=BUILDINGS.filter(b=>b.type===type.id && recipeVisible(b));
+  const units=state.units.filter(u=>recipes.some(b=>b.id===u.recipe));
   if(!units.length) return '';
-  const type=typeOf(b);
-  const outRes=resById(outId(b));
-  const title = b.type ? type.name+' · '+recipeLabel(b) : b.name;
-  const uInfo=util[b.id]||{frac:0,reason:'idle'};
-  const uPct=Math.round(uInfo.frac*100);
-  const uClass = uInfo.frac>0.95?'full':(uInfo.frac>0.05?'partial':'blocked');
-  const uLabel = REASON_LABELS[uInfo.reason]+(uInfo.reason==='full'?'':' · '+uPct+'%');
-  const cls=CLASS_OF_TIER[b.tier];
-  const className=CLASSES.find(c=>c.id===cls).name;
-  const wCut=workforceCutForRecipe(b);
-  const effWorkers=Math.max(1,Math.round(b.workers*(1-wCut)));
-  const staffBadge = '<div class="bcard-staff">Персонал: '+effWorkers+' × '+className+' на установку</div>';
-  const sMult=speedMultForRecipe(b);
-  const speedBadge = sMult>1 ? '<div class="bcard-staff">Скорость с учётом навыка: ×'+sMult.toFixed(2)+'</div>' : '';
-  const inputsStr = Object.keys(b.in||{}).length
-    ? Object.entries(b.in).map(([rid,q])=>q+' '+resName(rid)).join(' + ')
-    : 'Месторождение';
-  const siblings = b.type ? BUILDINGS.filter(x=>x.type===b.type && recipeVisible(x)) : [];
-  let retoolCaption='';
-  if(siblings.length>1){
-    const fee=retoolFee(b);
-    const feeStr=Object.entries(fee).map(([rid,q])=>q+' '+resName(rid)).join(' + ');
-    retoolCaption='<div class="bcard-staff">Переключить на другую руду: '+feeStr+' · цикл начнётся заново</div>';
-  }
-  const unitsHtml=units.map(u=>{
-    let picker='';
-    if(siblings.length>1){
-      const fee=retoolFee(b);
-      const feeOk=Object.entries(fee).every(([rid,q])=>(state.resources[rid]||0)>=q);
-      picker='<div class="recipe-picker small">'+siblings.map(x=>{
-        const xRes=resById(outId(x));
-        const isCurrent=x.id===b.id;
-        const locked=!recipeUnlocked(x);
-        return '<button class="recipe-pick small'+(isCurrent?' active':'')+'" style="--pick-color:var(--'+colorVarOf(xRes)+')" data-retool-unit="'+u.id+'" data-retool-to="'+x.id+'" '+((isCurrent||locked||!feeOk)?'disabled':'')+' type="button" title="'+recipeLabel(x)+'">'+iconSvg(xRes.id,colorVarOf(xRes))+'</button>';
-      }).join('')+'</div>';
-    }
-    return '<div class="unit-row"><span class="unit-id">#'+u.id+'</span>'+
-      picker+
-      '<div class="cycle-bar" style="flex:1"><div class="cycle-fill" data-cyclebar="'+u.id+'"></div></div>'+
-      '<span class="cycle-pct" data-cyclepct="'+u.id+'">0%</span>'+
-      '<span class="cycle-time" data-cycletime="'+u.id+'">—:—</span></div>';
-  }).join('');
-  const prodCv=colorVarOf(outRes);
-  return '<div class="bcard" style="--tier-color:var(--'+prodCv+')">'+
-    '<div class="bcard-head">'+iconSvg(type.icon||outRes.id,prodCv)+
-      '<div><h3>'+title+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[outRes.id]+' '+outRes.name+'</div>'+staffBadge+speedBadge+retoolCaption+'</div>'+
-    '</div>'+
-    '<div class="bcard-stats"><span>Построено: <strong>'+units.length+'</strong></span><span>Цикл: '+fmtDuration(b.cycle)+' · '+fmtDurationWords(b.cycle)+'</span></div>'+
-    '<div class="util-bar '+uClass+'"><div class="util-fill" style="width:'+uPct+'%"></div></div>'+
-    '<div class="util-label">'+uLabel+' · у каждой установки свой цикл, отсчёт ниже</div>'+
-    '<div class="unit-list">'+unitsHtml+'</div>'+
+  const sel=units.find(u=>u.id===selUnitByType[type.id]) || units[0];
+  selUnitByType[type.id]=sel.id;
+  const selB=BUILDINGS.find(b=>b.id===sel.recipe);
+  const selCv=colorVarOf(resById(outId(selB)));
+  const typeCv=type.neutralColor||'tier0';
+  const anyWork=recipes.some(unitWorking);
+  const wf=lastWorkforce[CLASS_OF_TIER[0]]||blankWf();
+  const staffOk=wf.staffing>0.999;
+  // Персонал делится между группами пропорционально: у каждой своя потребность и её доля занятых.
+  const groupDemand=units.reduce((sum,u)=>{ const b=BUILDINGS.find(x=>x.id===u.recipe); return sum+b.workers*(1-workforceCutForRecipe(b)); },0);
+  const groupAssigned=Math.floor(groupDemand*wf.staffing+1e-6);
+
+  const chips=recipes.map(b=>'<span class="mi-chip sunk" title="'+resFullName(outId(b))+' в час">'+resIcon48(outId(b))+'+'+fmtRate(recipeRatePerHour(b))+'/ч</span>').join('');
+  const summary='<div class="mi-sum bevel-frame">'+
+    svg48(TYPE48[type.id]||'',typeCv,'mi-type'+(anyWork?' working':''))+
+    '<span class="mi-cnt" title="'+type.name+'">×'+units.length+'</span>'+chips+'<span class="mi-sp"></span>'+
+    '<span class="mi-chip sunk'+(staffOk?'':' bad')+'" title="Персонал этих установок: есть / нужно">'+ui20('worker','class1')+groupAssigned+'/'+Math.round(groupDemand)+'</span>'+
   '</div>';
+
+  const cells=units.map(u=>{
+    const b=BUILDINGS.find(x=>x.id===u.recipe);
+    const oid=outId(b);
+    const idle=!unitWorking(b);
+    return '<button type="button" class="mi-cell bevel'+(idle?' idle':'')+(u.id===sel.id?' sel':'')+'" style="--oc:var(--'+colorVarOf(resById(oid))+')" data-mi-sel="'+u.id+'" data-mi-type="'+type.id+'" data-cycle-unit="'+u.id+'" title="#'+u.id+' · '+resFullName(oid)+'">'+
+      '<span class="fill"></span><span class="n">'+u.id+'</span>'+resIcon48(oid)+'<span class="t" data-cycle-time="'+u.id+'"></span></button>';
+  }).join('');
+  const free=Math.max(0,7-units.length);
+  const grid='<div class="mi-grid bevel-frame">'+cells+
+    '<button type="button" class="mi-empty plus" data-section-go="build" title="Построить ещё">+</button>'+
+    '<div class="mi-empty"></div>'.repeat(free)+'</div>';
+
+  const selIdle=!unitWorking(selB);
+  const fee=retoolFee(selB);
+  const feeOk=Object.entries(fee).every(([rid,q])=>(state.resources[rid]||0)>=q);
+  const feeStr=Object.entries(fee).map(([rid,q])=>q+' '+resName(rid)).join(' + ');
+  const picks=recipes.map(b=>{
+    const oid=outId(b), cur=b.id===selB.id, locked=!recipeUnlocked(b);
+    const dis=recipes.length<2||cur||locked||!feeOk;
+    const tip=resFullName(oid)+(cur?' — добывается сейчас':(recipes.length>1?' — переключить за '+feeStr+', цикл начнётся заново':''));
+    return '<button type="button" class="mi-pick'+(cur?' on':'')+'" style="--oc:var(--'+colorVarOf(resById(oid))+')" data-retool-unit="'+sel.id+'" data-retool-to="'+b.id+'" '+(dis?'disabled':'')+' title="'+tip+'">'+
+      resIcon48(oid)+'<b>'+resName(oid)+'</b><span>+'+fmtRate(unitPotentialPerHour(b))+'/ч</span></button>';
+  }).join('');
+  const uInfo=util[selB.id]||{reason:'idle'};
+  const status=selIdle
+    ? '<span class="mi-bad">'+(REASON_LABELS[uInfo.reason]||'Простой')+'</span>'
+    : '<span data-cycle-time="'+sel.id+'"></span>';
+  const detail='<div class="mi-detail bevel-frame" style="--oc:var(--'+selCv+')">'+
+    svg48(TYPE48[type.id]||'',typeCv,'mi-rig'+(selIdle?'':' working'),';--oc:var(--'+selCv+')')+
+    '<div class="mi-picks">'+picks+'</div>'+
+    '<div class="mi-prog"><div class="mi-row"><span class="mi-id">#'+sel.id+'</span>'+
+      '<span class="mi-rich" title="Богатство месторождения">'+ui20('gem','skill')+Math.round(richOf(selB)*100)+'%</span>'+status+'</div>'+
+      '<div class="mi-bar sunk" data-cycle-unit="'+sel.id+'"><i></i></div>'+
+      (recipes.length>1?'<div class="mi-fee">смена руды: '+feeStr+'</div>':'')+
+    '</div></div>';
+  return '<div class="mi-group">'+summary+grid+detail+'</div>';
 }
+let lastProdHtml='';
 function renderProduction(){
-  const cards=BUILDINGS.filter(b=>unitsOf(b.id).length>0).map(renderProductionCard).join('');
-  productionPanelEl.innerHTML = cards ? '<div class="bgrid">'+cards+'</div>' : '<div class="locked-banner">Пока ничего не работает — загляните во вкладку «Построить».</div>';
+  const groups=BUILDING_TYPES.map(renderProductionGroup).join('');
+  const html = groups || '<div class="locked-banner">Пока ничего не работает — загляните во вкладку «Построить».</div>';
+  // Панель перерисовывается каждый тик; DOM трогаем только при реальных изменениях,
+  // иначе пропадали бы клики и сбрасывалась анимация колёс. Прогресс циклов — в tickCycleBars.
+  if(html===lastProdHtml) return;
+  lastProdHtml=html;
+  productionPanelEl.innerHTML=html;
+  tickCycleBars();
 }
 
 function demolishCost(b){
@@ -1244,9 +1357,9 @@ function renderHQMiniProd(){
     const rate=recipeRatePerHour(b);
     const miniRes=resById(outId(b)), miniCv=colorVarOf(miniRes), miniType=typeOf(b);
     return '<div class="hq-mini-row">'+iconSvg(miniType.icon||miniRes.id,miniCv)+
-      '<span class="hq-mini-name">'+recipeLabel(b)+'</span>'+
+      '<span class="hq-mini-name" title="'+resFullName(outId(b))+'">'+recipeLabel(b)+'</span>'+
       '<span class="hq-mini-count">×'+count+'</span>'+
-      '<span class="hq-mini-rate">'+(rate>=10?Math.round(rate):rate.toFixed(1))+' '+miniRes.name.toLowerCase()+'/ч</span></div>';
+      '<span class="hq-mini-rate">'+(rate>=10?Math.round(rate):rate.toFixed(1))+' '+resTag(miniRes.id)+'/ч</span></div>';
   }).join('');
   if(!rows) return '';
   return '<div class="panel" style="margin-top:14px;"><h2>Производственные здания</h2><div class="hq-mini-list">'+rows+'</div></div>';
@@ -1290,11 +1403,11 @@ function renderServiceCard(sb){
   const cv='class'+sb.cls;
   const costStr=Object.entries(cost).map(([rid,q])=>{
     const ok=(state.resources[rid]||0)>=q;
-    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
+    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resTag(rid)+'</span>';
   }).join('');
   return '<div class="bcard" style="--tier-color:var(--'+cv+')">'+
     '<div class="bcard-head">'+iconSvg(outRes.id,cv)+
-      '<div><h3>'+sb.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+sb.out[sb.id]+' '+outRes.name+'</div></div>'+
+      '<div><h3>'+sb.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+sb.out[sb.id]+' '+resTag(outRes.id)+'</div></div>'+
     '</div>'+
     '<div class="bcard-stats"><span>Построено: <strong>'+count+'</strong></span><span>Цикл: '+fmtDuration(sb.cycle)+' · '+fmtDurationWords(sb.cycle)+'</span></div>'+
     '<div class="util-bar '+uClass+'"><div class="util-fill" style="width:'+(count===0?0:uPct)+'%"></div></div>'+
@@ -1313,7 +1426,7 @@ function renderHousingCard(h){
   const totalCap=count*h.capacity+(BASE_FREE_CAPACITY[h.cls]||0);
   const costStr=Object.entries(cost).map(([rid,q])=>{
     const ok=(state.resources[rid]||0)>=q;
-    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
+    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resTag(rid)+'</span>';
   }).join('');
   return '<div class="bcard" style="--tier-color:var(--'+cv+')">'+
     '<div class="bcard-head">'+iconSvg('housing',cv)+
@@ -1368,7 +1481,7 @@ function renderPopulation(){
         '<div class="chip-rate zero">−'+consumeHr.toFixed(2)+'/ч · запас '+(daysLeft>99?'99+ дн':(daysLeft<1?Math.round(daysLeft*24)+' ч':daysLeft.toFixed(1)+' дн'))+'</div>'
       );
       return '<div class="chip" style="--chip-color:var(--'+colorVarOf(g)+')"><div>'+iconSvg(g.id,colorVarOf(g))+'</div>'+
-        '<div class="chip-body"><div class="chip-name">'+g.name+'</div>'+
+        '<div class="chip-body"><div class="chip-name" title="'+g.name+'">'+resName(g.id)+'</div>'+
         '<div class="chip-amt">'+Math.floor(amt)+'</div>'+
         '<div class="chip-rate '+rateClass+'">'+(rate>=0?'+':'')+rate.toFixed(1)+'/с</div>'+
         supplyStr+
@@ -1402,7 +1515,7 @@ function renderAcademyCard(){
   const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
   const costStr=Object.entries(cost).map(([rid,q])=>{
     const ok=(state.resources[rid]||0)>=q;
-    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
+    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resTag(rid)+'</span>';
   }).join('');
   return '<div class="bcard" style="--tier-color:var(--skill)">'+
     '<div class="bcard-head">'+iconSvg('academy','skill')+
@@ -1624,8 +1737,10 @@ buildingsPanelEl.addEventListener('click', e=>{
 });
 productionPanelEl.addEventListener('click', e=>{
   const btn=e.target.closest('[data-retool-unit]');
-  if(!btn) return;
-  tryRetoolUnit(Number(btn.dataset.retoolUnit), btn.dataset.retoolTo);
+  if(btn){ tryRetoolUnit(Number(btn.dataset.retoolUnit), btn.dataset.retoolTo); return; }
+  const cell=e.target.closest('[data-mi-sel]');
+  if(cell){ selUnitByType[cell.dataset.miType]=Number(cell.dataset.miSel); renderProduction(); return; }
+  if(e.target.closest('[data-section-go]')) openSection(e.target.closest('[data-section-go]').dataset.sectionGo);
 });
 popPanelEl.addEventListener('click', e=>{
   const btn=e.target.closest('[data-build]');
@@ -1644,7 +1759,7 @@ if(offlineInfo){
   const rows=entries.length ? entries.map(([rid,d])=>{
     const r=resById(rid);
     const cls=d>=0?'pos':'neg';
-    return '<div class="delta-row">'+iconSvg(r.id,colorVarOf(r))+'<span class="delta-name">'+r.name+'</span><span class="delta-val '+cls+'">'+(d>=0?'+':'')+Math.round(d)+'</span></div>';
+    return '<div class="delta-row">'+iconSvg(r.id,colorVarOf(r))+'<span class="delta-name" title="'+r.name+'">'+resName(r.id)+'</span><span class="delta-val '+cls+'">'+(d>=0?'+':'')+Math.round(d)+'</span></div>';
   }).join('') : '<div class="delta-row muted">Производство простаивало — не хватало сырья или персонала.</div>';
   document.getElementById('modalTime').textContent='Пока вас не было: '+fmtElapsed(offlineInfo.elapsedSec*1000);
   document.getElementById('modalRows').innerHTML=rows;
@@ -1679,26 +1794,23 @@ function fmtMMSS(sec){
   const m=Math.floor(sec/60), r=sec%60;
   return String(m).padStart(2,'0')+':'+String(r).padStart(2,'0');
 }
+function unitCycleState(uid,now){
+  const unit=state.units.find(x=>x.id===uid);
+  const b=unit && BUILDINGS.find(x=>x.id===unit.recipe);
+  if(!b || !unitWorking(b)) return {p:0,left:0,idle:true};
+  const eff=Math.max(0.5, b.cycle/speedMultForRecipe(b));
+  const phase=(((now-unit.builtAt/1000)%eff)+eff)%eff/eff;
+  return {p:phase,left:eff-phase*eff,idle:false};
+}
 function tickCycleBars(){
   const now=Date.now()/1000;
-  document.querySelectorAll('[data-cyclebar]').forEach(el=>{
-    const uid=Number(el.dataset.cyclebar);
-    const row=el.closest('.unit-row');
-    const timeEl=row?row.querySelector('.cycle-time'):null;
-    const pctEl=row?row.querySelector('.cycle-pct'):null;
-    const unit=state.units.find(x=>x.id===uid);
-    if(!unit){ el.style.width='0%'; if(timeEl) timeEl.textContent='—:—'; if(pctEl) pctEl.textContent='—'; return; }
-    const b=BUILDINGS.find(x=>x.id===unit.recipe);
-    if(!b) return;
-    const uInfo=util[b.id];
-    if(!uInfo || uInfo.frac<=0.001){ el.style.width='0%'; if(timeEl) timeEl.textContent='простой'; if(pctEl) pctEl.textContent='0%'; return; }
-    const eff=Math.max(0.5, b.cycle/speedMultForRecipe(b));
-    const builtSec=unit.builtAt/1000;
-    const phase=(((now-builtSec)%eff)+eff)%eff/eff;
-    el.style.width=(phase*100).toFixed(1)+'%';
-    el.style.opacity = uInfo.frac>=0.95 ? '0.55' : '0.3';
-    if(timeEl) timeEl.textContent=fmtMMSS(eff-phase*eff);
-    if(pctEl) pctEl.textContent=Math.floor(phase*100)+'%';
+  document.querySelectorAll('[data-cycle-unit]').forEach(el=>{
+    el.style.setProperty('--p', unitCycleState(Number(el.dataset.cycleUnit),now).p.toFixed(4));
+  });
+  document.querySelectorAll('[data-cycle-time]').forEach(el=>{
+    const st=unitCycleState(Number(el.dataset.cycleTime),now);
+    const t=st.idle?'—:—':fmtMMSS(st.left);
+    if(el.textContent!==t) el.textContent=t;
   });
 }
 setInterval(tickCycleBars, 250);
