@@ -95,6 +95,10 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .recipe-pick{display:flex;align-items:center;gap:6px;font-family:var(--font-body);font-size:12px;background:var(--panel);color:var(--text-secondary);border:1px solid var(--border);border-radius:8px;padding:7px 10px;cursor:pointer;transition:border-color .15s,color .15s;}
 .recipe-pick:hover{color:var(--text-primary);border-color:var(--border-strong);}
 .recipe-pick.active{color:#0A0D18;background:var(--tier0);border-color:var(--tier0);}
+.recipe-picker.small{gap:4px;}
+.recipe-pick.small{padding:4px 6px;}
+.recipe-pick.small span{display:none;}
+.recipe-pick:disabled{opacity:.4;cursor:not-allowed;}
 .area-summary{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:12px;color:var(--text-secondary);margin-bottom:13px;grid-column:1/-1;}
 
 .t0{--chip-color:var(--tier0);--tier-color:var(--tier0);--tab-color:var(--tier0);}
@@ -139,10 +143,6 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .devbar button.active{background:var(--skill);border-color:var(--skill);color:#0A0D18;}
 .bcard.locked{opacity:.6;}
 .bcard-lock{font-size:11px;color:var(--tier1);}
-.retool{display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-size:10.5px;color:var(--text-muted);}
-.retool button{font-family:var(--font-body);font-size:10.5px;background:var(--panel);color:var(--text-secondary);border:1px solid var(--border);border-radius:5px;padding:3px 7px;cursor:pointer;}
-.retool button:hover:not(:disabled){border-color:var(--tier-color,var(--tier0));color:var(--text-primary);}
-.retool button:disabled{opacity:.45;cursor:not-allowed;}
 .durability-bar{height:5px;border-radius:3px;background:var(--border);overflow:hidden;}
 .durability-fill{height:100%;transition:width .3s;}
 .durability-bar.ok .durability-fill{background:var(--good);}
@@ -165,7 +165,6 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .unit-pct{font-family:var(--font-mono);width:34px;text-align:right;flex-shrink:0;}
 .unit-ok{color:var(--good);font-size:10.5px;flex-shrink:0;white-space:nowrap;}
 .repair-btn.small,.demolish-btn.small{padding:4px 8px;font-size:10px;margin-top:0;flex-shrink:0;}
-.unit-select{font-family:var(--font-mono);font-size:11px;background:var(--panel);color:var(--text-primary);border:1px solid var(--border);border-radius:5px;padding:3px 5px;}
 .warehouse-summary{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:14px;}
 .warehouse-bar{flex:1;min-width:180px;height:10px;border-radius:5px;background:var(--border);overflow:hidden;}
 .warehouse-bar-fill{height:100%;background:var(--tier1);transition:width .3s;}
@@ -407,7 +406,7 @@ const SECTIONS=[
   {id:'warehouse',label:'Склад',color:'tier4'},
 ];
 const TAB_LABELS=['Добыча'];
-const SAVE_KEY='industrial_belt_v18';
+const SAVE_KEY='industrial_belt_v19';
 const OFFLINE_CAP_SEC=12*3600;
 const OFFLINE_STEP=30;
 
@@ -674,7 +673,6 @@ saveState();
 
 let activeTier=0;
 let activeSection='hq';
-let buildRecipeChoice={}; // typeId -> выбранный на постройке рецепт (для типов с несколькими рецептами)
 
 function netRate(resId){
   let rate=0;
@@ -705,6 +703,13 @@ function fmtDuration(sec){
   sec=Math.round(sec);
   const m=Math.floor(sec/60), r=sec%60;
   return m+':'+String(r).padStart(2,'0');
+}
+function fmtDurationWords(sec){
+  sec=Math.round(sec);
+  const m=Math.floor(sec/60), r=sec%60;
+  if(m<=0) return r+' сек';
+  if(r<=0) return m+' мин';
+  return m+' мин '+r+' сек';
 }
 function fmtElapsed(ms){
   let s=Math.floor(ms/1000);
@@ -833,6 +838,7 @@ const REASON_LABELS={
   staff:'Не хватает персонала',
   comfort:'Персонал недоволен бытом',
   wear:'Изношено оборудование',
+  idle:'Ожидает первого тика симуляции',
 };
 
 function renderSections(){
@@ -899,36 +905,35 @@ function renderSingleRecipeCard(b,tierOk){
     '<div class="bcard-head">'+iconSvg(bb.outRes.id,'tier'+b.tier)+
       '<div><h3>'+type.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[bb.outRes.id]+' '+bb.outRes.name+'</div>'+bb.richBadge+bb.staffBadge+bb.speedBadge+'</div>'+
     '</div>'+
-    '<div class="bcard-stats"><span>Уже построено: <strong>'+bb.count+'</strong></span><span>Цикл: '+fmtDuration(b.cycle)+'</span></div>'+
+    '<div class="bcard-stats"><span>Уже построено: <strong>'+bb.count+'</strong></span><span>Цикл: '+fmtDuration(b.cycle)+' · '+fmtDurationWords(b.cycle)+'</span></div>'+
     bb.lockNote+bb.areaNote+
     '<div class="bcard-cost">'+bb.costStr+'</div>'+
     '<button class="build-btn" data-build="'+b.id+'" '+(bb.disabled?'disabled':'')+'>Построить (+1)</button>'+
   '</div>';
 }
-function renderRecipePickerCard(type,recipes,tierOk){
-  let chosenId=buildRecipeChoice[type.id];
-  if(!chosenId || !recipes.some(r=>r.id===chosenId)) chosenId=recipes[0].id;
-  buildRecipeChoice[type.id]=chosenId;
-  const b=recipes.find(r=>r.id===chosenId);
+function renderTypeBuildCard(type,recipes,tierOk){
   const count=typeCount({type:type.id});
-  const bb=buildingCardBody(b,tierOk,type,count);
-  const inputsStr='Месторождение';
-  const pickerBtns=recipes.map(r=>{
-    const rRes=resById(outId(r));
-    return '<button class="recipe-pick'+(r.id===chosenId?' active':'')+'" data-pick-type="'+type.id+'" data-pick-id="'+r.id+'" type="button">'+
-      iconSvg(rRes.id,'tier0')+'<span>'+recipeLabel(r)+'</span></button>';
+  const cost=scaledCost(type,count);
+  const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
+  const areaOk=(type.area||0)<=freeArea();
+  const disabled=!tierOk||!afford||!areaOk;
+  const areaNote=(!areaOk)?'<div class="bcard-lock">Не хватает площади участка ('+(type.area||0)+' нужно, '+freeArea()+' свободно)</div>':'';
+  const costStr=Object.entries(cost).map(([rid,q])=>{
+    const ok=(state.resources[rid]||0)>=q;
+    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
   }).join('');
-  return '<div class="bcard t0'+(bb.disabled&&tierOk?' locked':'')+'">'+
-    '<div class="bcard-head">'+iconSvg(bb.outRes.id,'tier0')+
-      '<div><h3>'+type.name+'</h3><div class="bcard-recipe">Выберите, что добывать</div></div>'+
+  const recipeNames=recipes.map(r=>recipeLabel(r)).join(' / ');
+  const buildId=recipes[0].id; // строится "вслепую" — конкретная руда выбирается позже, во вкладке «Производство»
+  const repIcon=iconSvg(outId(recipes[0]),'tier0');
+  return '<div class="bcard t0'+(disabled&&tierOk?' locked':'')+'">'+
+    '<div class="bcard-head">'+repIcon+
+      '<div><h3>'+type.name+'</h3><div class="bcard-recipe">Может добывать: '+recipeNames+'</div>'+
+      '<div class="bcard-staff">Рецепт выбирается после постройки, во вкладке «Производство» · Площадь: '+(type.area||0)+'</div></div>'+
     '</div>'+
-    '<div class="recipe-picker">'+pickerBtns+'</div>'+
-    '<div class="bcard-recipe">'+inputsStr+' → '+b.out[bb.outRes.id]+' '+bb.outRes.name+'</div>'+
-    bb.richBadge+bb.staffBadge+bb.speedBadge+
-    '<div class="bcard-stats"><span>Уже построено (этот тип): <strong>'+bb.count+'</strong></span><span>Цикл: '+fmtDuration(b.cycle)+'</span></div>'+
-    bb.lockNote+bb.areaNote+
-    '<div class="bcard-cost">'+bb.costStr+'</div>'+
-    '<button class="build-btn" data-build="'+b.id+'" '+(bb.disabled?'disabled':'')+'>Построить (+1)</button>'+
+    '<div class="bcard-stats"><span>Уже построено: <strong>'+count+'</strong></span></div>'+
+    areaNote+
+    '<div class="bcard-cost">'+costStr+'</div>'+
+    '<button class="build-btn" data-build="'+buildId+'" '+(disabled?'disabled':'')+'>Построить (+1)</button>'+
   '</div>';
 }
 function renderBuildings(){
@@ -949,7 +954,7 @@ function renderBuildings(){
   Object.keys(groups).forEach(k=>{
     const recipes=groups[k];
     if(recipes.length>1 && recipes[0].type){
-      html+=renderRecipePickerCard(typeOf(recipes[0]),recipes,tierOk);
+      html+=renderTypeBuildCard(typeOf(recipes[0]),recipes,tierOk);
     }else{
       recipes.forEach(b=>{ html+=renderSingleRecipeCard(b,tierOk); });
     }
@@ -977,34 +982,39 @@ function renderProductionCard(b){
   const inputsStr = Object.keys(b.in||{}).length
     ? Object.entries(b.in).map(([rid,q])=>q+' '+resName(rid)).join(' + ')
     : 'Месторождение';
-  let retoolBlock='';
-  if(b.type){
-    const others=BUILDINGS.filter(x=>x.type===b.type && x.id!==b.id && recipeUnlocked(x) && recipeVisible(x));
-    if(others.length){
+  const siblings = b.type ? BUILDINGS.filter(x=>x.type===b.type && recipeVisible(x)) : [];
+  let retoolCaption='';
+  if(siblings.length>1){
+    const fee=retoolFee(b);
+    const feeStr=Object.entries(fee).map(([rid,q])=>q+' '+resName(rid)).join(' + ');
+    retoolCaption='<div class="bcard-staff">Переключить на другую руду: '+feeStr+' · цикл начнётся заново</div>';
+  }
+  const unitsHtml=units.map(u=>{
+    let picker='';
+    if(siblings.length>1){
       const fee=retoolFee(b);
       const feeOk=Object.entries(fee).every(([rid,q])=>(state.resources[rid]||0)>=q);
-      const feeStr=Object.entries(fee).map(([rid,q])=>q+' '+resName(rid)).join(' + ');
-      const options=units.map(u=>'<option value="'+u.id+'">#'+u.id+' ('+Math.round(u.durability)+'% прочности)</option>').join('');
-      retoolBlock='<div class="retool"><span>Перенастроить <select class="unit-select" data-unit-select="'+b.id+'">'+options+'</select> ('+feeStr+') на:</span>'+
-        others.map(x=>'<button data-retool-select="'+b.id+'" data-retool-to="'+x.id+'" '+(feeOk?'':'disabled')+'>'+recipeLabel(x)+'</button>').join('')+
-      '</div>';
+      picker='<div class="recipe-picker small">'+siblings.map(x=>{
+        const xRes=resById(outId(x));
+        const isCurrent=x.id===b.id;
+        const locked=!recipeUnlocked(x);
+        return '<button class="recipe-pick small'+(isCurrent?' active':'')+'" data-retool-unit="'+u.id+'" data-retool-to="'+x.id+'" '+((isCurrent||locked||!feeOk)?'disabled':'')+' type="button" title="'+recipeLabel(x)+'">'+iconSvg(xRes.id,'tier0')+'</button>';
+      }).join('')+'</div>';
     }
-  }
-  const unitsHtml=units.map(u=>
-    '<div class="unit-row"><span class="unit-id">#'+u.id+'</span>'+
+    return '<div class="unit-row"><span class="unit-id">#'+u.id+'</span>'+
+      picker+
       '<div class="cycle-bar" style="flex:1"><div class="cycle-fill" data-cyclebar="'+u.id+'"></div></div>'+
       '<span class="cycle-pct" data-cyclepct="'+u.id+'">0%</span>'+
-      '<span class="cycle-time" data-cycletime="'+u.id+'">—:—</span></div>'
-  ).join('');
+      '<span class="cycle-time" data-cycletime="'+u.id+'">—:—</span></div>';
+  }).join('');
   return '<div class="bcard t'+b.tier+'">'+
     '<div class="bcard-head">'+iconSvg(outRes.id,'tier'+b.tier)+
-      '<div><h3>'+title+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[outRes.id]+' '+outRes.name+'</div>'+staffBadge+speedBadge+'</div>'+
+      '<div><h3>'+title+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[outRes.id]+' '+outRes.name+'</div>'+staffBadge+speedBadge+retoolCaption+'</div>'+
     '</div>'+
-    '<div class="bcard-stats"><span>Построено: <strong>'+units.length+'</strong></span><span>Цикл: '+fmtDuration(b.cycle)+'</span></div>'+
+    '<div class="bcard-stats"><span>Построено: <strong>'+units.length+'</strong></span><span>Цикл: '+fmtDuration(b.cycle)+' · '+fmtDurationWords(b.cycle)+'</span></div>'+
     '<div class="util-bar '+uClass+'"><div class="util-fill" style="width:'+uPct+'%"></div></div>'+
     '<div class="util-label">'+uLabel+' · у каждой установки свой цикл, отсчёт ниже</div>'+
     '<div class="unit-list">'+unitsHtml+'</div>'+
-    retoolBlock+
   '</div>';
 }
 function renderProduction(){
@@ -1119,7 +1129,7 @@ function renderServiceCard(sb){
     '<div class="bcard-head">'+iconSvg(outRes.id,cv)+
       '<div><h3>'+sb.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+sb.out[sb.id]+' '+outRes.name+'</div></div>'+
     '</div>'+
-    '<div class="bcard-stats"><span>Построено: <strong>'+count+'</strong></span><span>Цикл: '+fmtDuration(sb.cycle)+'</span></div>'+
+    '<div class="bcard-stats"><span>Построено: <strong>'+count+'</strong></span><span>Цикл: '+fmtDuration(sb.cycle)+' · '+fmtDurationWords(sb.cycle)+'</span></div>'+
     '<div class="util-bar '+uClass+'"><div class="util-fill" style="width:'+(count===0?0:uPct)+'%"></div></div>'+
     '<div class="util-label">'+uLabel+'</div>'+
     '<div class="bcard-cost">'+costStr+'</div>'+
@@ -1402,6 +1412,7 @@ function tryRetoolUnit(unitId,toId){
   Object.entries(fee).forEach(([rid,q])=>{ state.resources[rid]-=q; });
   const oldRecipe=u.recipe;
   u.recipe=toId;
+  u.builtAt=Date.now(); // цикл новой руды начинается заново, а не с фазы старой
   syncBuildingCount(oldRecipe);
   syncBuildingCount(toId);
   saveState();
@@ -1424,12 +1435,6 @@ tabsEl.addEventListener('click', e=>{
   renderView();
 });
 bgridEl.addEventListener('click', e=>{
-  const pickBtn=e.target.closest('[data-pick-type]');
-  if(pickBtn){
-    buildRecipeChoice[pickBtn.dataset.pickType]=pickBtn.dataset.pickId;
-    renderBuildings();
-    return;
-  }
   const btn=e.target.closest('[data-build]');
   if(!btn) return;
   tryBuild(btn.dataset.build);
@@ -1441,13 +1446,9 @@ buildingsPanelEl.addEventListener('click', e=>{
   if(demBtn){ tryDemolishUnit(Number(demBtn.dataset.demolishUnit)); }
 });
 productionPanelEl.addEventListener('click', e=>{
-  const btn=e.target.closest('[data-retool-select]');
+  const btn=e.target.closest('[data-retool-unit]');
   if(!btn) return;
-  const recipeId=btn.dataset.retoolSelect;
-  const card=btn.closest('.bcard');
-  const sel=card?card.querySelector('[data-unit-select="'+recipeId+'"]'):null;
-  const unitId=sel?Number(sel.value):null;
-  if(unitId!=null) tryRetoolUnit(unitId, btn.dataset.retoolTo);
+  tryRetoolUnit(Number(btn.dataset.retoolUnit), btn.dataset.retoolTo);
 });
 popPanelEl.addEventListener('click', e=>{
   const btn=e.target.closest('[data-build]');
