@@ -138,7 +138,8 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .hq-mini-list{display:flex;flex-direction:column;gap:7px;}
 .hq-mini-row{display:flex;align-items:center;gap:10px;font-size:12px;}
 .hq-mini-name{width:130px;flex-shrink:0;color:var(--text-secondary);}
-.hq-mini-pct{font-family:var(--font-mono);width:36px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;}
+.hq-mini-count{font-family:var(--font-mono);color:var(--text-muted);flex-shrink:0;}
+.hq-mini-rate{font-family:var(--font-mono);color:var(--text-primary);flex:1;text-align:right;font-variant-numeric:tabular-nums;}
 .skill-prod-list{display:flex;flex-direction:column;gap:4px;margin-top:2px;}
 .skill-prod-row{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;font-size:10.5px;color:var(--text-muted);}
 .skill-prod-name{color:var(--text-secondary);font-weight:600;min-width:90px;}
@@ -149,28 +150,37 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .devbar button.active{background:var(--skill);border-color:var(--skill);color:#0A0D18;}
 .bcard.locked{opacity:.6;}
 .bcard-lock{font-size:11px;color:var(--tier1);}
-.durability-bar{height:5px;border-radius:3px;background:var(--border);overflow:hidden;}
-.durability-fill{height:100%;transition:width .3s;}
-.durability-bar.ok .durability-fill{background:var(--good);}
-.durability-bar.warn .durability-fill{background:var(--tier1);}
-.durability-bar.bad .durability-fill{background:var(--bad);}
-.durability-label{font-size:10.5px;color:var(--text-muted);}
 .cycle-row{display:flex;align-items:center;gap:7px;margin-top:-2px;}
 .cycle-bar{flex:1;height:3px;border-radius:2px;background:var(--border);overflow:hidden;}
 .cycle-fill{height:100%;background:var(--tier-color,var(--tier0));opacity:.55;width:0%;}
 .cycle-time{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);white-space:nowrap;min-width:38px;text-align:right;font-variant-numeric:tabular-nums;}
 .cycle-pct{font-family:var(--font-mono);font-size:10px;color:var(--text-secondary);white-space:nowrap;min-width:30px;text-align:right;font-variant-numeric:tabular-nums;}
-.repair-btn{margin-top:2px;font-family:var(--font-body);font-weight:600;font-size:11px;letter-spacing:.02em;background:var(--panel);color:var(--tier1);border:1px solid var(--border);border-radius:7px;padding:7px 10px;cursor:pointer;}
-.repair-btn:hover:not(:disabled){border-color:var(--tier1);}
-.repair-btn:disabled{opacity:.4;cursor:not-allowed;}
-.demolish-btn{margin-top:2px;font-family:var(--font-body);font-weight:600;font-size:11px;letter-spacing:.02em;background:var(--panel);color:var(--bad);border:1px solid var(--border);border-radius:7px;padding:7px 10px;cursor:pointer;}
-.demolish-btn:hover{border-color:var(--bad);}
 .unit-list{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
 .unit-row{display:flex;align-items:center;gap:8px;font-size:11px;background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:6px 8px;flex-wrap:wrap;}
 .unit-id{font-family:var(--font-mono);color:var(--text-muted);width:32px;flex-shrink:0;}
-.unit-pct{font-family:var(--font-mono);width:34px;text-align:right;flex-shrink:0;}
-.unit-ok{color:var(--good);font-size:10.5px;flex-shrink:0;white-space:nowrap;}
-.repair-btn.small,.demolish-btn.small{padding:4px 8px;font-size:10px;margin-top:0;flex-shrink:0;}
+.unit-yard{display:flex;flex-wrap:wrap;gap:9px;margin-top:2px;}
+.unit-tile{position:relative;width:78px;display:flex;flex-direction:column;align-items:center;gap:5px;background:radial-gradient(circle at 50% 30%,var(--card-hover),var(--panel));border:1px solid var(--border);border-radius:11px;padding:9px 6px 8px;}
+.unit-tile.worn{border-color:var(--tier1);}
+.unit-tile.damaged{border-color:var(--bad);}
+.unit-tile-id{position:absolute;top:5px;left:7px;font-family:var(--font-mono);font-size:8.5px;color:var(--text-muted);}
+.unit-tile-icon svg{width:32px;height:32px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));}
+.unit-tile.damaged .unit-tile-icon svg{opacity:.55;}
+.unit-tile.worn .unit-tile-icon svg{opacity:.8;}
+.unit-tile-bar{width:100%;height:5px;border-radius:3px;background:var(--border);overflow:hidden;}
+.unit-tile-bar .fill{height:100%;transition:width .3s;}
+.unit-tile-bar.ok .fill{background:var(--good);}
+.unit-tile-bar.warn .fill{background:var(--tier1);}
+.unit-tile-bar.bad .fill{background:var(--bad);}
+.unit-tile-pct{font-family:var(--font-mono);font-size:9.5px;color:var(--text-muted);font-variant-numeric:tabular-nums;}
+.unit-tile-actions{display:flex;gap:5px;margin-top:1px;}
+.tile-btn{width:23px;height:23px;padding:0;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border);border-radius:6px;cursor:pointer;}
+.tile-btn svg{width:12px;height:12px;}
+.tile-btn.repair{color:var(--tier1);}
+.tile-btn.repair:hover:not(:disabled){border-color:var(--tier1);}
+.tile-btn.repair:disabled{opacity:.35;cursor:not-allowed;}
+.tile-btn.demolish{color:var(--bad);}
+.tile-btn.demolish:hover{border-color:var(--bad);}
+.tile-btn.ok-mark{color:var(--good);font-size:12px;cursor:default;}
 .warehouse-summary{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-bottom:14px;}
 .warehouse-bar{flex:1;min-width:180px;height:10px;border-radius:5px;background:var(--border);overflow:hidden;}
 .warehouse-bar-fill{height:100%;background:var(--tier1);transition:width .3s;}
@@ -435,10 +445,16 @@ const ICONS={
   rigMiner:'<circle cx="10" cy="4.3" r="2.1" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="4.3" r="0.6"/><path d="M10 6.3 L5.5 18 M10 6.3 L14.5 18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8.3 9.2 L11.7 9.2" stroke="currentColor" stroke-width="1" fill="none" opacity="0.45"/><path d="M7 12.3 L13 12.3" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.6"/><path d="M3 18h14" stroke="currentColor" stroke-width="1.5"/><path d="M2 18 Q10 15.6 18 18 Z" opacity="0.3"/>',
   // Буровая вышка — та же А-рама, но уже и без колеса, заканчивается каплей у земли.
   rigDrill:'<path d="M10 2 L6.3 15.5 M10 2 L13.7 15.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8.5 6 L11.5 6" stroke="currentColor" stroke-width="1" fill="none" opacity="0.45"/><path d="M7.6 9.6 L12.4 9.6" stroke="currentColor" stroke-width="1.1" fill="none" opacity="0.6"/><path d="M10 13c0 0 -2.3 2.9 -2.3 4.6a2.3 2.3 0 0 0 4.6 0c0-1.7-2.3-4.6-2.3-4.6z"/>',
+  // Мелкие функциональные значки для действий на плитке установки (ремонт/снос) — без своего colorVar, красятся через CSS color кнопки.
+  wrench:'<path d="M13.7 2.3a4.2 4.2 0 0 0-5.6 5l-6 6 2.6 2.6 6-6a4.2 4.2 0 0 0 5-5.6l-2.5 2.5-2-.4-.4-2z"/>',
+  trash:'<path d="M4 6.2h12" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M7.6 6.2V4.8a1.2 1.2 0 0 1 1.2-1.2h2.4a1.2 1.2 0 0 1 1.2 1.2v1.4" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M5.4 6.2 6.1 16a1 1 0 0 0 1 .9h5.8a1 1 0 0 0 1-.9l.7-9.8z"/><path d="M8.3 8.6v6M10 8.6v6M11.7 8.6v6" stroke="var(--card)" stroke-width="1" fill="none"/>',
 };
 function iconSvg(key,colorVar){
   const inner=ICONS[key] || '<circle cx="10" cy="10" r="7"/>';
   return '<svg viewBox="0 0 20 20" width="26" height="26" style="color:var(--'+colorVar+')" fill="currentColor">'+inner+'</svg>';
+}
+function miniIcon(key){
+  return '<svg viewBox="0 0 20 20" fill="currentColor">'+(ICONS[key]||'')+'</svg>';
 }
 
 function freshState(){
@@ -560,18 +576,19 @@ function computeWorkforce(dt){
   return wf;
 }
 
-// T0 больше не даёт плоскую ставку — это фактический выпуск (то же, что видно
-// в netRate), т.е. простаивающая установка (нет персонала/сырья/места на складе)
-// добывает 0 SP, а не свою "долю" просто за факт существования.
+// Фактический выпуск ресурса всеми установками рецепта в час — то же, что видно
+// в netRate: простаивающая установка (нет персонала/сырья/места на складе) даёт 0.
+function recipeRatePerHour(b){
+  const count=state.buildings[b.id]||0;
+  if(count<=0) return 0;
+  const u=(util[b.id]&&util[b.id].frac)||0;
+  if(u<=0) return 0;
+  return (b.out[outId(b)]*count/b.cycle)*3600*richOf(b)*speedMultForRecipe(b)*u;
+}
+// T0 больше не даёт плоскую ставку СП — она равна фактическому выпуску (см. выше),
+// т.е. простаивающая установка добывает 0 СП, а не свою "долю" просто за факт существования.
 function spFromT0PerHour(){
-  return BUILDINGS.filter(b=>b.tier===0).reduce((s,b)=>{
-    const count=state.buildings[b.id]||0;
-    if(count<=0) return s;
-    const u=(util[b.id]&&util[b.id].frac)||0;
-    if(u<=0) return s;
-    const rate=(b.out[outId(b)]*count/b.cycle)*3600*richOf(b)*speedMultForRecipe(b)*u;
-    return s+rate*SP_PER_UNIT_T0;
-  },0);
+  return BUILDINGS.filter(b=>b.tier===0).reduce((s,b)=>s+recipeRatePerHour(b)*SP_PER_UNIT_T0,0);
 }
 function spFromOtherTiersPerHour(){
   const academies=state.buildings[ACADEMY.id]||0;
@@ -1051,35 +1068,35 @@ function renderBuildingStatusCard(b){
   const outRes=resById(outId(b));
   const type=typeOf(b);
   const title = b.type ? type.name+' · '+recipeLabel(b) : b.name;
-  const inputsStr = Object.keys(b.in||{}).length
-    ? Object.entries(b.in).map(([rid,q])=>q+' '+resName(rid)).join(' + ')
-    : 'Месторождение';
   const dCost=demolishCost(b);
   const dKeys=Object.keys(dCost);
   const dStr=dKeys.length ? dKeys.map(rid=>dCost[rid]+' '+resName(rid)).join(' + ') : 'ничего';
-  const rowsHtml=units.map(u=>{
+  const statusCv=colorVarOf(outRes);
+  const tilesHtml=units.map(u=>{
     const durPct=Math.round(u.durability);
     const durClass = u.durability>=80?'ok':(u.durability>=45?'warn':'bad');
+    const tileState = u.durability>=80?'':(u.durability>=45?' worn':' damaged');
     const rCost=repairCost(u,b);
     const rKeys=Object.keys(rCost);
     const rAfford=rKeys.every(rid=>(state.resources[rid]||0)>=rCost[rid]);
-    return '<div class="unit-row">'+
-      '<span class="unit-id">#'+u.id+'</span>'+
-      '<div class="durability-bar '+durClass+'" style="flex:1"><div class="durability-fill" style="width:'+durPct+'%"></div></div>'+
-      '<span class="unit-pct">'+durPct+'%</span>'+
-      (rKeys.length
-        ? '<button class="repair-btn small" data-repair-unit="'+u.id+'" '+(rAfford?'':'disabled')+'>Ремонт ('+rKeys.map(rid=>rCost[rid]+' '+resName(rid)).join(' + ')+')</button>'
-        : '<span class="unit-ok">исправно</span>')+
-      '<button class="demolish-btn small" data-demolish-unit="'+u.id+'">Снести</button>'+
+    const repairBtn = rKeys.length
+      ? '<button class="tile-btn repair" data-repair-unit="'+u.id+'" '+(rAfford?'':'disabled')+' type="button" title="Ремонт: '+rKeys.map(rid=>rCost[rid]+' '+resName(rid)).join(' + ')+'">'+miniIcon('wrench')+'</button>'
+      : '<span class="tile-btn ok-mark" title="Исправно">✓</span>';
+    return '<div class="unit-tile'+tileState+'">'+
+      '<span class="unit-tile-id">#'+u.id+'</span>'+
+      '<div class="unit-tile-icon">'+iconSvg(type.icon||outRes.id,statusCv)+'</div>'+
+      '<div class="unit-tile-bar '+durClass+'"><div class="fill" style="width:'+durPct+'%"></div></div>'+
+      '<span class="unit-tile-pct">'+durPct+'%</span>'+
+      '<div class="unit-tile-actions">'+repairBtn+
+        '<button class="tile-btn demolish" data-demolish-unit="'+u.id+'" type="button" title="Снести: вернёт '+dStr+'">'+miniIcon('trash')+'</button>'+
+      '</div>'+
     '</div>';
   }).join('');
-  const statusCv=colorVarOf(outRes);
   return '<div class="bcard" style="--tier-color:var(--'+statusCv+')">'+
     '<div class="bcard-head">'+iconSvg(type.icon||outRes.id,statusCv)+
-      '<div><h3>'+title+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[outRes.id]+' '+outRes.name+'</div></div>'+
+      '<div><h3>'+title+'</h3><div class="bcard-recipe">Построено: '+units.length+'</div></div>'+
     '</div>'+
-    '<div class="bcard-stats"><span>Построено: <strong>'+units.length+'</strong></span><span>Снос одной вернёт: '+dStr+'</span></div>'+
-    '<div class="unit-list">'+rowsHtml+'</div>'+
+    '<div class="unit-yard">'+tilesHtml+'</div>'+
   '</div>';
 }
 function renderBuildingsStatus(){
@@ -1089,14 +1106,13 @@ function renderBuildingsStatus(){
 
 function renderHQMiniProd(){
   const rows=BUILDINGS.filter(b=>unitsOf(b.id).length>0).map(b=>{
-    const uInfo=util[b.id]||{frac:0,reason:'idle'};
-    const pct=Math.round(uInfo.frac*100);
-    const cls = uInfo.frac>0.95?'full':(uInfo.frac>0.05?'partial':'blocked');
+    const count=state.buildings[b.id]||0;
+    const rate=recipeRatePerHour(b);
     const miniRes=resById(outId(b)), miniCv=colorVarOf(miniRes), miniType=typeOf(b);
     return '<div class="hq-mini-row">'+iconSvg(miniType.icon||miniRes.id,miniCv)+
       '<span class="hq-mini-name">'+recipeLabel(b)+'</span>'+
-      '<div class="util-bar '+cls+'" style="flex:1"><div class="util-fill" style="width:'+pct+'%"></div></div>'+
-      '<span class="hq-mini-pct">'+pct+'%</span></div>';
+      '<span class="hq-mini-count">×'+count+'</span>'+
+      '<span class="hq-mini-rate">'+(rate>=10?Math.round(rate):rate.toFixed(1))+' '+miniRes.name.toLowerCase()+'/ч</span></div>';
   }).join('');
   if(!rows) return '';
   return '<div class="panel" style="margin-top:14px;"><h2>Производственные здания</h2><div class="hq-mini-list">'+rows+'</div></div>';
