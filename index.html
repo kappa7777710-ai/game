@@ -422,18 +422,18 @@ function colorVarOf(res){ return res.colorVar || ('tier'+res.tier); }
 const ICONS={
   // Ресурсы: разная форма силуэта на каждый (угловатая руда / гроздь самородков / капля),
   // цвет берётся отдельно через colorVar ресурса (--iron/--copper/--water), не общий tier0.
-  iron_ore:'<polygon points="4,13 2,8 6,3 12,2 17,6 18,12 13,17 7,18 3,16"/><polygon points="7,7 11,6 14,9 12,13 8,12" opacity="0.45"/>',
-  copper_ore:'<circle cx="7" cy="8.5" r="4.3"/><circle cx="13.2" cy="7.6" r="3.7"/><circle cx="10" cy="13.3" r="4.7"/><polygon points="8,8 11.2,7 12.3,11 9,12.2" opacity="0.4"/>',
-  water:'<path d="M10 2C10 2 4 10.5 4 14A6 6 0 0 0 16 14C16 10.5 10 2 10 2Z"/><path d="M6.3 13.2c0 1.6 1.1 2.8 2.2 3.2" stroke="currentColor" stroke-width="1.1" fill="none" opacity="0.45"/>',
+  iron_ore:'<polygon points="4,13 2,8 6,3 12,2 17,6 18,12 13,17 7,18 3,16" opacity="0.88"/><polygon points="6,8 10,5 14,8 12,12 8,12"/><polygon points="9,9 12,8 13,11 10,12" opacity="0.8"/><circle cx="14" cy="5.5" r="1.1"/>',
+  copper_ore:'<circle cx="7" cy="8.5" r="4.3" opacity="0.88"/><circle cx="13.2" cy="7.6" r="3.7" opacity="0.88"/><circle cx="10" cy="13.3" r="4.7" opacity="0.88"/><polygon points="8,8 11.2,7 12.3,11 9,12.2"/><circle cx="15" cy="9.3" r="1"/>',
+  water:'<path d="M10 2C10 2 4 10.5 4 14A6 6 0 0 0 16 14C16 10.5 10 2 10 2Z" opacity="0.9"/><ellipse cx="8.1" cy="9.6" rx="1.1" ry="1.8" transform="rotate(-20 8.1 9.6)"/>',
   class1:'<path d="M3 13a7 5 0 0 1 14 0v1H3z"/><rect x="2" y="13" width="16" height="2.2" rx="1"/><rect x="9" y="6" width="2" height="4" opacity="0.6"/>',
   skillT0:'<path d="M2 11c4-6 8-7.5 13-5.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="8.7" y="8" width="2.2" height="11" rx="1" transform="rotate(28 8.7 8)"/>',
   housing:'<path d="M10 2 2 8v10h16V8z"/><rect x="8" y="12" width="4" height="6" opacity="0.5"/>',
   academy:'<path d="M10 3 1 7l9 4 9-4z"/><path d="M5 9v4c0 1.5 2.5 3 5 3s5-1.5 5-3V9" fill="none" stroke="currentColor" stroke-width="1.4"/>',
   // Типы зданий: силуэт похож на саму установку, не на добываемый ресурс.
   // Шахтный копёр — колесо-шкив наверху, А-образная рама, линия земли внизу.
-  rigMiner:'<circle cx="10" cy="4.3" r="2.1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 6.3 L5.5 18 M10 6.3 L14.5 18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M7 12.3 L13 12.3" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.6"/><path d="M3 18h14" stroke="currentColor" stroke-width="1.5"/>',
+  rigMiner:'<circle cx="10" cy="4.3" r="2.1" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="4.3" r="0.6"/><path d="M10 6.3 L5.5 18 M10 6.3 L14.5 18" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8.3 9.2 L11.7 9.2" stroke="currentColor" stroke-width="1" fill="none" opacity="0.45"/><path d="M7 12.3 L13 12.3" stroke="currentColor" stroke-width="1.2" fill="none" opacity="0.6"/><path d="M3 18h14" stroke="currentColor" stroke-width="1.5"/><path d="M2 18 Q10 15.6 18 18 Z" opacity="0.3"/>',
   // Буровая вышка — та же А-рама, но уже и без колеса, заканчивается каплей у земли.
-  rigDrill:'<path d="M10 2 L6.3 15.5 M10 2 L13.7 15.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M7.6 9.6 L12.4 9.6" stroke="currentColor" stroke-width="1.1" fill="none" opacity="0.6"/><path d="M10 13c0 0 -2.3 2.9 -2.3 4.6a2.3 2.3 0 0 0 4.6 0c0-1.7-2.3-4.6-2.3-4.6z"/>',
+  rigDrill:'<path d="M10 2 L6.3 15.5 M10 2 L13.7 15.5" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M8.5 6 L11.5 6" stroke="currentColor" stroke-width="1" fill="none" opacity="0.45"/><path d="M7.6 9.6 L12.4 9.6" stroke="currentColor" stroke-width="1.1" fill="none" opacity="0.6"/><path d="M10 13c0 0 -2.3 2.9 -2.3 4.6a2.3 2.3 0 0 0 4.6 0c0-1.7-2.3-4.6-2.3-4.6z"/>',
 };
 function iconSvg(key,colorVar){
   const inner=ICONS[key] || '<circle cx="10" cy="10" r="7"/>';
