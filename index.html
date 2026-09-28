@@ -91,6 +91,11 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .bcard-cost span.bad{color:var(--bad);}
 .build-btn{margin-top:2px;font-family:var(--font-display);font-weight:600;font-size:13px;letter-spacing:.03em;text-transform:uppercase;background:var(--tier-color,var(--tier0));color:#0A0D18;border:none;border-radius:7px;padding:9px 10px;cursor:pointer;}
 .build-btn:disabled{background:var(--border);color:var(--text-muted);cursor:not-allowed;}
+.recipe-picker{display:flex;gap:6px;flex-wrap:wrap;}
+.recipe-pick{display:flex;align-items:center;gap:6px;font-family:var(--font-body);font-size:12px;background:var(--panel);color:var(--text-secondary);border:1px solid var(--border);border-radius:8px;padding:7px 10px;cursor:pointer;transition:border-color .15s,color .15s;}
+.recipe-pick:hover{color:var(--text-primary);border-color:var(--border-strong);}
+.recipe-pick.active{color:#0A0D18;background:var(--tier0);border-color:var(--tier0);}
+.area-summary{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:12px;color:var(--text-secondary);margin-bottom:13px;grid-column:1/-1;}
 
 .t0{--chip-color:var(--tier0);--tier-color:var(--tier0);--tab-color:var(--tier0);}
 .t1{--chip-color:var(--tier1);--tier-color:var(--tier1);--tab-color:var(--tier1);}
@@ -148,6 +153,7 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .cycle-bar{flex:1;height:3px;border-radius:2px;background:var(--border);overflow:hidden;}
 .cycle-fill{height:100%;background:var(--tier-color,var(--tier0));opacity:.55;width:0%;}
 .cycle-time{font-family:var(--font-mono);font-size:10px;color:var(--text-muted);white-space:nowrap;min-width:38px;text-align:right;font-variant-numeric:tabular-nums;}
+.cycle-pct{font-family:var(--font-mono);font-size:10px;color:var(--text-secondary);white-space:nowrap;min-width:30px;text-align:right;font-variant-numeric:tabular-nums;}
 .repair-btn{margin-top:2px;font-family:var(--font-body);font-weight:600;font-size:11px;letter-spacing:.02em;background:var(--panel);color:var(--tier1);border:1px solid var(--border);border-radius:7px;padding:7px 10px;cursor:pointer;}
 .repair-btn:hover:not(:disabled){border-color:var(--tier1);}
 .repair-btn:disabled{opacity:.4;cursor:not-allowed;}
@@ -267,13 +273,21 @@ function totalCargoWeight(){
 function warehouseCapacityKg(){ return WAREHOUSE_BASE_KG; }
 function warehouseFreeKg(){ return Math.max(0, warehouseCapacityKg()-totalCargoWeight()); }
 
-// Тип здания = универсальная установка (цена, рост цены). Рецепт = что она выпускает.
+// Тип здания = универсальная установка (цена, рост цены, площадь). Рецепт = что она выпускает.
 // Рецепт открывается уровнем навыка recipe.skill (по умолчанию навык своего тира) >= recipe.unlock.
 // У рецептов T2+ пока нет type: каждый из них — сам себе тип со своей ценой (старая схема).
 const BUILDING_TYPES=[
-  {id:'miner',name:'Добывающая установка',cost:{iron_ore:60}},
+  {id:'miner',name:'Горнодобывающая установка',cost:{iron_ore:60},area:25},
+  {id:'drill',name:'Буровая установка',cost:{iron_ore:40},area:10},
 ];
 const RETOOL_FEE=0.1; // доля базовой цены за перенастройку одной установки на другой рецепт
+
+// Площадь участка базы: каждая построенная установка занимает area своего типа,
+// суммарно не больше BASE_AREA. Отдельный лимит от весового склада — можно упереться
+// в площадь, даже если по весу и ресурсам всё ещё есть запас.
+const BASE_AREA=500;
+function usedArea(){ return state.units.reduce((s,u)=>{ const b=BUILDINGS.find(x=>x.id===u.recipe); return s+(b?(typeOf(b).area||0):0); },0); }
+function freeArea(){ return Math.max(0, BASE_AREA-usedArea()); }
 
 // Износ: прочность 0-100, падает со временем независимо от того, работает ли установка.
 // Ссылочная точка: -30 п.п. за 45 суток непрерывной работы. Ниже пола установка не изнашивается
@@ -289,7 +303,7 @@ const DEMOLISH_REFUND=0.25; // снос возвращает 25% ресурсо�
 const BUILDINGS=[
   {id:'iron_ore',type:'miner',unlock:0,tier:0,cycle:400,in:{},out:{iron_ore:4},workers:3},
   {id:'copper_ore',type:'miner',unlock:0,tier:0,cycle:450,in:{},out:{copper_ore:4},workers:3},
-  {id:'water',type:'miner',unlock:0,tier:0,cycle:350,in:{},out:{water:3},workers:3},
+  {id:'water',type:'drill',unlock:0,tier:0,cycle:350,in:{},out:{water:3},workers:3},
 ];
 
 const SERVICE_BUILDINGS=[];
@@ -393,7 +407,7 @@ const SECTIONS=[
   {id:'warehouse',label:'Склад',color:'tier4'},
 ];
 const TAB_LABELS=['Добыча'];
-const SAVE_KEY='industrial_belt_v17';
+const SAVE_KEY='industrial_belt_v18';
 const OFFLINE_CAP_SEC=12*3600;
 const OFFLINE_STEP=30;
 
@@ -660,6 +674,7 @@ saveState();
 
 let activeTier=0;
 let activeSection='hq';
+let buildRecipeChoice={}; // typeId -> выбранный на постройке рецепт (для типов с несколькими рецептами)
 
 function netRate(resId){
   let rate=0;
@@ -850,45 +865,94 @@ function renderTabs(){
   tabsEl.innerHTML=html;
 }
 
+function buildingCardBody(b,tierOk,type,count){
+  const cls=CLASS_OF_TIER[b.tier];
+  const className=CLASSES.find(c=>c.id===cls).name;
+  const cost=scaledCost(type,count);
+  const skOk=recipeUnlocked(b);
+  const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
+  const areaOk=(type.area||0)<=freeArea();
+  const outRes=resById(outId(b));
+  const richBadge = b.tier===0 ? '<div class="bcard-richness">Богатство месторождения: '+Math.round(richOf(b)*100)+'%</div>' : '';
+  const wCut=workforceCutForRecipe(b);
+  const effWorkers=Math.max(1,Math.round(b.workers*(1-wCut)));
+  const staffBadge = '<div class="bcard-staff">Персонал: '+effWorkers+' × '+className+(wCut>0?' (база '+b.workers+')':'')+' · Площадь: '+(type.area||0)+'</div>';
+  const sMult=speedMultForRecipe(b);
+  const speedBadge = sMult>1 ? '<div class="bcard-staff">Скорость с учётом навыка: ×'+sMult.toFixed(2)+'</div>' : '';
+  const lockNote = skOk ? '' : '<div class="bcard-lock">Нужен навык «'+skillName(recipeSkillId(b))+'» ур. '+(b.unlock||0)+'</div>';
+  const areaNote = (skOk && !areaOk) ? '<div class="bcard-lock">Не хватает площади участка ('+(type.area||0)+' нужно, '+freeArea()+' свободно)</div>' : '';
+  const costStr=Object.entries(cost).map(([rid,q])=>{
+    const ok=(state.resources[rid]||0)>=q;
+    return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
+  }).join('');
+  return {
+    outRes, richBadge, staffBadge, speedBadge, lockNote, areaNote, costStr, count,
+    disabled: !tierOk||!skOk||!afford||!areaOk,
+  };
+}
+function renderSingleRecipeCard(b,tierOk){
+  const type=typeOf(b);
+  const count=state.buildings[b.id]||0;
+  const bb=buildingCardBody(b,tierOk,type,count);
+  const inputsStr='Месторождение';
+  return '<div class="bcard t'+b.tier+(bb.disabled&&tierOk?' locked':'')+'">'+
+    '<div class="bcard-head">'+iconSvg(bb.outRes.id,'tier'+b.tier)+
+      '<div><h3>'+type.name+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[bb.outRes.id]+' '+bb.outRes.name+'</div>'+bb.richBadge+bb.staffBadge+bb.speedBadge+'</div>'+
+    '</div>'+
+    '<div class="bcard-stats"><span>Уже построено: <strong>'+bb.count+'</strong></span><span>Цикл: '+fmtDuration(b.cycle)+'</span></div>'+
+    bb.lockNote+bb.areaNote+
+    '<div class="bcard-cost">'+bb.costStr+'</div>'+
+    '<button class="build-btn" data-build="'+b.id+'" '+(bb.disabled?'disabled':'')+'>Построить (+1)</button>'+
+  '</div>';
+}
+function renderRecipePickerCard(type,recipes,tierOk){
+  let chosenId=buildRecipeChoice[type.id];
+  if(!chosenId || !recipes.some(r=>r.id===chosenId)) chosenId=recipes[0].id;
+  buildRecipeChoice[type.id]=chosenId;
+  const b=recipes.find(r=>r.id===chosenId);
+  const count=typeCount({type:type.id});
+  const bb=buildingCardBody(b,tierOk,type,count);
+  const inputsStr='Месторождение';
+  const pickerBtns=recipes.map(r=>{
+    const rRes=resById(outId(r));
+    return '<button class="recipe-pick'+(r.id===chosenId?' active':'')+'" data-pick-type="'+type.id+'" data-pick-id="'+r.id+'" type="button">'+
+      iconSvg(rRes.id,'tier0')+'<span>'+recipeLabel(r)+'</span></button>';
+  }).join('');
+  return '<div class="bcard t0'+(bb.disabled&&tierOk?' locked':'')+'">'+
+    '<div class="bcard-head">'+iconSvg(bb.outRes.id,'tier0')+
+      '<div><h3>'+type.name+'</h3><div class="bcard-recipe">Выберите, что добывать</div></div>'+
+    '</div>'+
+    '<div class="recipe-picker">'+pickerBtns+'</div>'+
+    '<div class="bcard-recipe">'+inputsStr+' → '+b.out[bb.outRes.id]+' '+bb.outRes.name+'</div>'+
+    bb.richBadge+bb.staffBadge+bb.speedBadge+
+    '<div class="bcard-stats"><span>Уже построено (этот тип): <strong>'+bb.count+'</strong></span><span>Цикл: '+fmtDuration(b.cycle)+'</span></div>'+
+    bb.lockNote+bb.areaNote+
+    '<div class="bcard-cost">'+bb.costStr+'</div>'+
+    '<button class="build-btn" data-build="'+b.id+'" '+(bb.disabled?'disabled':'')+'>Построить (+1)</button>'+
+  '</div>';
+}
 function renderBuildings(){
   const tierOk=tierUnlocked(activeTier);
   let html='';
   if(!tierOk){
     html+='<div class="locked-banner">Постройте хотя бы один объект уровня T'+(activeTier-1)+', чтобы открыть этот раздел цепочки.</div>';
   }
-  const cls=CLASS_OF_TIER[activeTier];
-  const className=CLASSES.find(c=>c.id===cls).name;
+  const areaPct=Math.min(100,Math.round((usedArea()/BASE_AREA)*100));
+  html+='<div class="area-summary"><span>Площадь участка</span>'+
+    '<div class="warehouse-bar'+(areaPct>=99.5?' full':'')+'" style="flex:1"><div class="warehouse-bar-fill" style="width:'+areaPct+'%"></div></div>'+
+    '<span class="warehouse-value">'+usedArea()+' / '+BASE_AREA+'</span></div>';
+  const groups={};
   BUILDINGS.filter(b=>b.tier===activeTier && recipeVisible(b)).forEach(b=>{
-    const count=state.buildings[b.id]||0;
-    const type=typeOf(b);
-    const cost=scaledCost(type,typeCount(b));
-    const skOk=recipeUnlocked(b);
-    const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
-    const outRes=resById(outId(b));
-    const title = b.type ? type.name+' · '+recipeLabel(b) : b.name;
-    const inputsStr = Object.keys(b.in||{}).length
-      ? Object.entries(b.in).map(([rid,q])=>q+' '+resName(rid)).join(' + ')
-      : 'Месторождение';
-    const richBadge = (b.tier===0 && b.type!=null) ? '<div class="bcard-richness">Богатство месторождения: '+Math.round(richOf(b)*100)+'%</div>' : '';
-    const wCut=workforceCutForRecipe(b);
-    const effWorkers=Math.max(1,Math.round(b.workers*(1-wCut)));
-    const staffBadge = '<div class="bcard-staff">Персонал: '+effWorkers+' × '+className+(wCut>0?' (база '+b.workers+')':'')+'</div>';
-    const sMult=speedMultForRecipe(b);
-    const speedBadge = sMult>1 ? '<div class="bcard-staff">Скорость с учётом навыка: ×'+sMult.toFixed(2)+'</div>' : '';
-    const lockNote = skOk ? '' : '<div class="bcard-lock">Нужен навык «'+skillName(recipeSkillId(b))+'» ур. '+(b.unlock||0)+'</div>';
-    const costStr=Object.entries(cost).map(([rid,q])=>{
-      const ok=(state.resources[rid]||0)>=q;
-      return '<span class="'+(ok?'ok':'bad')+'">'+q+' '+resName(rid)+'</span>';
-    }).join('');
-    html+='<div class="bcard t'+b.tier+(skOk?'':' locked')+'">'+
-      '<div class="bcard-head">'+iconSvg(outRes.id,'tier'+b.tier)+
-        '<div><h3>'+title+'</h3><div class="bcard-recipe">'+inputsStr+' → '+b.out[outRes.id]+' '+outRes.name+'</div>'+richBadge+staffBadge+speedBadge+'</div>'+
-      '</div>'+
-      '<div class="bcard-stats"><span>Уже построено: <strong>'+count+'</strong></span><span>Цикл: '+fmtDuration(b.cycle)+'</span></div>'+
-      lockNote+
-      '<div class="bcard-cost">'+costStr+'</div>'+
-      '<button class="build-btn" data-build="'+b.id+'" '+((!tierOk||!skOk||!afford)?'disabled':'')+'>Построить (+1)</button>'+
-    '</div>';
+    const k=typeKey(b);
+    (groups[k]=groups[k]||[]).push(b);
+  });
+  Object.keys(groups).forEach(k=>{
+    const recipes=groups[k];
+    if(recipes.length>1 && recipes[0].type){
+      html+=renderRecipePickerCard(typeOf(recipes[0]),recipes,tierOk);
+    }else{
+      recipes.forEach(b=>{ html+=renderSingleRecipeCard(b,tierOk); });
+    }
   });
   bgridEl.innerHTML=html;
 }
@@ -929,6 +993,7 @@ function renderProductionCard(b){
   const unitsHtml=units.map(u=>
     '<div class="unit-row"><span class="unit-id">#'+u.id+'</span>'+
       '<div class="cycle-bar" style="flex:1"><div class="cycle-fill" data-cyclebar="'+u.id+'"></div></div>'+
+      '<span class="cycle-pct" data-cyclepct="'+u.id+'">0%</span>'+
       '<span class="cycle-time" data-cycletime="'+u.id+'">—:—</span></div>'
   ).join('');
   return '<div class="bcard t'+b.tier+'">'+
@@ -1019,6 +1084,7 @@ function renderHQ(){
     '<div class="pop-metrics">'+
       '<span>Время работы: <strong>'+fmtElapsed(Date.now()-state.startTs)+'</strong></span>'+
       '<span>Построено объектов: <strong>'+totalBuilt+'</strong></span>'+
+      '<span>Площадь: <strong>'+usedArea()+' / '+BASE_AREA+'</strong></span>'+
       '<span>Персонал: <strong>'+workers+' / '+slots+'</strong></span>'+
       '<span>Склад: <strong>'+Math.round(usedKg).toLocaleString('ru-RU')+' / '+capKg.toLocaleString('ru-RU')+' кг</strong></span>'+
       '<span>Изучается: <strong>'+(trainSk?trainSk.name+' (ур. '+skillLevelById(trainSk.id)+')':'—')+'</strong></span>'+
@@ -1274,6 +1340,7 @@ function tryBuild(id){
   if(!unlocked) return;
   const isRecipe=BUILDINGS.includes(b);
   if(isRecipe && !recipeUnlocked(b)) return;
+  if(isRecipe && (typeOf(b).area||0)>freeArea()) return;
   const count=state.buildings[id]||0;
   const cost=isRecipe ? scaledCost(typeOf(b),typeCount(b)) : scaledCost(b,count);
   const afford=Object.entries(cost).every(([rid,q])=>(state.resources[rid]||0)>=q);
@@ -1357,6 +1424,12 @@ tabsEl.addEventListener('click', e=>{
   renderView();
 });
 bgridEl.addEventListener('click', e=>{
+  const pickBtn=e.target.closest('[data-pick-type]');
+  if(pickBtn){
+    buildRecipeChoice[pickBtn.dataset.pickType]=pickBtn.dataset.pickId;
+    renderBuildings();
+    return;
+  }
   const btn=e.target.closest('[data-build]');
   if(!btn) return;
   tryBuild(btn.dataset.build);
@@ -1434,18 +1507,20 @@ function tickCycleBars(){
     const uid=Number(el.dataset.cyclebar);
     const row=el.closest('.unit-row');
     const timeEl=row?row.querySelector('.cycle-time'):null;
+    const pctEl=row?row.querySelector('.cycle-pct'):null;
     const unit=state.units.find(x=>x.id===uid);
-    if(!unit){ el.style.width='0%'; if(timeEl) timeEl.textContent='—:—'; return; }
+    if(!unit){ el.style.width='0%'; if(timeEl) timeEl.textContent='—:—'; if(pctEl) pctEl.textContent='—'; return; }
     const b=BUILDINGS.find(x=>x.id===unit.recipe);
     if(!b) return;
     const uInfo=util[b.id];
-    if(!uInfo || uInfo.frac<=0.001){ el.style.width='0%'; if(timeEl) timeEl.textContent='простой'; return; }
+    if(!uInfo || uInfo.frac<=0.001){ el.style.width='0%'; if(timeEl) timeEl.textContent='простой'; if(pctEl) pctEl.textContent='0%'; return; }
     const eff=Math.max(0.5, b.cycle/speedMultForRecipe(b));
     const builtSec=unit.builtAt/1000;
     const phase=(((now-builtSec)%eff)+eff)%eff/eff;
     el.style.width=(phase*100).toFixed(1)+'%';
     el.style.opacity = uInfo.frac>=0.95 ? '0.55' : '0.3';
     if(timeEl) timeEl.textContent=fmtMMSS(eff-phase*eff);
+    if(pctEl) pctEl.textContent=Math.floor(phase*100)+'%';
   });
 }
 setInterval(tickCycleBars, 250);
