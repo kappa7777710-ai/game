@@ -29,6 +29,8 @@
   --skill:#B388FF;
   --good:#4ADE9B;
   --bad:#F4557B;
+  --ink:#0A0D18;
+  --hi:#FFFFFF;
   --radius:10px;
   --font-display:'Rajdhani',sans-serif;
   --font-body:'IBM Plex Sans',sans-serif;
@@ -61,10 +63,38 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
 .chip-rate.neg{color:var(--bad);}
 .chip-rate.zero{color:var(--text-muted);}
 
-.sections{display:flex;gap:6px;flex-wrap:wrap;}
-.section-btn{font-family:var(--font-display);font-weight:700;font-size:15px;letter-spacing:.02em;background:var(--panel);border:1px solid var(--border);color:var(--text-secondary);padding:10px 18px;border-radius:9px 9px 0 0;cursor:pointer;transition:color .15s,background .15s;}
-.section-btn:hover{color:var(--text-primary);}
-.section-btn.active{color:#0A0D18;background:var(--sec-color,var(--tier0));border-color:var(--sec-color,var(--tier0));}
+.sections{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.hotbar{display:flex;gap:8px;padding:10px;border-radius:16px;width:100%;max-width:720px;
+  background:linear-gradient(180deg,#1A2143,#0E1328);border:2px solid #2B3563;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 -2px 0 rgba(0,0,0,.4),0 10px 26px rgba(0,0,0,.45);}
+.hb-slot{position:relative;flex:1 1 0;min-width:0;aspect-ratio:1;border-radius:12px;cursor:pointer;font:inherit;color:var(--text-secondary);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:0;
+  background:linear-gradient(180deg,#2A3360 0%,#1A2142 55%,#141A34 100%);border:1px solid #0B0F20;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.10),inset 0 -3px 0 rgba(0,0,0,.35),0 2px 0 rgba(0,0,0,.35);
+  transition:transform .1s,box-shadow .15s,filter .15s;}
+.hb-slot:hover{filter:brightness(1.15);}
+.hb-slot:active{transform:translateY(2px);box-shadow:inset 0 3px 6px rgba(0,0,0,.5);}
+.hb-slot svg{width:52%;height:auto;max-width:48px;color:var(--c);filter:drop-shadow(0 2px 2px rgba(0,0,0,.5));}
+.hb-name{font-family:var(--font-display);font-weight:700;font-size:11px;letter-spacing:.04em;text-transform:uppercase;line-height:1;}
+.hb-key{position:absolute;top:4px;left:6px;font-family:var(--font-mono);font-size:9.5px;color:var(--text-muted);}
+.hb-dot{position:absolute;top:-6px;right:-6px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--c);color:#0A0D18;
+  font-family:var(--font-mono);font-weight:500;font-size:10.5px;line-height:15px;text-align:center;border:2px solid #0E1328;}
+.hb-fill{position:absolute;left:5px;right:5px;bottom:4px;height:3px;border-radius:2px;background:rgba(0,0,0,.45);overflow:hidden;}
+.hb-fill i{display:block;height:100%;background:var(--c);}
+.hb-slot.active{color:var(--text-primary);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--c) 34%,#1A2142) 0%,#171E3C 70%);
+  box-shadow:0 0 0 2px var(--c),0 0 18px color-mix(in srgb,var(--c) 55%,transparent),inset 0 2px 0 rgba(255,255,255,.18),inset 0 -3px 0 rgba(0,0,0,.3);}
+.hb-slot.active svg{filter:drop-shadow(0 0 7px color-mix(in srgb,var(--c) 80%,transparent));}
+.hb-caption{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;padding:0 4px;width:100%;max-width:720px;}
+.hb-caption b{font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:.03em;color:var(--c);}
+.hb-caption span{font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);}
+.hb-caption .hb-hint{margin-left:auto;font-family:var(--font-body);font-size:11px;color:var(--text-muted);}
+.hb-caption kbd{font-family:var(--font-mono);font-size:10.5px;color:var(--text-secondary);background:var(--card);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:0 5px;}
+@media (max-width:560px){
+  .hotbar{gap:5px;padding:7px;border-radius:14px;}
+  .hb-name,.hb-key,.hb-caption .hb-hint{display:none;}
+  .hb-slot svg{width:62%;}
+}
 
 .tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:0;}
 .tab-btn{font-family:var(--font-display);font-weight:600;font-size:13.5px;letter-spacing:.03em;text-transform:uppercase;background:none;border:none;color:var(--text-muted);padding:10px 14px;cursor:pointer;border-bottom:2px solid transparent;transition:color .15s;}
@@ -413,14 +443,70 @@ function retoolFee(b){
 }
 
 const SECTIONS=[
-  {id:'hq',label:'Штаб-квартира',color:'tier0'},
-  {id:'buildings',label:'Здания',color:'tier1'},
-  {id:'build',label:'Построить',color:'tier2'},
-  {id:'workers',label:'Рабочие',color:'class1'},
-  {id:'skills',label:'Навыки',color:'skill'},
-  {id:'production',label:'Производство',color:'tier3'},
-  {id:'warehouse',label:'Склад',color:'tier4'},
+  {id:'hq',label:'Штаб-квартира',short:'Штаб',color:'tier0'},
+  {id:'buildings',label:'Здания',short:'Здания',color:'tier1'},
+  {id:'build',label:'Построить',short:'Стройка',color:'tier2'},
+  {id:'workers',label:'Рабочие',short:'Рабочие',color:'class1'},
+  {id:'skills',label:'Навыки',short:'Навыки',color:'skill'},
+  {id:'production',label:'Производство',short:'Цех',color:'tier3'},
+  {id:'warehouse',label:'Склад',short:'Склад',color:'tier4'},
 ];
+// Иконки разделов для хотбара — отдельный холст 48×48 (детальнее, чем ICONS 20×20).
+// Тёмные/светлые детали красятся через style (--ink/--hi), основная заливка — currentColor.
+const SECTION_ICONS={
+  hq:'<rect x="5" y="41" width="38" height="2.5" rx="1.25" opacity=".3"/>'+
+     '<path d="M7 41V26a2 2 0 0 1 2-2h9v17z" opacity=".6"/><path d="M30 41V24h9a2 2 0 0 1 2 2v15z" opacity=".6"/>'+
+     '<path d="M17 41V15a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v26z"/>'+
+     '<path d="M24 13V6.5" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="24" cy="5" r="2.2" style="fill:var(--hi)"/>'+
+     '<path d="M8.6 23.2c0-4.3 3.1-7.2 7.3-7.2" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round"/><path d="M11 21.4l3.6-3.2" stroke="currentColor" stroke-width="1.2"/>'+
+     '<g style="fill:var(--hi)" opacity=".85"><rect x="20" y="16" width="3" height="2.3" rx=".4"/><rect x="25" y="16" width="3" height="2.3" rx=".4"/><rect x="20" y="20.5" width="3" height="2.3" rx=".4"/><rect x="25" y="20.5" width="3" height="2.3" rx=".4"/><rect x="20" y="25" width="3" height="2.3" rx=".4"/><rect x="25" y="25" width="3" height="2.3" rx=".4"/></g>'+
+     '<g style="fill:var(--hi)" opacity=".5"><rect x="10" y="28" width="5" height="2" rx=".4"/><rect x="10" y="32.5" width="5" height="2" rx=".4"/><rect x="33" y="28" width="5" height="2" rx=".4"/><rect x="33" y="32.5" width="5" height="2" rx=".4"/></g>'+
+     '<rect x="21" y="33" width="6" height="8" rx="1" style="fill:var(--ink)" opacity=".55"/>',
+  buildings:'<rect x="3" y="41" width="42" height="2.5" rx="1.25" opacity=".3"/>'+
+     '<circle cx="30" cy="7" r="2.6" opacity=".32"/><circle cx="34.6" cy="4.2" r="1.9" opacity=".22"/>'+
+     '<path d="M4 41V27l7-4.5V27l7-4.5V27l7-4.5V41z" opacity=".6"/>'+
+     '<rect x="26.5" y="11" width="6" height="30" rx="1"/><rect x="26.5" y="15" width="6" height="1.6" style="fill:var(--ink)" opacity=".4"/>'+
+     '<rect x="34" y="21" width="10" height="20" rx="1.5" opacity=".82"/>'+
+     '<g style="fill:var(--hi)" opacity=".7"><rect x="7" y="31" width="3.5" height="3" rx=".4"/><rect x="13.5" y="31" width="3.5" height="3" rx=".4"/><rect x="20" y="31" width="3" height="3" rx=".4"/><rect x="7" y="36" width="3.5" height="3" rx=".4"/><rect x="13.5" y="36" width="3.5" height="3" rx=".4"/></g>'+
+     '<g style="fill:var(--hi)" opacity=".8"><rect x="36" y="24" width="2.5" height="2.5" rx=".3"/><rect x="39.5" y="24" width="2.5" height="2.5" rx=".3"/><rect x="36" y="29" width="2.5" height="2.5" rx=".3"/><rect x="39.5" y="29" width="2.5" height="2.5" rx=".3"/><rect x="36" y="34" width="2.5" height="2.5" rx=".3"/><rect x="39.5" y="34" width="2.5" height="2.5" rx=".3"/></g>',
+  build:'<rect x="8" y="41" width="14" height="2.5" rx="1.25" opacity=".35"/>'+
+     '<path d="M13 41V12h4v29z"/>'+
+     '<path d="M13 16l4 4M17 20l-4 4M13 24l4 4M17 28l-4 4M13 32l4 4M17 36l-4 4" style="stroke:var(--ink)" stroke-width="1" opacity=".45"/>'+
+     '<path d="M13 12l2-7.5 2 7.5z" opacity=".9"/>'+
+     '<path d="M15 4.5L6 10M15 4.5L42 10" stroke="currentColor" stroke-width="1" fill="none" opacity=".6"/>'+
+     '<rect x="5" y="10" width="38" height="3" rx="1"/>'+
+     '<rect x="5" y="13" width="6" height="5" rx="1" opacity=".75"/>'+
+     '<rect x="17" y="13" width="4.5" height="4" rx="1" style="fill:var(--hi)" opacity=".8"/>'+
+     '<rect x="32" y="13" width="4" height="2" opacity=".9"/>'+
+     '<path d="M34 15v12" stroke="currentColor" stroke-width="1.1"/>'+
+     '<path d="M34 27l-6 5M34 27l6 5" stroke="currentColor" stroke-width="1" fill="none" opacity=".75"/>'+
+     '<rect x="26" y="32" width="16" height="4.2" rx="1" style="fill:var(--hi)" opacity=".85"/>'+
+     '<path d="M30 32v4.2M34 32v4.2M38 32v4.2" style="stroke:var(--ink)" stroke-width="1" opacity=".3"/>',
+  workers:'<path d="M26 35c1-6.5 4.8-9.5 9-9.5s8.2 3 9.2 9.5z" opacity=".28"/><circle cx="35" cy="18" r="5" opacity=".35"/><path d="M29.5 16a5.5 5.5 0 0 1 11 0z" opacity=".5"/><rect x="28.5" y="15.3" width="13" height="1.8" rx=".9" opacity=".5"/>'+
+     '<path d="M7 44c0-9.5 7.5-14 17-14s17 4.5 17 14z" opacity=".68"/>'+
+     '<path d="M11.5 38.8h25" style="stroke:var(--hi)" stroke-width="2" opacity=".65"/>'+
+     '<circle cx="24" cy="22.5" r="7.5" opacity=".92"/>'+
+     '<path d="M14.5 19.5a9.5 9.5 0 0 1 19 0z"/><rect x="12" y="18.5" width="24" height="3" rx="1.5"/>'+
+     '<rect x="22.8" y="10.8" width="2.4" height="7.5" rx="1" style="fill:var(--hi)" opacity=".45"/>',
+  skills:'<path d="M5 15.5c7-2.5 13-1.5 18 2.5v23c-5-3.5-11-4.5-18-2z" opacity=".6"/>'+
+     '<path d="M43 15.5c-7-2.5-13-1.5-18 2.5v23c5-3.5 11-4.5 18-2z" opacity=".92"/>'+
+     '<path d="M9 22.5c4-1 7-.6 10 1M9 27.5c4-1 7-.6 10 1M9 32.5c4-1 7-.6 10 1" style="stroke:var(--hi)" stroke-width="1.1" fill="none" opacity=".45"/>'+
+     '<path d="M29 23.5c3-1.6 6-2 10-1M29 28.5c3-1.6 6-2 10-1M29 33.5c3-1.6 6-2 10-1" style="stroke:var(--ink)" stroke-width="1.1" fill="none" opacity=".35"/>'+
+     '<polygon points="24,2 25.53,5.9 29.71,6.15 26.47,8.8 27.53,12.85 24,10.6 20.47,12.85 21.53,8.8 18.29,6.15 22.47,5.9" style="fill:var(--hi)"/>'+
+     '<circle cx="13.5" cy="8" r="1.1" opacity=".7"/><circle cx="34.5" cy="9.5" r="1.3" opacity=".7"/><circle cx="38" cy="4.5" r=".8" opacity=".5"/>',
+  production:'<path fill-rule="evenodd" opacity=".6" d="M34.03 5.87 L34.41 3.87 L36.59 3.87 L36.97 5.87 L38.79 6.63 L40.47 5.48 L42.02 7.03 L40.87 8.71 L41.63 10.53 L43.63 10.91 L43.63 13.09 L41.63 13.47 L40.87 15.29 L42.02 16.97 L40.47 18.52 L38.79 17.37 L36.97 18.13 L36.59 20.13 L34.41 20.13 L34.03 18.13 L32.21 17.37 L30.53 18.52 L28.98 16.97 L30.13 15.29 L29.37 13.47 L27.37 13.09 L27.37 10.91 L29.37 10.53 L30.13 8.71 L28.98 7.03 L30.53 5.48 L32.21 6.63 Z M37.9 12 A2.4 2.4 0 1 0 33.1 12 A2.4 2.4 0 1 0 37.9 12 Z"/>'+
+     '<path fill-rule="evenodd" d="M15.98 10.39 L16.56 7.58 L19.44 7.58 L20.02 10.39 L22.60 11.23 L24.73 9.29 L27.05 10.99 L25.87 13.61 L27.46 15.80 L30.32 15.48 L31.21 18.22 L28.71 19.65 L28.71 22.35 L31.21 23.78 L30.32 26.52 L27.46 26.20 L25.87 28.39 L27.05 31.01 L24.73 32.71 L22.60 30.77 L20.02 31.61 L19.44 34.42 L16.56 34.42 L15.98 31.61 L13.40 30.77 L11.27 32.71 L8.95 31.01 L10.13 28.39 L8.54 26.20 L5.68 26.52 L4.79 23.78 L7.29 22.35 L7.29 19.65 L4.79 18.22 L5.68 15.48 L8.54 15.80 L10.13 13.61 L8.95 10.99 L11.27 9.29 L13.40 11.23 Z M22.2 21 A4.2 4.2 0 1 0 13.8 21 A4.2 4.2 0 1 0 22.2 21 Z"/>'+
+     '<rect x="3" y="37.5" width="42" height="6" rx="3" opacity=".55"/>'+
+     '<g style="fill:var(--hi)" opacity=".7"><circle cx="7" cy="40.5" r="1.3"/><circle cx="15" cy="40.5" r="1.3"/><circle cx="23" cy="40.5" r="1.3"/><circle cx="31" cy="40.5" r="1.3"/><circle cx="39" cy="40.5" r="1.3"/></g>'+
+     '<rect x="33" y="28.5" width="8.5" height="8.5" rx="1" style="fill:var(--hi)" opacity=".85"/><path d="M33 32.7h8.5" style="stroke:var(--ink)" stroke-width="1" opacity=".3"/>',
+  warehouse:'<rect x="3" y="41" width="42" height="2.5" rx="1.25" opacity=".3"/>'+
+     '<rect x="5" y="25" width="18" height="16" rx="1.5" opacity=".7"/><rect x="25" y="25" width="18" height="16" rx="1.5" opacity=".86"/><rect x="15" y="8.5" width="18" height="16" rx="1.5"/>'+
+     '<g style="stroke:var(--ink)" stroke-width="1.3" fill="none" opacity=".4">'+
+       '<rect x="7.2" y="27.2" width="13.6" height="11.6" rx=".5"/><path d="M7.2 38.8L20.8 27.2"/>'+
+       '<rect x="27.2" y="27.2" width="13.6" height="11.6" rx=".5"/><path d="M27.2 38.8L40.8 27.2"/>'+
+       '<rect x="17.2" y="10.7" width="13.6" height="11.6" rx=".5"/><path d="M17.2 22.3L30.8 10.7"/></g>'+
+     '<path d="M16 9.5h16" style="stroke:var(--hi)" stroke-width="1" opacity=".35"/>',
+};
 const TAB_LABELS=['Добыча'];
 const SAVE_KEY='industrial_belt_v19';
 const OFFLINE_CAP_SEC=12*3600;
@@ -871,21 +957,48 @@ const REASON_LABELS={
   idle:'Ожидает первого тика симуляции',
 };
 
+function sectionInfo(id){
+  const units=state.units.length;
+  if(id==='hq') return {stat:'Обзор базы'};
+  if(id==='buildings') return {stat:'Построено объектов: '+units, badge:units||null};
+  if(id==='build') return {stat:'Площадь участка: '+usedArea()+' / '+BASE_AREA};
+  if(id==='workers'){
+    const assigned=Object.values(lastWorkforce).reduce((s,c)=>s+Math.floor(c.assigned),0);
+    const cap=Object.values(lastWorkforce).reduce((s,c)=>s+Math.floor(c.cap),0);
+    return {stat:'Персонал: '+assigned+' / '+cap+' чел.', badge:assigned||null};
+  }
+  if(id==='skills'){
+    const sk=SKILLS.find(x=>x.id===state.training);
+    return {stat:sk?('Изучается: '+sk.name+' · ур. '+skillLevelById(sk.id)):'Ничего не изучается'};
+  }
+  if(id==='production') return {stat:'Установок в цеху: '+units, badge:units||null};
+  if(id==='warehouse'){
+    const used=totalCargoWeight(), cap=warehouseCapacityKg();
+    return {stat:Math.round(used).toLocaleString('ru-RU')+' / '+cap.toLocaleString('ru-RU')+' кг', fill:Math.min(100,used/cap*100)};
+  }
+  return {stat:''};
+}
+let lastSectionsHtml='';
 function renderSections(){
-  let html='';
-  SECTIONS.forEach(s=>{
-    let badge='';
-    if(s.id==='workers'){
-      const count=Object.values(lastWorkforce).reduce((sum,c)=>sum+Math.floor(c.assigned),0);
-      badge=' · '+count+' чел.';
-    }else if(s.id==='warehouse'){
-      badge=' · '+Math.round(totalCargoWeight()).toLocaleString('ru-RU')+' / '+warehouseCapacityKg().toLocaleString('ru-RU')+' кг';
-    }else if(s.id==='buildings' || s.id==='production'){
-      const count=BUILDINGS.reduce((sum,b)=>sum+(state.buildings[b.id]||0),0);
-      badge=' · '+count+' объектов';
-    }
-    html+='<button class="section-btn'+(s.id===activeSection?' active':'')+'" style="--sec-color:var(--'+s.color+')" data-section="'+s.id+'">'+s.label+badge+'</button>';
+  let slots='';
+  SECTIONS.forEach((s,i)=>{
+    const info=sectionInfo(s.id);
+    slots+='<button type="button" class="hb-slot'+(s.id===activeSection?' active':'')+'" style="--c:var(--'+s.color+')" data-section="'+s.id+'" title="'+s.label+' ('+(i+1)+')">'+
+      '<span class="hb-key">'+(i+1)+'</span>'+
+      '<svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true">'+SECTION_ICONS[s.id]+'</svg>'+
+      '<span class="hb-name">'+s.short+'</span>'+
+      (info.badge!=null?'<span class="hb-dot">'+info.badge+'</span>':'')+
+      (info.fill!=null?'<span class="hb-fill"><i style="width:'+info.fill.toFixed(1)+'%"></i></span>':'')+
+    '</button>';
   });
+  const cur=SECTIONS.find(s=>s.id===activeSection);
+  const html='<div class="hotbar">'+slots+'</div>'+
+    '<div class="hb-caption" style="--c:var(--'+cur.color+')"><b>'+cur.label+'</b><span>'+sectionInfo(cur.id).stat+'</span>'+
+    '<span class="hb-hint">клавиши <kbd>1</kbd>–<kbd>'+SECTIONS.length+'</kbd></span></div>';
+  // Хотбар перерисовывается каждый тик; не трогаем DOM без изменений, иначе клик,
+  // попавший между mousedown и mouseup на пересоздание кнопок, теряется.
+  if(html===lastSectionsHtml) return;
+  lastSectionsHtml=html;
   sectionsEl.innerHTML=html;
 }
 
@@ -1452,13 +1565,23 @@ function tryRetoolUnit(unitId,toId){
   renderAll();
 }
 
-sectionsEl.addEventListener('click', e=>{
-  const btn=e.target.closest('[data-section]');
-  if(!btn) return;
-  activeSection=btn.dataset.section;
+function openSection(id){
+  activeSection=id;
   renderSections();
   if(activeSection==='production') renderTabs();
   renderView();
+}
+sectionsEl.addEventListener('click', e=>{
+  const btn=e.target.closest('[data-section]');
+  if(!btn) return;
+  openSection(btn.dataset.section);
+});
+document.addEventListener('keydown', e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  const tag=(e.target.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='textarea'||tag==='select'||e.target.isContentEditable) return;
+  const n=parseInt(e.key,10);
+  if(n>=1 && n<=SECTIONS.length) openSection(SECTIONS[n-1].id);
 });
 tabsEl.addEventListener('click', e=>{
   const btn=e.target.closest('[data-tier]');
