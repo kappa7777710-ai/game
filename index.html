@@ -85,6 +85,13 @@ h1{font-family:var(--font-display);font-weight:700;font-size:30px;letter-spacing
   background:linear-gradient(180deg,color-mix(in srgb,var(--c) 34%,#1A2142) 0%,#171E3C 70%);
   box-shadow:0 0 0 2px var(--c),0 0 18px color-mix(in srgb,var(--c) 55%,transparent),inset 0 2px 0 rgba(255,255,255,.18),inset 0 -3px 0 rgba(0,0,0,.3);}
 .hb-slot.active svg{filter:drop-shadow(0 0 7px color-mix(in srgb,var(--c) 80%,transparent));}
+/* Шестерёнки «Цеха» крутятся, пока хоть одна установка реально работает. Малая (8 зубьев)
+   вращается навстречу большой (10 зубьев) в 10/8 раза быстрее — зацепление выглядит честно. */
+.hb-slot .gear-lg,.hb-slot .gear-sm{transform-box:fill-box;transform-origin:center;}
+.hb-slot.spinning .gear-lg{animation:hb-spin 6s linear infinite;}
+.hb-slot.spinning .gear-sm{animation:hb-spin 4.8s linear infinite reverse;}
+@keyframes hb-spin{to{transform:rotate(360deg);}}
+@media (prefers-reduced-motion:reduce){ .hb-slot.spinning .gear-lg,.hb-slot.spinning .gear-sm{animation:none;} }
 .hb-caption{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;padding:0 4px;width:100%;max-width:720px;}
 .hb-caption b{font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:.03em;color:var(--c);}
 .hb-caption span{font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);}
@@ -494,8 +501,8 @@ const SECTION_ICONS={
      '<path d="M29 23.5c3-1.6 6-2 10-1M29 28.5c3-1.6 6-2 10-1M29 33.5c3-1.6 6-2 10-1" style="stroke:var(--ink)" stroke-width="1.1" fill="none" opacity=".35"/>'+
      '<polygon points="24,2 25.53,5.9 29.71,6.15 26.47,8.8 27.53,12.85 24,10.6 20.47,12.85 21.53,8.8 18.29,6.15 22.47,5.9" style="fill:var(--hi)"/>'+
      '<circle cx="13.5" cy="8" r="1.1" opacity=".7"/><circle cx="34.5" cy="9.5" r="1.3" opacity=".7"/><circle cx="38" cy="4.5" r=".8" opacity=".5"/>',
-  production:'<path fill-rule="evenodd" opacity=".6" d="M34.03 5.87 L34.41 3.87 L36.59 3.87 L36.97 5.87 L38.79 6.63 L40.47 5.48 L42.02 7.03 L40.87 8.71 L41.63 10.53 L43.63 10.91 L43.63 13.09 L41.63 13.47 L40.87 15.29 L42.02 16.97 L40.47 18.52 L38.79 17.37 L36.97 18.13 L36.59 20.13 L34.41 20.13 L34.03 18.13 L32.21 17.37 L30.53 18.52 L28.98 16.97 L30.13 15.29 L29.37 13.47 L27.37 13.09 L27.37 10.91 L29.37 10.53 L30.13 8.71 L28.98 7.03 L30.53 5.48 L32.21 6.63 Z M37.9 12 A2.4 2.4 0 1 0 33.1 12 A2.4 2.4 0 1 0 37.9 12 Z"/>'+
-     '<path fill-rule="evenodd" d="M15.98 10.39 L16.56 7.58 L19.44 7.58 L20.02 10.39 L22.60 11.23 L24.73 9.29 L27.05 10.99 L25.87 13.61 L27.46 15.80 L30.32 15.48 L31.21 18.22 L28.71 19.65 L28.71 22.35 L31.21 23.78 L30.32 26.52 L27.46 26.20 L25.87 28.39 L27.05 31.01 L24.73 32.71 L22.60 30.77 L20.02 31.61 L19.44 34.42 L16.56 34.42 L15.98 31.61 L13.40 30.77 L11.27 32.71 L8.95 31.01 L10.13 28.39 L8.54 26.20 L5.68 26.52 L4.79 23.78 L7.29 22.35 L7.29 19.65 L4.79 18.22 L5.68 15.48 L8.54 15.80 L10.13 13.61 L8.95 10.99 L11.27 9.29 L13.40 11.23 Z M22.2 21 A4.2 4.2 0 1 0 13.8 21 A4.2 4.2 0 1 0 22.2 21 Z"/>'+
+  production:'<path class="gear-sm" fill-rule="evenodd" opacity=".6" d="M34.03 5.87 L34.41 3.87 L36.59 3.87 L36.97 5.87 L38.79 6.63 L40.47 5.48 L42.02 7.03 L40.87 8.71 L41.63 10.53 L43.63 10.91 L43.63 13.09 L41.63 13.47 L40.87 15.29 L42.02 16.97 L40.47 18.52 L38.79 17.37 L36.97 18.13 L36.59 20.13 L34.41 20.13 L34.03 18.13 L32.21 17.37 L30.53 18.52 L28.98 16.97 L30.13 15.29 L29.37 13.47 L27.37 13.09 L27.37 10.91 L29.37 10.53 L30.13 8.71 L28.98 7.03 L30.53 5.48 L32.21 6.63 Z M37.9 12 A2.4 2.4 0 1 0 33.1 12 A2.4 2.4 0 1 0 37.9 12 Z"/>'+
+     '<path class="gear-lg" fill-rule="evenodd" d="M15.98 10.39 L16.56 7.58 L19.44 7.58 L20.02 10.39 L22.60 11.23 L24.73 9.29 L27.05 10.99 L25.87 13.61 L27.46 15.80 L30.32 15.48 L31.21 18.22 L28.71 19.65 L28.71 22.35 L31.21 23.78 L30.32 26.52 L27.46 26.20 L25.87 28.39 L27.05 31.01 L24.73 32.71 L22.60 30.77 L20.02 31.61 L19.44 34.42 L16.56 34.42 L15.98 31.61 L13.40 30.77 L11.27 32.71 L8.95 31.01 L10.13 28.39 L8.54 26.20 L5.68 26.52 L4.79 23.78 L7.29 22.35 L7.29 19.65 L4.79 18.22 L5.68 15.48 L8.54 15.80 L10.13 13.61 L8.95 10.99 L11.27 9.29 L13.40 11.23 Z M22.2 21 A4.2 4.2 0 1 0 13.8 21 A4.2 4.2 0 1 0 22.2 21 Z"/>'+
      '<rect x="3" y="37.5" width="42" height="6" rx="3" opacity=".55"/>'+
      '<g style="fill:var(--hi)" opacity=".7"><circle cx="7" cy="40.5" r="1.3"/><circle cx="15" cy="40.5" r="1.3"/><circle cx="23" cy="40.5" r="1.3"/><circle cx="31" cy="40.5" r="1.3"/><circle cx="39" cy="40.5" r="1.3"/></g>'+
      '<rect x="33" y="28.5" width="8.5" height="8.5" rx="1" style="fill:var(--hi)" opacity=".85"/><path d="M33 32.7h8.5" style="stroke:var(--ink)" stroke-width="1" opacity=".3"/>',
@@ -978,12 +985,32 @@ function sectionInfo(id){
   }
   return {stat:''};
 }
-let lastSectionsHtml='';
+let lastSectionsKey='';
 function renderSections(){
+  const infos=SECTIONS.map(s=>sectionInfo(s.id));
+  const prodActive=BUILDINGS.some(b=>util[b.id] && util[b.id].frac>0.001);
+  const cur=SECTIONS.find(s=>s.id===activeSection);
+  const curInfo=infos[SECTIONS.indexOf(cur)];
+  // Хотбар вызывается каждый тик. Пересоздаём кнопки только при смене структуры
+  // (активный раздел, счётчики, работа цеха) — иначе сбрасывалась бы анимация
+  // шестерёнок и терялся клик между mousedown и mouseup. Остальное правим на месте.
+  const key=activeSection+'|'+prodActive+'|'+infos.map(i=>i.badge==null?'':i.badge).join(',');
+  if(key===lastSectionsKey){
+    infos.forEach((info,i)=>{
+      if(info.fill==null) return;
+      const el=sectionsEl.querySelector('[data-section="'+SECTIONS[i].id+'"] .hb-fill i');
+      if(el) el.style.width=info.fill.toFixed(1)+'%';
+    });
+    const statEl=sectionsEl.querySelector('.hb-stat');
+    if(statEl && statEl.textContent!==curInfo.stat) statEl.textContent=curInfo.stat;
+    return;
+  }
+  lastSectionsKey=key;
   let slots='';
   SECTIONS.forEach((s,i)=>{
-    const info=sectionInfo(s.id);
-    slots+='<button type="button" class="hb-slot'+(s.id===activeSection?' active':'')+'" style="--c:var(--'+s.color+')" data-section="'+s.id+'" title="'+s.label+' ('+(i+1)+')">'+
+    const info=infos[i];
+    const spin = s.id==='production' && prodActive ? ' spinning' : '';
+    slots+='<button type="button" class="hb-slot'+(s.id===activeSection?' active':'')+spin+'" style="--c:var(--'+s.color+')" data-section="'+s.id+'" title="'+s.label+' ('+(i+1)+')">'+
       '<span class="hb-key">'+(i+1)+'</span>'+
       '<svg viewBox="0 0 48 48" fill="currentColor" aria-hidden="true">'+SECTION_ICONS[s.id]+'</svg>'+
       '<span class="hb-name">'+s.short+'</span>'+
@@ -991,15 +1018,9 @@ function renderSections(){
       (info.fill!=null?'<span class="hb-fill"><i style="width:'+info.fill.toFixed(1)+'%"></i></span>':'')+
     '</button>';
   });
-  const cur=SECTIONS.find(s=>s.id===activeSection);
-  const html='<div class="hotbar">'+slots+'</div>'+
-    '<div class="hb-caption" style="--c:var(--'+cur.color+')"><b>'+cur.label+'</b><span>'+sectionInfo(cur.id).stat+'</span>'+
+  sectionsEl.innerHTML='<div class="hotbar">'+slots+'</div>'+
+    '<div class="hb-caption" style="--c:var(--'+cur.color+')"><b>'+cur.label+'</b><span class="hb-stat">'+curInfo.stat+'</span>'+
     '<span class="hb-hint">клавиши <kbd>1</kbd>–<kbd>'+SECTIONS.length+'</kbd></span></div>';
-  // Хотбар перерисовывается каждый тик; не трогаем DOM без изменений, иначе клик,
-  // попавший между mousedown и mouseup на пересоздание кнопок, теряется.
-  if(html===lastSectionsHtml) return;
-  lastSectionsHtml=html;
-  sectionsEl.innerHTML=html;
 }
 
 function renderTabs(){
