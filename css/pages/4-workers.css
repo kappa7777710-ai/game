@@ -1,0 +1,21 @@
+/* Вкладка «Рабочие». */
+.pop-panel{display:flex;flex-direction:column;}
+.pop-class{display:flex;flex-direction:column;gap:11px;padding-block:18px;border-bottom:1px solid var(--border);}
+.pop-class:last-child{border-bottom:none;}
+.pop-class-head{display:flex;flex-wrap:wrap;align-items:center;gap:14px;border-left:3px solid var(--tier-color);padding-left:11px;}
+.pop-class-head svg{flex-shrink:0;}
+.pop-class-head h3{font-family:var(--font-display);font-weight:600;font-size:16px;margin:0;color:var(--text-primary);}
+.pop-metrics{display:flex;flex-wrap:wrap;gap:12px;font-family:var(--font-mono);font-size:11px;font-variant-numeric:tabular-nums;color:var(--text-secondary);}
+.pop-metrics .ok{color:var(--good);}
+.pop-metrics .warn{color:var(--tier1);}
+.pop-metrics .bad{color:var(--bad);}
+.need-list{display:flex;flex-direction:column;gap:7px;}
+.need-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-secondary);}
+.need-row .need-label{width:150px;flex-shrink:0;}
+.need-row .need-weight{font-family:var(--font-mono);font-size:10.5px;color:var(--text-muted);width:70px;flex-shrink:0;}
+.need-row .need-bar{flex:1;height:7px;border-radius:4px;background:var(--border);overflow:hidden;}
+.need-row .need-bar-fill{height:100%;}
+.need-row .need-pct{font-family:var(--font-mono);width:38px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;}
+.pop-needs{display:flex;flex-wrap:wrap;gap:8px;}
+.pop-needs .chip{min-width:140px;flex:1 0 140px;}
+.pop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
